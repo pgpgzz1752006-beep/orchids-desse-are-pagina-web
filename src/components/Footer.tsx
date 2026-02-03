@@ -161,21 +161,21 @@ export default function Footer() {
                   </a>
 
                   {/* WhatsApp */}
-                  <a
-                    href="https://wa.me/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-0 m-0 -ml-[8px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="WhatsApp"
-                  >
-                    <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
-                      alt="WhatsApp"
-                      width={70}
-                      height={70}
-                      className="w-[70px] h-[70px] object-contain block"
-                    />
-                  </a>
+                    <a
+                      href="https://wa.me/529512424333"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-0 m-0 -ml-[8px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                      aria-label="Abrir WhatsApp +52 951 242 4333"
+                    >
+                      <img
+                        src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
+                        alt="WhatsApp"
+                        width={70}
+                        height={70}
+                        className="w-[70px] h-[70px] object-contain block"
+                      />
+                    </a>
 
                   {/* Email */}
                   <a
