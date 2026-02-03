@@ -51,7 +51,7 @@ export default function Footer() {
             </div>
 
             {/* Column 2: Contáctanos */}
-            <div className="flex flex-col items-center justify-start text-center">
+              <div id="contacto" className="flex flex-col items-center justify-start text-center scroll-mt-[140px]">
               <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-semibold text-[#111111] dark:text-[#F2F2F2] leading-[1.1]">
                 Contáctanos
               </h3>
