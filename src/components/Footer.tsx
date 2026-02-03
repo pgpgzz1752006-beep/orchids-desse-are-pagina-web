@@ -33,24 +33,7 @@ export default function Footer() {
                 Contáctanos
               </h3>
               <div className="flex items-center justify-center gap-[18px] md:gap-[22px] lg:gap-[26px]">
-                {/* Instagram */}
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                  aria-label="Instagram"
-                >
-                  <img
-                    src="/icons/icon-instagram.png"
-                    alt="Instagram"
-                    width={48}
-                    height={48}
-                    className="w-[32px] h-[32px] md:w-[38px] md:h-[38px] lg:w-[44px] lg:h-[44px] object-contain block"
-                  />
-                </a>
-
-                {/* Facebook */}
+                  {/* Facebook */}
                 <a
                   href="https://facebook.com"
                   target="_blank"
