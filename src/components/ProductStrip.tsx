@@ -343,9 +343,9 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
                     </div>
 
                     {/* Product Name */}
-                    <p className="font-['Montserrat'] text-[10px] md:text-[11px] lg:text-[11px] font-medium text-[#333333] text-center uppercase leading-[1.4] min-h-[28px]">
-                      {product.name}
-                    </p>
+                      <p className="font-['Montserrat'] text-[10px] md:text-[11px] lg:text-[11px] font-medium text-[#333333] dark:text-[#E0E0E0] text-center uppercase leading-[1.4] min-h-[28px]">
+                        {product.name}
+                      </p>
                   </a>
                 </div>
               ))}
