@@ -28,8 +28,8 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
-  return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-[#0E0F12] transition-colors duration-300">
+    return (
+      <header id="top" className="sticky top-0 z-50 bg-white dark:bg-[#0E0F12] transition-colors duration-300">
       {/* Multicolor Top Bar */}
       <div className="flex w-full h-[12px]">
         {colorBarSegments.map((segment, index) => (
