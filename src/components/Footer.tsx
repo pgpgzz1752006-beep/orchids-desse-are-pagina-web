@@ -37,8 +37,8 @@ export default function Footer() {
       {/* Footer Content */}
       <div className="w-full bg-[#F5F5F5] pt-6 md:pt-7 lg:pt-[26px] pb-5 md:pb-6 lg:pb-6">
         <div className="w-full max-w-[1540px] mx-auto px-4 md:px-10 lg:px-[56px]">
-          {/* Main Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-[1.1fr_1.3fr_1fr] gap-6 md:gap-4 lg:gap-6 items-start">
+            {/* Main Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1.4fr_1fr] gap-6 md:gap-4 lg:gap-6 items-start">
             {/* Column 1: Logo */}
             <div className="flex justify-center md:justify-start max-w-[300px]">
               <Image
