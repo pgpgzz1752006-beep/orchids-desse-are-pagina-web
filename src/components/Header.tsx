@@ -59,14 +59,23 @@ export default function Header() {
           </a>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-14 xl:gap-16">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="group relative"
-              >
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-14 xl:gap-16">
+              {navItems.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={(e) => {
+                    if (item.href.startsWith("#")) {
+                      e.preventDefault();
+                      const target = document.getElementById(item.href.slice(1));
+                      if (target) {
+                        target.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }
+                    }
+                  }}
+                  className="group relative"
+                >
                 <span
                   className={`
                     font-['Montserrat'] text-[18px] font-medium uppercase tracking-[0.04em]
