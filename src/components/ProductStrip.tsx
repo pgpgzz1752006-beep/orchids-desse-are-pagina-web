@@ -324,12 +324,12 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
                   className="flex-shrink-0 px-2 lg:px-[10px]"
                   style={{ width: `${cardWidthPercent}%` }}
                 >
-                  <a
-                    href={product.href}
-                    className="block bg-white border border-[#D9D9D9] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-200 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[4px] hover:scale-[1.02] hover:border-[#BDBDBD] hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] active:translate-y-[-2px] active:scale-[1.01] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm"
-                    onClick={(e) => isDragging && e.preventDefault()}
-                    draggable={false}
-                  >
+                    <a
+                      href={product.href}
+                      className="block bg-white dark:bg-[#1A1D24] border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-200 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[4px] hover:scale-[1.02] hover:border-[#BDBDBD] hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] active:translate-y-[-2px] active:scale-[1.01] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm"
+                      onClick={(e) => isDragging && e.preventDefault()}
+                      draggable={false}
+                    >
                     {/* Image Container */}
                     <div className="flex items-center justify-center h-[100px] md:h-[110px] lg:h-[120px] mb-3">
                       <Image
