@@ -50,12 +50,12 @@ export default function Footer() {
               />
             </div>
 
-            {/* Column 2: Contáctanos */}
-            <div className="flex flex-col items-center justify-start text-center">
-              <h3 className="font-['Montserrat'] text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#111111]">
-                Contáctanos
-              </h3>
-              <div className="flex items-center justify-center gap-[14px] md:gap-[20px] lg:gap-[24px] mt-4 md:mt-[16px] lg:mt-[18px]">
+              {/* Column 2: Contáctanos */}
+              <div className="flex flex-col items-center justify-start text-center">
+                <h3 className="font-['Montserrat'] text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#111111] leading-[1.1]">
+                  Contáctanos
+                </h3>
+                <div className="flex items-center justify-center gap-[12px] md:gap-[16px] lg:gap-[18px] mt-[10px] md:mt-[10px] lg:mt-[12px]">
                 {/* Instagram */}
                 <a
                   href="https://instagram.com"
