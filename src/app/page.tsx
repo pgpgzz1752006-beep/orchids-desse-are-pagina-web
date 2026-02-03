@@ -4,6 +4,7 @@ import CategoriesSection from "@/components/CategoriesSection";
 import SolutionsSection from "@/components/SolutionsSection";
 import ProductStrip from "@/components/ProductStrip";
 import ChatButtonSection from "@/components/ChatButtonSection";
+import Footer from "@/components/Footer";
 
 const featuredProducts = [
   {
@@ -81,6 +82,7 @@ export default function Home() {
         <SolutionsSection />
         <ChatButtonSection />
       </main>
+      <Footer />
     </div>
   );
 }
