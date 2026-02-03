@@ -1,0 +1,102 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+
+const categories = [
+  {
+    label: "Termos y cilindros",
+    href: "/categorias/termos-cilindros",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-750-D_7-1770139573383.jpg?width=800&height=800&resize=contain",
+    overlayColor: "rgba(107, 43, 131, 0.78)",
+  },
+  {
+    label: "Bolsas y maletas",
+    href: "/categorias/bolsas-maletas",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SIN-761-G_8-1770139575048.jpg?width=800&height=800&resize=contain",
+    overlayColor: "rgba(182, 167, 0, 0.78)",
+  },
+  {
+    label: "Libretas y carpetas",
+    href: "/categorias/libretas-carpetas",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/HL-9046-H_7-1770139580279.jpg?width=800&height=800&resize=contain",
+    overlayColor: "rgba(216, 27, 125, 0.78)",
+  },
+  {
+    label: "Bar",
+    href: "/categorias/bar",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/KTC-850-BE_5-1770139578681.jpg?width=800&height=800&resize=contain",
+    overlayColor: "rgba(31, 106, 174, 0.78)",
+  },
+  {
+    label: "Sets de regalo",
+    href: "/categorias/sets-regalo",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SET-023-N_6-1770139576900.jpg?width=800&height=800&resize=contain",
+    overlayColor: "rgba(34, 167, 214, 0.78)",
+  },
+  {
+    label: "Deportes",
+    href: "/categorias/deportes",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-750-D_7-1770139573383.jpg?width=800&height=800&resize=contain",
+    overlayColor: "rgba(107, 43, 131, 0.78)",
+  },
+  {
+    label: "Artículos del hogar",
+    href: "/categorias/hogar",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/KTC-850-BE_5-1770139578681.jpg?width=800&height=800&resize=contain",
+    overlayColor: "rgba(122, 174, 43, 0.78)",
+  },
+  {
+    label: "Gorras y playeras",
+    href: "/categorias/gorras-playeras",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/CAP-021-AC_3-1770139581820.jpg?width=800&height=800&resize=contain",
+    overlayColor: "rgba(210, 138, 27, 0.78)",
+  },
+];
+
+export default function CategoriesSection() {
+  return (
+    <section className="w-full bg-white py-12 md:py-16 lg:py-[72px]">
+      {/* Title */}
+      <div className="w-full max-w-[1440px] mx-auto px-6 md:px-8 lg:px-12 mb-8 md:mb-10 lg:mb-12">
+        <h2 className="text-center font-['Montserrat'] text-[32px] md:text-[44px] lg:text-[52px] tracking-[0.02em] text-[#111111]">
+          <span className="font-normal">CATEGORÍAS </span>
+          <span className="font-bold">DESTACADAS</span>
+        </h2>
+      </div>
+
+      {/* Categories Grid */}
+      <div className="w-full max-w-[1440px] mx-auto px-6 md:px-8 lg:px-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0">
+          {categories.map((category, index) => (
+            <Link
+              key={category.label}
+              href={category.href}
+              className="group relative h-[220px] md:h-[260px] lg:h-[290px] overflow-hidden block focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-inset"
+            >
+              {/* Background Image */}
+              <Image
+                src={category.image}
+                alt={category.label}
+                fill
+                className="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.02]"
+                sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+                loading={index < 4 ? "eager" : "lazy"}
+              />
+
+              {/* Color Overlay at Bottom */}
+              <div
+                className="absolute bottom-0 left-0 right-0 h-[56px] md:h-[60px] lg:h-[64px] flex items-center justify-center transition-opacity duration-200 ease-out group-hover:opacity-90"
+                style={{ backgroundColor: category.overlayColor }}
+              >
+                <span className="font-['Montserrat'] text-white text-[18px] md:text-[22px] lg:text-[24px] font-semibold text-center px-4">
+                  {category.label}
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
