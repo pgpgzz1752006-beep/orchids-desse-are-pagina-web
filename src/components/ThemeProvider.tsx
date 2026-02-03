@@ -48,5 +48,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useTheme() {
-  return useContext(ThemeContext);
+  const context = useContext(ThemeContext);
+  // Provide safe defaults if context is null (shouldn't happen with proper wrapping)
+  if (!context) {
+    return { theme: "light" as Theme, toggleTheme: () => {} };
+  }
+  return context;
 }
