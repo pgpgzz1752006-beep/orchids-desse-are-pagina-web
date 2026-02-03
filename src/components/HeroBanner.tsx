@@ -24,6 +24,11 @@ const bannerSlides = [
     src: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/BANNER4-resized-1770155629990.jpg?width=8000&height=8000&resize=contain",
     alt: "Feliz Día del Niño - Productos promocionales infantiles",
   },
+  {
+    id: 5,
+    src: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/BANNER6-1-resized-1770156711649.jpg?width=8000&height=8000&resize=contain",
+    alt: "2drink es Tuyo - Botellas promocionales para hidratación",
+  },
 ];
 
 const AUTOPLAY_INTERVAL = 7000; // 7 seconds
