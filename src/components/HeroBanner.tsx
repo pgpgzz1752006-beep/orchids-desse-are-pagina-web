@@ -32,85 +32,53 @@ const bannerSlides = [
 ];
 
 const AUTOPLAY_INTERVAL = 5000; // 5 seconds
-const TRANSITION_DURATION = 700; // 700ms
+const CROSSFADE_DURATION = 1500; // 1500ms for soft crossfade
 
 export default function HeroBanner() {
   const totalSlides = bannerSlides.length;
   
-  // Extended slides: [last, ...all, first] for seamless loop
-  const extendedSlides = [
-    bannerSlides[totalSlides - 1], // Clone of last
-    ...bannerSlides,               // All original slides
-    bannerSlides[0],               // Clone of first
-  ];
-  
-  // Start at index 1 (first real slide)
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const [isTransitioning, setIsTransitioning] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   
   const containerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const autoplayRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Mount effect
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Check for reduced motion preference
   useEffect(() => {
+    if (!isMounted) return;
+    
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mediaQuery.matches);
 
     const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
-  }, []);
-
-  // Handle transition end - invisible reset for seamless loop
-  const handleTransitionEnd = useCallback(() => {
-    // If we're at the clone of the last slide (index 0), jump to real last
-    if (currentIndex === 0) {
-      setIsTransitioning(false);
-      setCurrentIndex(totalSlides);
-    }
-    // If we're at the clone of the first slide (index totalSlides + 1), jump to real first
-    else if (currentIndex === totalSlides + 1) {
-      setIsTransitioning(false);
-      setCurrentIndex(1);
-    }
-  }, [currentIndex, totalSlides]);
-
-  // Re-enable transition after instant jump
-  useEffect(() => {
-    if (!isTransitioning) {
-      // Force reflow then re-enable transition
-      if (trackRef.current) {
-        trackRef.current.offsetHeight; // Force reflow
-      }
-      const timeout = setTimeout(() => setIsTransitioning(true), 20);
-      return () => clearTimeout(timeout);
-    }
-  }, [isTransitioning]);
+  }, [isMounted]);
 
   const goToNext = useCallback(() => {
-    if (!isTransitioning) return;
-    setCurrentIndex((prev) => prev + 1);
-  }, [isTransitioning]);
+    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+  }, [totalSlides]);
 
   const goToPrev = useCallback(() => {
-    if (!isTransitioning) return;
-    setCurrentIndex((prev) => prev - 1);
-  }, [isTransitioning]);
+    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+  }, [totalSlides]);
 
-  const goToSlide = useCallback((realIndex: number) => {
-    // realIndex is 0-based for original slides
-    // We need to add 1 because index 0 is the clone
-    setCurrentIndex(realIndex + 1);
+  const goToSlide = useCallback((index: number) => {
+    setCurrentIndex(index);
   }, []);
 
   // Autoplay logic
   useEffect(() => {
-    if (reducedMotion || isPaused) {
+    if (!isMounted || reducedMotion || isPaused) {
       if (autoplayRef.current) {
         clearInterval(autoplayRef.current);
         autoplayRef.current = null;
@@ -127,7 +95,7 @@ export default function HeroBanner() {
         clearInterval(autoplayRef.current);
       }
     };
-  }, [reducedMotion, isPaused, goToNext]);
+  }, [isMounted, reducedMotion, isPaused, goToNext]);
 
   // Touch/swipe handlers
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -158,30 +126,30 @@ export default function HeroBanner() {
   const handleMouseEnter = () => setIsPaused(true);
   const handleMouseLeave = () => setIsPaused(false);
 
-  const handleDotClick = (realIndex: number) => {
-    goToSlide(realIndex);
+  const handleDotClick = (index: number) => {
+    goToSlide(index);
     setIsPaused(true);
     setTimeout(() => setIsPaused(false), 10000);
   };
 
-  // Calculate the real slide index for dots (0-based)
-  const getRealIndex = () => {
-    if (currentIndex === 0) return totalSlides - 1;
-    if (currentIndex === totalSlides + 1) return 0;
-    return currentIndex - 1;
+  const handlePrevClick = () => {
+    goToPrev();
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 10000);
   };
 
-  const realIndex = getRealIndex();
-
-  // Calculate transform
-  const translateX = -(currentIndex * 100) / extendedSlides.length;
+  const handleNextClick = () => {
+    goToNext();
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 10000);
+  };
 
   return (
     <section
       className="relative w-full overflow-hidden bg-white dark:bg-[#0E0F12] transition-colors duration-300"
       data-autoplay={!reducedMotion && !isPaused ? "on" : "off"}
     >
-      {/* Carousel container */}
+      {/* Carousel container - Crossfade implementation */}
       <div
         ref={containerRef}
         className="relative w-full aspect-[16/9] sm:aspect-[21/9] lg:aspect-auto lg:h-[480px] xl:h-[520px] min-h-[200px] max-h-[520px]"
@@ -191,62 +159,45 @@ export default function HeroBanner() {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Track */}
-        <div
-          ref={trackRef}
-          className="flex h-full will-change-transform"
-          style={{
-            width: `${extendedSlides.length * 100}%`,
-            transform: `translateX(${translateX}%)`,
-            transition: isTransitioning && !reducedMotion
-              ? `transform ${TRANSITION_DURATION}ms ease-in-out`
-              : "none",
-          }}
-          onTransitionEnd={handleTransitionEnd}
-        >
-          {extendedSlides.map((slide, index) => (
-            <div
-              key={`slide-${index}`}
-              className="relative h-full flex-shrink-0"
-              style={{ width: `${100 / extendedSlides.length}%` }}
-            >
-              <Image
-                src={slide.src}
-                alt={slide.alt}
-                fill
-                className="object-contain lg:object-cover object-center"
-                priority={index <= 2}
-                loading={index <= 2 ? "eager" : "lazy"}
-                sizes="100vw"
-              />
-            </div>
-          ))}
-        </div>
+        {/* Stacked slides with crossfade */}
+        {bannerSlides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className="absolute inset-0 w-full h-full"
+            style={{
+              opacity: currentIndex === index ? 1 : 0,
+              zIndex: currentIndex === index ? 1 : 0,
+              transition: reducedMotion ? "none" : `opacity ${CROSSFADE_DURATION}ms ease-in-out`,
+            }}
+          >
+            <Image
+              src={slide.src}
+              alt={slide.alt}
+              fill
+              className="object-contain lg:object-cover object-center"
+              priority={index <= 1}
+              loading={index <= 1 ? "eager" : "lazy"}
+              sizes="100vw"
+            />
+          </div>
+        ))}
 
-        {/* Arrow buttons */}
+        {/* Arrow buttons - visible on hover */}
         <button
-          onClick={() => {
-            goToPrev();
-            setIsPaused(true);
-            setTimeout(() => setIsPaused(false), 10000);
-          }}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9] focus-visible:ring-offset-2 z-10"
+          onClick={handlePrevClick}
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/80 dark:bg-[#1A1D24]/80 hover:bg-white dark:hover:bg-[#1A1D24] rounded-full flex items-center justify-center shadow-lg opacity-0 hover:opacity-100 focus:opacity-100 transition-opacity duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9] focus-visible:ring-offset-2 z-10"
           aria-label="Banner anterior"
         >
-          <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
         <button
-          onClick={() => {
-            goToNext();
-            setIsPaused(true);
-            setTimeout(() => setIsPaused(false), 10000);
-          }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9] focus-visible:ring-offset-2 z-10"
+          onClick={handleNextClick}
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/80 dark:bg-[#1A1D24]/80 hover:bg-white dark:hover:bg-[#1A1D24] rounded-full flex items-center justify-center shadow-lg opacity-0 hover:opacity-100 focus:opacity-100 transition-opacity duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9] focus-visible:ring-offset-2 z-10"
           aria-label="Banner siguiente"
         >
-          <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>
@@ -263,13 +214,13 @@ export default function HeroBanner() {
               rounded-full transition-all duration-200
               focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9] focus-visible:ring-offset-2
               ${
-                realIndex === index
-                  ? "bg-[#666666] scale-110"
-                  : "bg-[#CFCFCF] hover:bg-[#AAAAAA]"
+                currentIndex === index
+                  ? "bg-[#666666] dark:bg-[#AAAAAA] scale-110"
+                  : "bg-[#CFCFCF] dark:bg-[#555555] hover:bg-[#AAAAAA] dark:hover:bg-[#777777]"
               }
             `}
             aria-label={`Ir al banner ${index + 1}`}
-            aria-current={realIndex === index ? "true" : "false"}
+            aria-current={currentIndex === index ? "true" : "false"}
           />
         ))}
       </div>
