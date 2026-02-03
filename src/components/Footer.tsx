@@ -196,7 +196,7 @@ export default function Footer() {
 
               {/* Column 3: Menú */}
               <div className="flex flex-col items-center md:items-end">
-                <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-bold text-[#111111] leading-[1.1] mb-2 md:mb-3">
+                <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-bold text-[#111111] dark:text-[#F2F2F2] leading-[1.1] mb-2 md:mb-3">
                   Menú
                 </h3>
                 <nav className="flex flex-col items-center md:items-end gap-[6px] md:gap-[8px]">
@@ -204,7 +204,7 @@ export default function Footer() {
                     <a
                       key={link.label}
                       href={link.href}
-                      className="group relative inline-block font-['Montserrat'] text-[16px] md:text-[18px] lg:text-[20px] font-normal text-[#111111] leading-[1.25] transition-colors duration-200 ease-out hover:text-[#14C6C9] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/45 focus-visible:ring-offset-4 rounded-md"
+                      className="group relative inline-block font-['Montserrat'] text-[16px] md:text-[18px] lg:text-[20px] font-normal text-[#111111] dark:text-[#F2F2F2] leading-[1.25] transition-colors duration-200 ease-out hover:text-[#14C6C9] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/45 focus-visible:ring-offset-4 rounded-md"
                     >
                       {link.label}
                       {/* Animated underline */}
@@ -217,7 +217,7 @@ export default function Footer() {
 
           {/* Copyright */}
           <div className="mt-5 md:mt-6 lg:mt-7 text-center">
-            <p className="font-['Montserrat'] text-[13px] md:text-[14px] lg:text-[15px] text-[#111111] italic">
+            <p className="font-['Montserrat'] text-[13px] md:text-[14px] lg:text-[15px] text-[#111111] dark:text-[#F2F2F2] italic">
               Diseñare Promocionales 2026®. Todos los derechos reservados.
             </p>
           </div>
