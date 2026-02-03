@@ -44,13 +44,13 @@ export default function SolutionsSection() {
           el aliado estratégico que necesitas para ofrecer más y mejor a tus clientes.
         </p>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
-          {solutions.map((solution) => (
-            <div
-              key={solution.title}
-              className="bg-[#F2F2F2] rounded-xl p-5 lg:p-[22px] flex flex-col transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-sm"
-            >
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 py-3">
+            {solutions.map((solution) => (
+              <div
+                key={solution.title}
+                className="bg-[#F2F2F2] rounded-xl p-5 lg:p-[22px] flex flex-col will-change-transform transition-all duration-200 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_14px_30px_rgba(0,0,0,0.14)] active:translate-y-[-2px] active:scale-[1.01] focus-within:ring-2 focus-within:ring-[#14C6C9]/60 focus-within:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-md"
+              >
               {/* Icon Container */}
               <div className="w-[56px] h-[56px] md:w-[64px] md:h-[64px] lg:w-[72px] lg:h-[72px] bg-white rounded-[14px] lg:rounded-[16px] flex items-center justify-center mb-4">
                 <img
