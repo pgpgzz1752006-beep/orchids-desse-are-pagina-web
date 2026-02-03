@@ -355,20 +355,8 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
           >
             <ChevronRight className="w-7 h-7" strokeWidth={1.5} />
           </button>
-        </div>
-
-        {/* Visual indicator - subtle progress bar instead of dots */}
-        <div className="flex justify-center mt-8">
-          <div className="w-16 h-[3px] bg-[#E0E0E0] dark:bg-[#3A3D44] rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-[#333333] dark:bg-[#888888] rounded-full transition-none"
-              style={{ 
-                width: trackWidth > 0 ? `${(offset / trackWidth) * 100}%` : "0%",
-              }}
-            />
           </div>
         </div>
-      </div>
-    </section>
+      </section>
   );
 }
