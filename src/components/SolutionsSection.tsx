@@ -56,8 +56,8 @@ export default function SolutionsSection() {
                             <img
                               src={solution.icon}
                               alt={solution.title}
-                              width={75}
-                              height={75}
+                              width={225}
+                              height={225}
                               className="w-[213px] h-[213px] md:w-[219px] md:h-[219px] lg:w-[225px] lg:h-[225px] object-contain block"
                             />
                     </div>
