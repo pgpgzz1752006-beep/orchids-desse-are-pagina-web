@@ -79,6 +79,7 @@ export default function Home() {
           products={recommendedProducts}
         />
         <SolutionsSection />
+        <ChatButtonSection />
       </main>
     </div>
   );
