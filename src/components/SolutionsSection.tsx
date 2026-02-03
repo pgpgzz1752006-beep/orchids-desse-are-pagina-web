@@ -51,15 +51,15 @@ export default function SolutionsSection() {
               key={solution.title}
               className="bg-[#F2F2F2] rounded-xl p-5 lg:p-[22px] flex flex-col transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-sm"
             >
-              {/* Icon Container */}
-              <div className="w-10 h-10 bg-white rounded-[10px] flex items-center justify-center mb-4">
-                <img
-                  src={solution.icon}
-                  alt={solution.title}
-                  width={24}
-                  height={24}
-                  className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] lg:w-[22px] lg:h-[22px] object-contain block"
-                />
+            {/* Icon Container */}
+                <div className="w-14 h-14 md:w-16 md:h-16 lg:w-[72px] lg:h-[72px] bg-white rounded-[14px] lg:rounded-[16px] flex items-center justify-center mb-4">
+                  <img
+                    src={solution.icon}
+                    alt={solution.title}
+                    width={44}
+                    height={44}
+                    className="w-[34px] h-[34px] md:w-[40px] md:h-[40px] lg:w-[44px] lg:h-[44px] object-contain block"
+                  />
               </div>
 
               {/* Title */}
