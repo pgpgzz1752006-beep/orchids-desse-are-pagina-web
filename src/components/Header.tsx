@@ -88,12 +88,24 @@ export default function Header() {
             ))}
         </nav>
 
-        {/* Icons */}
-        <div className="flex items-center gap-7 lg:gap-8">
-          <button
-            className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
-            aria-label="Buscar"
-          >
+          {/* Icons */}
+          <div className="flex items-center gap-7 lg:gap-8">
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] dark:hover:text-white hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/30 rounded"
+              aria-label={theme === "light" ? "Cambiar a modo oscuro" : "Cambiar a modo claro"}
+            >
+              {theme === "light" ? (
+                <Moon className="w-6 h-6" strokeWidth={1.5} />
+              ) : (
+                <Sun className="w-6 h-6" strokeWidth={1.5} />
+              )}
+            </button>
+            <button
+              className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
+              aria-label="Buscar"
+            >
             <Search className="w-6 h-6" strokeWidth={1.5} />
           </button>
           <button
