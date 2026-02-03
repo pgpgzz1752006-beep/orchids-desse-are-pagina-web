@@ -137,33 +137,33 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 top-[132px] bg-white z-40">
-          <nav className="flex flex-col items-center pt-12 gap-8">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="group relative"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span
-                  className={`
-                    font-['Montserrat'] text-[20px] font-medium uppercase tracking-[0.04em]
-                    transition-colors duration-200 ease-out
-                    ${item.active ? "text-[#14C6C9]" : "text-[#111111] hover:text-[#14C6C9]"}
-                  `}
+        {mobileMenuOpen && (
+          <div className="lg:hidden fixed inset-0 top-[132px] bg-white dark:bg-[#0E0F12] z-40 transition-colors duration-300">
+            <nav className="flex flex-col items-center pt-12 gap-8">
+              {navItems.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="group relative"
+                  onClick={() => setMobileMenuOpen(false)}
                 >
-                  {item.label}
-                </span>
-                {item.active && (
-                  <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9]" />
-                )}
-              </a>
-            ))}
-          </nav>
-        </div>
-      )}
-    </header>
+                  <span
+                    className={`
+                      font-['Montserrat'] text-[20px] font-medium uppercase tracking-[0.04em]
+                      transition-colors duration-200 ease-out
+                      ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-[#F2F2F2] hover:text-[#14C6C9]"}
+                    `}
+                  >
+                    {item.label}
+                  </span>
+                  {item.active && (
+                    <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9]" />
+                  )}
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
+      </header>
   );
 }
