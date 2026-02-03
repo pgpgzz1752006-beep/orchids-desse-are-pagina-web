@@ -19,12 +19,24 @@ interface ProductStripProps {
 
 export default function ProductStrip({ titleRegular, titleBold, products, autoplay = false }: ProductStripProps) {
   const carouselId = useId();
-  
-  // Duplicate products for infinite loop effect
-  const extendedProducts = autoplay ? [...products, ...products, ...products] : products;
   const totalOriginal = products.length;
   
-  const [currentIndex, setCurrentIndex] = useState(autoplay ? totalOriginal : 0);
+  // For infinite loop: [last N products, ...all products, first N products]
+  // N = max visible cards (5 for desktop)
+  const cloneCount = 5;
+  
+  const extendedProducts = autoplay 
+    ? [
+        ...products.slice(-cloneCount), // Clone of last N
+        ...products,                     // All original
+        ...products.slice(0, cloneCount) // Clone of first N
+      ]
+    : products;
+  
+  // Start index: cloneCount (first real product)
+  const startIndex = autoplay ? cloneCount : 0;
+  
+  const [currentIndex, setCurrentIndex] = useState(startIndex);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -62,19 +74,10 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     setPrefersReducedMotion(mediaQuery.matches);
     
-    if (mediaQuery.matches && autoplay) {
-      console.log("autoplay disabled: reduced motion", carouselId);
-    }
-    
-    const handler = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches);
-      if (e.matches && autoplay) {
-        console.log("autoplay disabled: reduced motion", carouselId);
-      }
-    };
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
-  }, [isMounted, autoplay, carouselId]);
+  }, [isMounted]);
   
   // Update visible cards on resize
   useEffect(() => {
@@ -89,7 +92,35 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
   // Calculate card width percentage
   const cardWidthPercent = 100 / visibleCards;
   
-  // Autoplay logic - FIXED
+  // Handle transition end - invisible reset for seamless loop
+  const handleTransitionEnd = useCallback(() => {
+    if (!autoplay) return;
+    
+    // If scrolled past real products (into end clones), jump to start of real products
+    if (currentIndex >= cloneCount + totalOriginal) {
+      setIsTransitioning(false);
+      setCurrentIndex(cloneCount + (currentIndex - cloneCount - totalOriginal));
+    }
+    // If scrolled before real products (into start clones), jump to end of real products
+    else if (currentIndex < cloneCount) {
+      setIsTransitioning(false);
+      setCurrentIndex(cloneCount + totalOriginal - (cloneCount - currentIndex));
+    }
+  }, [autoplay, currentIndex, totalOriginal, cloneCount]);
+  
+  // Re-enable transition after instant jump
+  useEffect(() => {
+    if (!isTransitioning && isMounted) {
+      // Force reflow then re-enable transition
+      if (trackRef.current) {
+        trackRef.current.offsetHeight;
+      }
+      const timeout = setTimeout(() => setIsTransitioning(true), 20);
+      return () => clearTimeout(timeout);
+    }
+  }, [isTransitioning, isMounted]);
+  
+  // Autoplay logic
   useEffect(() => {
     if (!isMounted || !autoplay) return;
     
@@ -97,17 +128,14 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
       if (autoplayRef.current) {
         clearInterval(autoplayRef.current);
         autoplayRef.current = null;
-        console.log("autoplay paused", carouselId, { isPaused, prefersReducedMotion });
       }
       return;
     }
     
-    console.log("autoplay started", carouselId, Date.now());
-    
     autoplayRef.current = setInterval(() => {
-      console.log("autoplay tick", carouselId, Date.now());
-      setIsTransitioning(true);
-      setCurrentIndex((prev) => prev + 1);
+      if (isTransitioning) {
+        setCurrentIndex((prev) => prev + 1);
+      }
     }, 10000);
     
     return () => {
@@ -116,50 +144,17 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
         autoplayRef.current = null;
       }
     };
-  }, [isMounted, autoplay, isPaused, prefersReducedMotion, carouselId]);
-  
-  // Handle infinite loop reset
-  useEffect(() => {
-    if (!autoplay || !isMounted) return;
-    
-    // If we've scrolled past the middle set, jump back to middle
-    if (currentIndex >= totalOriginal * 2) {
-      const timeout = setTimeout(() => {
-        setIsTransitioning(false);
-        setCurrentIndex(totalOriginal);
-        console.log("loop reset forward", carouselId);
-      }, 700);
-      return () => clearTimeout(timeout);
-    }
-    
-    // If we've scrolled before the first set, jump to middle
-    if (currentIndex < 0) {
-      const timeout = setTimeout(() => {
-        setIsTransitioning(false);
-        setCurrentIndex(totalOriginal - 1);
-        console.log("loop reset backward", carouselId);
-      }, 700);
-      return () => clearTimeout(timeout);
-    }
-  }, [currentIndex, totalOriginal, autoplay, isMounted, carouselId]);
-  
-  // Re-enable transition after instant jump
-  useEffect(() => {
-    if (!isTransitioning && isMounted) {
-      const timeout = setTimeout(() => setIsTransitioning(true), 50);
-      return () => clearTimeout(timeout);
-    }
-  }, [isTransitioning, isMounted]);
+  }, [isMounted, autoplay, isPaused, prefersReducedMotion, isTransitioning]);
   
   const goToNext = useCallback(() => {
-    setIsTransitioning(true);
+    if (!isTransitioning) return;
     setCurrentIndex((prev) => prev + 1);
-  }, []);
+  }, [isTransitioning]);
   
   const goToPrev = useCallback(() => {
-    setIsTransitioning(true);
+    if (!isTransitioning) return;
     setCurrentIndex((prev) => prev - 1);
-  }, []);
+  }, [isTransitioning]);
   
   // Pause autoplay and resume after 10s
   const pauseAndResume = useCallback(() => {
@@ -169,22 +164,19 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
     resumeTimeoutRef.current = setTimeout(() => {
       setIsPaused(false);
-      console.log("autoplay resumed after interaction", carouselId);
     }, 10000);
-  }, [autoplay, carouselId]);
+  }, [autoplay]);
   
   // Handle hover pause
   const handleMouseEnter = () => {
     if (autoplay && !prefersReducedMotion) {
       setIsPaused(true);
-      console.log("autoplay paused: hover", carouselId);
     }
   };
   
   const handleMouseLeave = () => {
     if (autoplay && !prefersReducedMotion) {
       setIsPaused(false);
-      console.log("autoplay resumed: hover end", carouselId);
     }
   };
   
@@ -262,11 +254,16 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     : 0;
   const translateX = baseTranslate + dragTranslatePercent;
   
-  // Calculate active dot index
-  const activeDot = autoplay 
-    ? ((currentIndex % totalOriginal) + totalOriginal) % totalOriginal 
-    : Math.min(currentIndex, Math.max(0, products.length - visibleCards));
-  const totalDots = autoplay ? totalOriginal : Math.max(1, products.length - visibleCards + 1);
+  // Calculate active dot index (for real products only)
+  const getRealIndex = () => {
+    if (!autoplay) return currentIndex;
+    // Map extended index to real product index
+    const realIdx = ((currentIndex - cloneCount) % totalOriginal + totalOriginal) % totalOriginal;
+    return realIdx;
+  };
+  
+  const activeDot = getRealIndex();
+  const totalDots = Math.min(totalOriginal, 5);
   
   return (
     <section 
@@ -317,6 +314,7 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
                   ? "transform 700ms ease-in-out" 
                   : "none",
               }}
+              onTransitionEnd={handleTransitionEnd}
             >
               {extendedProducts.map((product, index) => (
                 <div
@@ -364,11 +362,11 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
 
         {/* Dots */}
         <div className="flex justify-center gap-2 mt-8">
-          {Array.from({ length: Math.min(totalDots, 5) }).map((_, i) => (
+          {Array.from({ length: totalDots }).map((_, i) => (
             <span
               key={i}
               className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                i === (activeDot % Math.min(totalDots, 5)) ? "bg-[#333333]" : "bg-[#D9D9D9]"
+                i === (activeDot % totalDots) ? "bg-[#333333]" : "bg-[#D9D9D9]"
               }`}
             />
           ))}
