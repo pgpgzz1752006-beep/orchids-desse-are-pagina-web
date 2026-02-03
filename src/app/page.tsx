@@ -3,6 +3,7 @@ import HeroBanner from "@/components/HeroBanner";
 import CategoriesSection from "@/components/CategoriesSection";
 import SolutionsSection from "@/components/SolutionsSection";
 import ProductStrip from "@/components/ProductStrip";
+import ChatButtonSection from "@/components/ChatButtonSection";
 
 const featuredProducts = [
   {
