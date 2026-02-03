@@ -1,6 +1,39 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Custom Fonts */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/Montserrat-Light-1770138478928.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/Montserrat-Regular-1-1770138483370.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/Montserrat-Medium-1770138481220.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cronos Pro Display';
+  src: url('https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/Cronos-Pro-Display_12439-1770138477461.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
