@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useId } from "react";
 
 interface Product {
   name: string;
@@ -18,6 +18,8 @@ interface ProductStripProps {
 }
 
 export default function ProductStrip({ titleRegular, titleBold, products, autoplay = false }: ProductStripProps) {
+  const carouselId = useId();
+  
   // Duplicate products for infinite loop effect
   const extendedProducts = autoplay ? [...products, ...products, ...products] : products;
   const totalOriginal = products.length;
@@ -26,11 +28,12 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   
   const trackRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const autoplayRef = useRef<NodeJS.Timeout | null>(null);
-  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Touch/drag state
   const [isDragging, setIsDragging] = useState(false);
@@ -47,56 +50,84 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
   
   const [visibleCards, setVisibleCards] = useState(5);
   
+  // Mount effect
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
   // Check reduced motion preference
   useEffect(() => {
+    if (!isMounted) return;
+    
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     setPrefersReducedMotion(mediaQuery.matches);
     
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    if (mediaQuery.matches && autoplay) {
+      console.log("autoplay disabled: reduced motion", carouselId);
+    }
+    
+    const handler = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+      if (e.matches && autoplay) {
+        console.log("autoplay disabled: reduced motion", carouselId);
+      }
+    };
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
-  }, []);
+  }, [isMounted, autoplay, carouselId]);
   
   // Update visible cards on resize
   useEffect(() => {
+    if (!isMounted) return;
+    
     const handleResize = () => setVisibleCards(getVisibleCards());
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [getVisibleCards]);
+  }, [getVisibleCards, isMounted]);
   
   // Calculate card width percentage
   const cardWidthPercent = 100 / visibleCards;
   
-  // Autoplay logic
+  // Autoplay logic - FIXED
   useEffect(() => {
-    if (!autoplay || isPaused || prefersReducedMotion) {
+    if (!isMounted || !autoplay) return;
+    
+    if (isPaused || prefersReducedMotion) {
       if (autoplayRef.current) {
         clearInterval(autoplayRef.current);
         autoplayRef.current = null;
+        console.log("autoplay paused", carouselId, { isPaused, prefersReducedMotion });
       }
       return;
     }
     
+    console.log("autoplay started", carouselId, Date.now());
+    
     autoplayRef.current = setInterval(() => {
+      console.log("autoplay tick", carouselId, Date.now());
       setIsTransitioning(true);
       setCurrentIndex((prev) => prev + 1);
     }, 10000);
     
     return () => {
-      if (autoplayRef.current) clearInterval(autoplayRef.current);
+      if (autoplayRef.current) {
+        clearInterval(autoplayRef.current);
+        autoplayRef.current = null;
+      }
     };
-  }, [autoplay, isPaused, prefersReducedMotion]);
+  }, [isMounted, autoplay, isPaused, prefersReducedMotion, carouselId]);
   
   // Handle infinite loop reset
   useEffect(() => {
-    if (!autoplay) return;
+    if (!autoplay || !isMounted) return;
     
     // If we've scrolled past the middle set, jump back to middle
     if (currentIndex >= totalOriginal * 2) {
       const timeout = setTimeout(() => {
         setIsTransitioning(false);
         setCurrentIndex(totalOriginal);
+        console.log("loop reset forward", carouselId);
       }, 700);
       return () => clearTimeout(timeout);
     }
@@ -106,18 +137,19 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
       const timeout = setTimeout(() => {
         setIsTransitioning(false);
         setCurrentIndex(totalOriginal - 1);
+        console.log("loop reset backward", carouselId);
       }, 700);
       return () => clearTimeout(timeout);
     }
-  }, [currentIndex, totalOriginal, autoplay]);
+  }, [currentIndex, totalOriginal, autoplay, isMounted, carouselId]);
   
   // Re-enable transition after instant jump
   useEffect(() => {
-    if (!isTransitioning) {
+    if (!isTransitioning && isMounted) {
       const timeout = setTimeout(() => setIsTransitioning(true), 50);
       return () => clearTimeout(timeout);
     }
-  }, [isTransitioning]);
+  }, [isTransitioning, isMounted]);
   
   const goToNext = useCallback(() => {
     setIsTransitioning(true);
@@ -135,16 +167,25 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     setIsPaused(true);
     
     if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
-    resumeTimeoutRef.current = setTimeout(() => setIsPaused(false), 10000);
-  }, [autoplay]);
+    resumeTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+      console.log("autoplay resumed after interaction", carouselId);
+    }, 10000);
+  }, [autoplay, carouselId]);
   
   // Handle hover pause
   const handleMouseEnter = () => {
-    if (autoplay && !prefersReducedMotion) setIsPaused(true);
+    if (autoplay && !prefersReducedMotion) {
+      setIsPaused(true);
+      console.log("autoplay paused: hover", carouselId);
+    }
   };
   
   const handleMouseLeave = () => {
-    if (autoplay && !prefersReducedMotion) setIsPaused(false);
+    if (autoplay && !prefersReducedMotion) {
+      setIsPaused(false);
+      console.log("autoplay resumed: hover end", carouselId);
+    }
   };
   
   // Touch/drag handlers
@@ -228,7 +269,11 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
   const totalDots = autoplay ? totalOriginal : Math.max(1, products.length - visibleCards + 1);
   
   return (
-    <section className="w-full bg-white py-14 md:py-16 lg:py-[72px]">
+    <section 
+      className="w-full bg-white py-14 md:py-16 lg:py-[72px]"
+      data-autoplay={autoplay ? "on" : "off"}
+      data-carousel-id={carouselId}
+    >
       <div className="w-full max-w-[1320px] mx-auto px-6 md:px-10 lg:px-10">
         {/* Title */}
         <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] mb-10 md:mb-12">
@@ -251,40 +296,40 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
             <ChevronLeft className="w-7 h-7" strokeWidth={1.5} />
           </button>
 
-            {/* Products Track */}
+          {/* Products Track */}
+          <div 
+            ref={containerRef}
+            className="w-full md:px-14 lg:px-16 overflow-hidden select-none py-3"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+          >
             <div 
-              ref={containerRef}
-              className="w-full md:px-14 lg:px-16 overflow-hidden select-none py-3"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
+              ref={trackRef}
+              className="flex"
+              style={{
+                transform: `translateX(${translateX}%)`,
+                transition: isTransitioning && !isDragging 
+                  ? "transform 700ms ease-in-out" 
+                  : "none",
+              }}
             >
-              <div 
-                ref={trackRef}
-                className="flex"
-                style={{
-                  transform: `translateX(${translateX}%)`,
-                  transition: isTransitioning && !isDragging 
-                    ? "transform 700ms ease-in-out" 
-                    : "none",
-                }}
-              >
-                {extendedProducts.map((product, index) => (
-                  <div
-                    key={`${product.name}-${index}`}
-                    className="flex-shrink-0 px-2 lg:px-[10px]"
-                    style={{ width: `${cardWidthPercent}%` }}
+              {extendedProducts.map((product, index) => (
+                <div
+                  key={`${product.name}-${index}`}
+                  className="flex-shrink-0 px-2 lg:px-[10px]"
+                  style={{ width: `${cardWidthPercent}%` }}
+                >
+                  <a
+                    href={product.href}
+                    className="block bg-white border border-[#D9D9D9] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-200 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[4px] hover:scale-[1.02] hover:border-[#BDBDBD] hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] active:translate-y-[-2px] active:scale-[1.01] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm"
+                    onClick={(e) => isDragging && e.preventDefault()}
+                    draggable={false}
                   >
-                    <a
-                      href={product.href}
-                      className="block bg-white border border-[#D9D9D9] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-200 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[4px] hover:scale-[1.02] hover:border-[#BDBDBD] hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] active:translate-y-[-2px] active:scale-[1.01] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm"
-                      onClick={(e) => isDragging && e.preventDefault()}
-                      draggable={false}
-                    >
                     {/* Image Container */}
                     <div className="flex items-center justify-center h-[100px] md:h-[110px] lg:h-[120px] mb-3">
                       <Image
