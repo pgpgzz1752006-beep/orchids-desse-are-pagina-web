@@ -65,7 +65,7 @@ const recommendedProducts = [
 
 export default function Home() {
   return (
-      <div className="min-h-screen bg-white dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300">
+      <div id="top" className="min-h-screen bg-white dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300">
         <Header />
         <main className="w-full">
           <HeroBanner />
