@@ -35,11 +35,23 @@ const AUTOPLAY_INTERVAL = 5000; // 5 seconds
 const TRANSITION_DURATION = 700; // 700ms
 
 export default function HeroBanner() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const totalSlides = bannerSlides.length;
+  
+  // Extended slides: [last, ...all, first] for seamless loop
+  const extendedSlides = [
+    bannerSlides[totalSlides - 1], // Clone of last
+    ...bannerSlides,               // All original slides
+    bannerSlides[0],               // Clone of first
+  ];
+  
+  // Start at index 1 (first real slide)
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  
   const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const autoplayRef = useRef<NodeJS.Timeout | null>(null);
@@ -48,37 +60,53 @@ export default function HeroBanner() {
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mediaQuery.matches);
-    if (mediaQuery.matches) {
-      console.log("autoplay disabled: reduced motion");
-    }
 
-    const handler = (e: MediaQueryListEvent) => {
-      setReducedMotion(e.matches);
-      if (e.matches) {
-        console.log("autoplay disabled: reduced motion");
-      }
-    };
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
-  const goToSlide = useCallback((index: number) => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentSlide(index);
-    setTimeout(() => setIsTransitioning(false), TRANSITION_DURATION);
+  // Handle transition end - invisible reset for seamless loop
+  const handleTransitionEnd = useCallback(() => {
+    // If we're at the clone of the last slide (index 0), jump to real last
+    if (currentIndex === 0) {
+      setIsTransitioning(false);
+      setCurrentIndex(totalSlides);
+    }
+    // If we're at the clone of the first slide (index totalSlides + 1), jump to real first
+    else if (currentIndex === totalSlides + 1) {
+      setIsTransitioning(false);
+      setCurrentIndex(1);
+    }
+  }, [currentIndex, totalSlides]);
+
+  // Re-enable transition after instant jump
+  useEffect(() => {
+    if (!isTransitioning) {
+      // Force reflow then re-enable transition
+      if (trackRef.current) {
+        trackRef.current.offsetHeight; // Force reflow
+      }
+      const timeout = setTimeout(() => setIsTransitioning(true), 20);
+      return () => clearTimeout(timeout);
+    }
   }, [isTransitioning]);
 
-  const nextSlide = useCallback(() => {
-    const next = (currentSlide + 1) % bannerSlides.length;
-    goToSlide(next);
-    console.log("banner autoplay tick", "HeroBanner", Date.now(), "slide:", next);
-  }, [currentSlide, goToSlide]);
+  const goToNext = useCallback(() => {
+    if (!isTransitioning) return;
+    setCurrentIndex((prev) => prev + 1);
+  }, [isTransitioning]);
 
-  const prevSlide = useCallback(() => {
-    const prev = (currentSlide - 1 + bannerSlides.length) % bannerSlides.length;
-    goToSlide(prev);
-  }, [currentSlide, goToSlide]);
+  const goToPrev = useCallback(() => {
+    if (!isTransitioning) return;
+    setCurrentIndex((prev) => prev - 1);
+  }, [isTransitioning]);
+
+  const goToSlide = useCallback((realIndex: number) => {
+    // realIndex is 0-based for original slides
+    // We need to add 1 because index 0 is the clone
+    setCurrentIndex(realIndex + 1);
+  }, []);
 
   // Autoplay logic
   useEffect(() => {
@@ -91,7 +119,7 @@ export default function HeroBanner() {
     }
 
     autoplayRef.current = setInterval(() => {
-      nextSlide();
+      goToNext();
     }, AUTOPLAY_INTERVAL);
 
     return () => {
@@ -99,7 +127,7 @@ export default function HeroBanner() {
         clearInterval(autoplayRef.current);
       }
     };
-  }, [reducedMotion, isPaused, nextSlide]);
+  }, [reducedMotion, isPaused, goToNext]);
 
   // Touch/swipe handlers
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -117,9 +145,9 @@ export default function HeroBanner() {
 
     if (Math.abs(diff) > threshold) {
       if (diff > 0) {
-        nextSlide();
+        goToNext();
       } else {
-        prevSlide();
+        goToPrev();
       }
     }
 
@@ -130,62 +158,75 @@ export default function HeroBanner() {
   const handleMouseEnter = () => setIsPaused(true);
   const handleMouseLeave = () => setIsPaused(false);
 
-  const handleDotClick = (index: number) => {
-    goToSlide(index);
+  const handleDotClick = (realIndex: number) => {
+    goToSlide(realIndex);
     setIsPaused(true);
-    // Resume autoplay after 10s
     setTimeout(() => setIsPaused(false), 10000);
   };
+
+  // Calculate the real slide index for dots (0-based)
+  const getRealIndex = () => {
+    if (currentIndex === 0) return totalSlides - 1;
+    if (currentIndex === totalSlides + 1) return 0;
+    return currentIndex - 1;
+  };
+
+  const realIndex = getRealIndex();
+
+  // Calculate transform
+  const translateX = -(currentIndex * 100) / extendedSlides.length;
 
   return (
     <section
       className="relative w-full overflow-hidden bg-white dark:bg-[#0E0F12] transition-colors duration-300"
       data-autoplay={!reducedMotion && !isPaused ? "on" : "off"}
     >
-        {/* Carousel container - aspect-ratio for mobile/tablet, fixed height for desktop */}
-          <div
-            ref={containerRef}
-            className="relative w-full aspect-[16/9] sm:aspect-[21/9] lg:aspect-auto lg:h-[480px] xl:h-[520px] min-h-[200px] max-h-[520px]"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
+      {/* Carousel container */}
+      <div
+        ref={containerRef}
+        className="relative w-full aspect-[16/9] sm:aspect-[21/9] lg:aspect-auto lg:h-[480px] xl:h-[520px] min-h-[200px] max-h-[520px]"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {/* Track */}
         <div
+          ref={trackRef}
           className="flex h-full will-change-transform"
           style={{
-            width: `${bannerSlides.length * 100}%`,
-            transform: `translateX(-${(currentSlide * 100) / bannerSlides.length}%)`,
-            transition: reducedMotion
-              ? "none"
-              : `transform ${TRANSITION_DURATION}ms ease-in-out`,
+            width: `${extendedSlides.length * 100}%`,
+            transform: `translateX(${translateX}%)`,
+            transition: isTransitioning && !reducedMotion
+              ? `transform ${TRANSITION_DURATION}ms ease-in-out`
+              : "none",
           }}
+          onTransitionEnd={handleTransitionEnd}
         >
-          {bannerSlides.map((slide, index) => (
+          {extendedSlides.map((slide, index) => (
             <div
-              key={slide.id}
+              key={`slide-${index}`}
               className="relative h-full flex-shrink-0"
-              style={{ width: `${100 / bannerSlides.length}%` }}
+              style={{ width: `${100 / extendedSlides.length}%` }}
             >
               <Image
-                    src={slide.src}
-                    alt={slide.alt}
-                    fill
-                    className="object-contain lg:object-cover object-center"
-                    priority={index === 0}
-                    loading={index === 0 ? "eager" : "lazy"}
-                    sizes="100vw"
-                  />
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                className="object-contain lg:object-cover object-center"
+                priority={index <= 2}
+                loading={index <= 2 ? "eager" : "lazy"}
+                sizes="100vw"
+              />
             </div>
           ))}
         </div>
 
-        {/* Arrow buttons (optional - hidden by default, show on hover) */}
+        {/* Arrow buttons */}
         <button
           onClick={() => {
-            prevSlide();
+            goToPrev();
             setIsPaused(true);
             setTimeout(() => setIsPaused(false), 10000);
           }}
@@ -198,7 +239,7 @@ export default function HeroBanner() {
         </button>
         <button
           onClick={() => {
-            nextSlide();
+            goToNext();
             setIsPaused(true);
             setTimeout(() => setIsPaused(false), 10000);
           }}
@@ -222,13 +263,13 @@ export default function HeroBanner() {
               rounded-full transition-all duration-200
               focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9] focus-visible:ring-offset-2
               ${
-                currentSlide === index
+                realIndex === index
                   ? "bg-[#666666] scale-110"
                   : "bg-[#CFCFCF] hover:bg-[#AAAAAA]"
               }
             `}
             aria-label={`Ir al banner ${index + 1}`}
-            aria-current={currentSlide === index ? "true" : "false"}
+            aria-current={realIndex === index ? "true" : "false"}
           />
         ))}
       </div>
