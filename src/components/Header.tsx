@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Search, User, ShoppingCart, Menu, X } from "lucide-react";
 
 const navItems = [
-  { label: "CATEGORÍAS", href: "/categorias", active: true },
+  { label: "CATEGORÍAS", href: "/categorias", active: false },
   { label: "PRODUCTOS", href: "/productos", active: false },
   { label: "NUEVOS", href: "/nuevos", active: false },
   { label: "SERVICIOS", href: "/servicios", active: false },
