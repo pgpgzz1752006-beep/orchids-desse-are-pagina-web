@@ -76,10 +76,11 @@ export default function Home() {
           />
         <CategoriesSection />
         <ProductStrip
-          titleRegular="PRODUCTOS"
-          titleBold="RECOMENDADOS"
-          products={recommendedProducts}
-        />
+            titleRegular="PRODUCTOS"
+            titleBold="RECOMENDADOS"
+            products={recommendedProducts}
+            autoplay
+          />
         <SolutionsSection />
         <ChatButtonSection />
       </main>
