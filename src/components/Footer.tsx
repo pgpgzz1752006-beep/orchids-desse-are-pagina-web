@@ -69,7 +69,7 @@ export default function Footer() {
                     alt="Instagram"
                     width={52}
                     height={52}
-                    className="w-[40px] h-[40px] md:w-[46px] md:h-[46px] lg:w-[52px] lg:h-[52px] object-contain block"
+                      className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
                   />
                 </a>
 
@@ -86,7 +86,7 @@ export default function Footer() {
                     alt="Facebook"
                     width={52}
                     height={52}
-                    className="w-[40px] h-[40px] md:w-[46px] md:h-[46px] lg:w-[52px] lg:h-[52px] object-contain block"
+                      className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
                   />
                 </a>
 
@@ -103,7 +103,7 @@ export default function Footer() {
                     alt="WhatsApp"
                     width={52}
                     height={52}
-                    className="w-[40px] h-[40px] md:w-[46px] md:h-[46px] lg:w-[52px] lg:h-[52px] object-contain block"
+                      className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
                   />
                 </a>
 
@@ -118,7 +118,7 @@ export default function Footer() {
                     alt="Email"
                     width={52}
                     height={52}
-                    className="w-[40px] h-[40px] md:w-[46px] md:h-[46px] lg:w-[52px] lg:h-[52px] object-contain block"
+                      className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
                   />
                 </a>
               </div>
