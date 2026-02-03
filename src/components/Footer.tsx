@@ -7,7 +7,7 @@ const menuLinks = [
   { label: "Productos", href: "/productos" },
   { label: "Nuevos", href: "/nuevos" },
   { label: "Servicios", href: "/servicios" },
-  { label: "Contacto", href: "/contacto" },
+  { label: "Contacto", href: "#contacto" },
 ];
 
 const colorBarSegments = [
