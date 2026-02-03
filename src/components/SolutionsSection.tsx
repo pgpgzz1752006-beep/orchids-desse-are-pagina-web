@@ -52,7 +52,7 @@ export default function SolutionsSection() {
               className="bg-[#F2F2F2] rounded-xl p-5 lg:p-[22px] flex flex-col transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-sm"
             >
               {/* Icon Container */}
-                    <div className="w-[62px] h-[62px] md:w-[70px] md:h-[70px] lg:w-[80px] lg:h-[80px] bg-white rounded-[14px] lg:rounded-[16px] flex items-center justify-center mb-4">
+                    <div className="w-[32px] h-[32px] md:w-[40px] md:h-[40px] lg:w-[50px] lg:h-[50px] bg-white rounded-[14px] lg:rounded-[16px] flex items-center justify-center mb-4">
                         <img
                           src={solution.icon}
                           alt={solution.title}
