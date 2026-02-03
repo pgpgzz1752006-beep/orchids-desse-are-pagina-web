@@ -10,7 +10,7 @@ const navItems = [
   { label: "PRODUCTOS", href: "/productos", active: false },
   { label: "NUEVOS", href: "/nuevos", active: false },
   { label: "SERVICIOS", href: "/servicios", active: false },
-  { label: "CONTACTO", href: "/contacto", active: false },
+  { label: "CONTACTO", href: "#contacto", active: false },
 ];
 
 const colorBarSegments = [
