@@ -125,7 +125,7 @@ export default function Footer() {
               </div>
 
               {/* Mobile: allow wrap if needed */}
-              <div className="flex md:hidden flex-wrap items-center justify-center gap-[8px] mt-[12px]">
+              <div className="flex md:hidden flex-wrap items-center justify-center gap-0 mt-[12px]">
                 {/* Instagram */}
                 <a
                   href="https://instagram.com"
