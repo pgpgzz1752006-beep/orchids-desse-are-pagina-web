@@ -11,8 +11,8 @@ export default function Home() {
       <main className="w-full">
         <HeroBanner />
         <CategoriesSection />
-        <SolutionsSection />
         <RecommendedProductsSection />
+        <SolutionsSection />
       </main>
     </div>
   );
