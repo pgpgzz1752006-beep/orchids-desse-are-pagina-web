@@ -1,28 +1,26 @@
 "use client";
 
-import { Droplet, Wand2, Award, Package } from "lucide-react";
-
 const solutions = [
   {
-    icon: Droplet,
+    icon: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-13-1770146554097.png?width=200&height=200&resize=contain",
     title: "Productos",
     description:
       "Innovamos en productos, colores y materiales. Tenemos uno de los catálogos más amplios de la industria.",
   },
   {
-    icon: Wand2,
+    icon: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-11-1770146554097.png?width=200&height=200&resize=contain",
     title: "Personalización",
     description:
       "Todos nuestros productos son totalmente personalizables. Puedes utilizar nuestro visualizador con tu logotipo.",
   },
   {
-    icon: Award,
+    icon: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-12-1770146554097.png?width=200&height=200&resize=contain",
     title: "Proyectos especiales",
     description:
       "¿No encontraste lo que buscabas? Podemos crear artículos a tu medida: lonas, flyers, notas de remisión y un sin fin de artículos impresos.",
   },
   {
-    icon: Package,
+    icon: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-10-1770146554097.png?width=200&height=200&resize=contain",
     title: "Distribución",
     description:
       "Entregamos tus productos en cualquier rincón de México, con una logística confiable y eficiente.",
@@ -55,9 +53,12 @@ export default function SolutionsSection() {
             >
               {/* Icon Container */}
               <div className="w-10 h-10 bg-white rounded-[10px] flex items-center justify-center mb-4">
-                <solution.icon
-                  className="w-[22px] h-[22px] text-[#18C6C8]"
-                  strokeWidth={2}
+                <img
+                  src={solution.icon}
+                  alt={solution.title}
+                  width={24}
+                  height={24}
+                  className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] lg:w-[22px] lg:h-[22px] object-contain block"
                 />
               </div>
 
