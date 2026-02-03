@@ -52,15 +52,15 @@ export default function SolutionsSection() {
               className="bg-[#F2F2F2] rounded-xl p-5 lg:p-[22px] flex flex-col transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-sm"
             >
               {/* Icon Container */}
-                  <div className="w-[72px] h-[72px] md:w-[80px] md:h-[80px] lg:w-[90px] lg:h-[90px] bg-white rounded-[14px] lg:rounded-[16px] flex items-center justify-center mb-4">
-                    <img
-                      src={solution.icon}
-                      alt={solution.title}
-                      width={60}
-                      height={60}
-                      className="w-[48px] h-[48px] md:w-[54px] md:h-[54px] lg:w-[60px] lg:h-[60px] object-contain block"
-                    />
-                </div>
+                    <div className="w-[62px] h-[62px] md:w-[70px] md:h-[70px] lg:w-[80px] lg:h-[80px] bg-white rounded-[14px] lg:rounded-[16px] flex items-center justify-center mb-4">
+                      <img
+                        src={solution.icon}
+                        alt={solution.title}
+                        width={75}
+                        height={75}
+                        className="w-[63px] h-[63px] md:w-[69px] md:h-[69px] lg:w-[75px] lg:h-[75px] object-contain block"
+                      />
+                  </div>
 
               {/* Title */}
               <h3 className="font-['Montserrat'] text-[16px] lg:text-[17px] font-bold text-[#111111] mb-2">
