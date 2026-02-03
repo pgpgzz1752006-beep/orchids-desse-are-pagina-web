@@ -179,9 +179,9 @@ export default function Footer() {
 
                   {/* Email */}
                   <a
-                    href="mailto:contacto@disenare.com"
+                    href="mailto:disenarepromocionales@gmail.com?subject=Cotizaci%C3%B3n%20de%20promocionales&body=Hola%2C%20me%20gustar%C3%ADa%20cotizar%20promocionales.%20Mi%20nombre%20es%3A%20_____%20%0A%0AGracias."
                     className="p-0 m-0 -ml-[8px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="Correo"
+                    aria-label="Enviar correo a disenarepromocionales@gmail.com"
                   >
                     <img
                       src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-08-1770149787870.png?width=200&height=200&resize=contain"
