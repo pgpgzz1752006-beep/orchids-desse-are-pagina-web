@@ -65,27 +65,28 @@ const recommendedProducts = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white font-['Montserrat']">
-      <Header />
-      <main className="w-full">
-        <HeroBanner />
-        <ProductStrip
-            titleRegular="PRODUCTOS"
-            titleBold="DESTACADOS"
-            products={featuredProducts}
-            autoplay
-          />
-        <CategoriesSection />
-        <ProductStrip
-            titleRegular="PRODUCTOS"
-            titleBold="RECOMENDADOS"
-            products={recommendedProducts}
-            autoplay
-          />
-        <SolutionsSection />
-        <ChatButtonSection />
-      </main>
-      <Footer />
-    </div>
+      <div className="min-h-screen bg-white font-['Montserrat']">
+        <Header />
+        <main className="w-full">
+          <HeroBanner />
+          <ProductStrip
+              titleRegular="PRODUCTOS"
+              titleBold="DESTACADOS"
+              products={featuredProducts}
+              autoplay
+            />
+          <CategoriesSection />
+          <ProductStrip
+              titleRegular="PRODUCTOS"
+              titleBold="RECOMENDADOS"
+              products={recommendedProducts}
+              autoplay
+            />
+          <SolutionsSection />
+          <ChatButtonSection />
+        </main>
+        <Footer />
+        <WhatsAppButton />
+      </div>
   );
 }
