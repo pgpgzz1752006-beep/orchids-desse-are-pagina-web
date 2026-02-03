@@ -2,7 +2,7 @@
 
 const solutions = [
   {
-    icon: "/icons/icon-personalizacion.png",
+    icon: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-13-1770147592915.png?width=200&height=200&resize=contain",
     title: "Productos",
     description:
       "Innovamos en productos, colores y materiales. Tenemos uno de los catálogos más amplios de la industria.",
@@ -14,13 +14,13 @@ const solutions = [
       "Todos nuestros productos son totalmente personalizables. Puedes utilizar nuestro visualizador con tu logotipo.",
   },
   {
-    icon: "/icons/icon-personalizacion.png",
+    icon: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-12-1770147598107.png?width=200&height=200&resize=contain",
     title: "Proyectos especiales",
     description:
       "¿No encontraste lo que buscabas? Podemos crear artículos a tu medida: lonas, flyers, notas de remisión y un sin fin de artículos impresos.",
   },
   {
-    icon: "/icons/icon-personalizacion.png",
+    icon: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-10-1770147602221.png?width=200&height=200&resize=contain",
     title: "Distribución",
     description:
       "Entregamos tus productos en cualquier rincón de México, con una logística confiable y eficiente.",
