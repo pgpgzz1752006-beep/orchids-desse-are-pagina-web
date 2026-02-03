@@ -58,7 +58,7 @@ export default function SolutionsSection() {
                   alt={solution.title}
                   width={72}
                   height={72}
-                  className="w-[350px] h-[350px] md:w-[350px] md:h-[350px] lg:w-[350px] lg:h-[350px] object-contain block"
+                  className="w-[450px] h-[450px] md:w-[450px] md:h-[450px] lg:w-[450px] lg:h-[450px] object-contain block"
                 />
               </div>
 
