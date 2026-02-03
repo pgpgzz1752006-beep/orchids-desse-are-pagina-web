@@ -31,7 +31,7 @@ const bannerSlides = [
   },
 ];
 
-const AUTOPLAY_INTERVAL = 7000; // 7 seconds
+const AUTOPLAY_INTERVAL = 5000; // 5 seconds
 const TRANSITION_DURATION = 700; // 700ms
 
 export default function HeroBanner() {
