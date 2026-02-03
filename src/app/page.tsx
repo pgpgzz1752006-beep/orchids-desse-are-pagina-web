@@ -4,6 +4,7 @@ import CategoriesSection from "@/components/CategoriesSection";
 import SolutionsSection from "@/components/SolutionsSection";
 import ProductStrip from "@/components/ProductStrip";
 import ChatButtonSection from "@/components/ChatButtonSection";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 
 const featuredProducts = [
