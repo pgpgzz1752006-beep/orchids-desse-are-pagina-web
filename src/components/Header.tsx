@@ -137,7 +137,7 @@ export default function Header() {
                   className={`
                     font-['Montserrat'] text-[20px] font-medium uppercase tracking-[0.04em]
                     transition-colors duration-200 ease-out
-                    ${item.active ? "text-[#14C6C9]" : "text-[#111111]"}
+                    ${item.active ? "text-[#14C6C9]" : "text-[#111111] hover:text-[#14C6C9]"}
                   `}
                 >
                   {item.label}
