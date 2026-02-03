@@ -270,13 +270,13 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
   
   return (
     <section 
-      className="w-full bg-white py-14 md:py-16 lg:py-[72px]"
+      className="w-full bg-white dark:bg-[#0E0F12] py-14 md:py-16 lg:py-[72px] transition-colors duration-300"
       data-autoplay={autoplay ? "on" : "off"}
       data-carousel-id={carouselId}
     >
       <div className="w-full max-w-[1320px] mx-auto px-6 md:px-10 lg:px-10">
         {/* Title */}
-        <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] mb-10 md:mb-12">
+        <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2] mb-10 md:mb-12">
           <span className="font-normal">{titleRegular} </span>
           <span className="font-extrabold">{titleBold}</span>
         </h2>
