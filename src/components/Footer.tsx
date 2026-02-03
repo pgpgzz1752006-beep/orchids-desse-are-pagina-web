@@ -124,28 +124,28 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Column 3: Menú */}
-            <div className="flex flex-col items-center md:items-end">
-              <h3 className="font-['Montserrat'] text-[26px] md:text-[28px] lg:text-[32px] font-bold text-[#111111] mb-4 md:mb-5">
-                Menú
-              </h3>
-              <nav className="flex flex-col items-center md:items-end gap-2 md:gap-[10px]">
-                {menuLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className="font-['Montserrat'] text-[20px] md:text-[22px] lg:text-[24px] font-normal text-[#111111] transition-opacity duration-150 hover:opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </nav>
+              {/* Column 3: Menú */}
+              <div className="flex flex-col items-center md:items-end">
+                <h3 className="font-['Montserrat'] text-[26px] md:text-[28px] lg:text-[32px] font-bold text-[#111111] leading-[1.1] mb-2 md:mb-3">
+                  Menú
+                </h3>
+                <nav className="flex flex-col items-center md:items-end gap-[6px] md:gap-[8px]">
+                  {menuLinks.map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      className="font-['Montserrat'] text-[18px] md:text-[20px] lg:text-[22px] font-normal text-[#111111] leading-[1.25] transition-opacity duration-150 hover:opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </nav>
+              </div>
             </div>
-          </div>
 
-          {/* Copyright */}
-          <div className="mt-10 md:mt-12 lg:mt-14 text-center">
-            <p className="font-['Montserrat'] text-[15px] md:text-[17px] lg:text-[18px] text-[#111111] italic">
+            {/* Copyright */}
+            <div className="mt-5 md:mt-6 lg:mt-7 text-center">
+              <p className="font-['Montserrat'] text-[14px] md:text-[15px] lg:text-[16px] text-[#111111] italic">
               Diseñare Promocionales 2026®. Todos los derechos reservados.
             </p>
           </div>
