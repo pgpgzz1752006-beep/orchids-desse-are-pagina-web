@@ -29,16 +29,16 @@ const solutions = [
 
 export default function SolutionsSection() {
   return (
-    <section className="w-full bg-white py-16 md:py-20 lg:py-16">
+    <section className="w-full bg-white dark:bg-[#0E0F12] py-16 md:py-20 lg:py-16 transition-colors duration-300">
       <div className="w-full max-w-[1280px] mx-auto px-5 md:px-8 lg:px-8">
         {/* Title */}
-        <h2 className="text-center font-['Montserrat'] text-[30px] md:text-[38px] lg:text-[44px] tracking-[0.03em] text-[#111111] mb-5">
+        <h2 className="text-center font-['Montserrat'] text-[30px] md:text-[38px] lg:text-[44px] tracking-[0.03em] text-[#111111] dark:text-[#F2F2F2] mb-5">
           <span className="font-normal">NUESTRAS </span>
           <span className="font-extrabold">SOLUCIONES</span>
         </h2>
 
         {/* Description */}
-        <p className="text-center font-['Montserrat'] text-[14px] md:text-[15px] lg:text-[15px] leading-[1.7] text-[#2F2F2F] max-w-[880px] mx-auto mb-10 md:mb-12 lg:mb-14">
+        <p className="text-center font-['Montserrat'] text-[14px] md:text-[15px] lg:text-[15px] leading-[1.7] text-[#2F2F2F] dark:text-[#CCCCCC] max-w-[880px] mx-auto mb-10 md:mb-12 lg:mb-14">
           Importamos, personalizamos y distribuimos los mejores productos promocionales para que tu
           negocio crezca. Con un catálogo exclusivo, precios competitivos y soluciones a la medida, somos
           el aliado estratégico que necesitas para ofrecer más y mejor a tus clientes.
@@ -49,7 +49,7 @@ export default function SolutionsSection() {
             {solutions.map((solution) => (
               <div
                 key={solution.title}
-                className="bg-[#F2F2F2] rounded-xl p-5 lg:p-[22px] flex flex-col will-change-transform transition-all duration-200 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_14px_30px_rgba(0,0,0,0.14)] active:translate-y-[-2px] active:scale-[1.01] focus-within:ring-2 focus-within:ring-[#14C6C9]/60 focus-within:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-md"
+                className="bg-[#F2F2F2] dark:bg-[#1A1D24] rounded-xl p-5 lg:p-[22px] flex flex-col will-change-transform transition-all duration-200 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_14px_30px_rgba(0,0,0,0.14)] active:translate-y-[-2px] active:scale-[1.01] focus-within:ring-2 focus-within:ring-[#14C6C9]/60 focus-within:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-md"
               >
               {/* Icon Container */}
               <div className="w-[56px] h-[56px] md:w-[64px] md:h-[64px] lg:w-[72px] lg:h-[72px] bg-white rounded-[14px] lg:rounded-[16px] flex items-center justify-center mb-4">
@@ -63,12 +63,12 @@ export default function SolutionsSection() {
               </div>
 
               {/* Title */}
-              <h3 className="font-['Montserrat'] text-[16px] lg:text-[17px] font-bold text-[#111111] mb-2">
+              <h3 className="font-['Montserrat'] text-[16px] lg:text-[17px] font-bold text-[#111111] dark:text-[#F2F2F2] mb-2">
                 {solution.title}
               </h3>
 
               {/* Description */}
-              <p className="font-['Montserrat'] text-[13px] lg:text-[13.5px] leading-[1.6] text-[#4A4A4A] min-h-[72px]">
+              <p className="font-['Montserrat'] text-[13px] lg:text-[13.5px] leading-[1.6] text-[#4A4A4A] dark:text-[#AAAAAA] min-h-[72px]">
                 {solution.description}
               </p>
             </div>
