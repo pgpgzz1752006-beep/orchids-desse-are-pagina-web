@@ -125,21 +125,21 @@ export default function Footer() {
               </div>
 
               {/* Mobile: allow wrap if needed */}
-              <div className="flex md:hidden flex-wrap items-center justify-center gap-[12px] mt-[12px]">
+              <div className="flex md:hidden flex-wrap items-center justify-center gap-[8px] mt-[12px]">
                 {/* Instagram */}
                 <a
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-[48px] h-[48px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  className="w-[52px] h-[52px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
                   aria-label="Instagram"
                 >
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
                     alt="Instagram"
-                    width={44}
-                    height={44}
-                    className="w-[44px] h-[44px] object-contain block"
+                    width={48}
+                    height={48}
+                    className="w-[48px] h-[48px] object-contain block"
                   />
                 </a>
 
@@ -148,15 +148,15 @@ export default function Footer() {
                   href="https://facebook.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-[48px] h-[48px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  className="w-[52px] h-[52px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
                   aria-label="Facebook"
                 >
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
                     alt="Facebook"
-                    width={44}
-                    height={44}
-                    className="w-[44px] h-[44px] object-contain block"
+                    width={48}
+                    height={48}
+                    className="w-[48px] h-[48px] object-contain block"
                   />
                 </a>
 
@@ -165,30 +165,30 @@ export default function Footer() {
                   href="https://wa.me/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-[48px] h-[48px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  className="w-[52px] h-[52px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
                   aria-label="WhatsApp"
                 >
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
                     alt="WhatsApp"
-                    width={44}
-                    height={44}
-                    className="w-[44px] h-[44px] object-contain block"
+                    width={48}
+                    height={48}
+                    className="w-[48px] h-[48px] object-contain block"
                   />
                 </a>
 
                 {/* Email */}
                 <a
                   href="mailto:contacto@disenare.com"
-                  className="w-[48px] h-[48px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  className="w-[52px] h-[52px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
                   aria-label="Correo"
                 >
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-08-1770149787870.png?width=200&height=200&resize=contain"
                     alt="Email"
-                    width={44}
-                    height={44}
-                    className="w-[44px] h-[44px] object-contain block"
+                    width={48}
+                    height={48}
+                    className="w-[48px] h-[48px] object-contain block"
                   />
                 </a>
               </div>
