@@ -34,11 +34,11 @@ export default function Footer() {
         ))}
       </div>
 
-      {/* Footer Content */}
-      <div className="w-full bg-[#F5F5F5] pt-12 md:pt-14 lg:pt-[52px] pb-8 md:pb-10 lg:pb-10">
-        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-14 lg:px-[72px]">
-          {/* Main Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_1fr] gap-10 md:gap-8 lg:gap-12 items-start">
+        {/* Footer Content */}
+        <div className="w-full bg-[#F5F5F5] pt-6 md:pt-7 lg:pt-[26px] pb-5 md:pb-6 lg:pb-6">
+          <div className="w-full max-w-[1440px] mx-auto px-6 md:px-14 lg:px-[72px]">
+            {/* Main Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_1fr] gap-6 md:gap-6 lg:gap-8 items-start">
             {/* Column 1: Logo */}
             <div className="flex justify-center md:justify-start">
               <Image
