@@ -145,11 +145,11 @@ export default function Footer() {
 
                   {/* Facebook */}
                   <a
-                    href="https://facebook.com"
+                    href="https://www.facebook.com/share/14UPMcQd31J/?mibextid=wwXIfr"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-0 m-0 -ml-[8px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="Facebook"
+                    aria-label="Facebook Diseñare Promocionales"
                   >
                     <img
                       src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
