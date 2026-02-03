@@ -144,43 +144,44 @@ export default function HeroBanner() {
     setTimeout(() => setIsPaused(false), 10000);
   };
 
-  return (
-    <section
-      className="relative w-full overflow-hidden bg-white dark:bg-[#0E0F12] transition-colors duration-300"
-      data-autoplay={!reducedMotion && !isPaused ? "on" : "off"}
-    >
-      {/* Carousel container - Crossfade implementation */}
-      <div
-        ref={containerRef}
-        className="relative w-full aspect-[16/9] sm:aspect-[21/9] lg:aspect-auto lg:h-[480px] xl:h-[520px] min-h-[200px] max-h-[520px]"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+    return (
+      <section
+        className="relative w-full bg-white dark:bg-[#0E0F12] transition-colors duration-300"
+        data-autoplay={!reducedMotion && !isPaused ? "on" : "off"}
       >
-        {/* Stacked slides with crossfade */}
-        {bannerSlides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className="absolute inset-0 w-full h-full"
-            style={{
-              opacity: currentIndex === index ? 1 : 0,
-              zIndex: currentIndex === index ? 1 : 0,
-              transition: reducedMotion ? "none" : `opacity ${CROSSFADE_DURATION}ms ease-in-out`,
-            }}
-          >
-            <Image
-              src={slide.src}
-              alt={slide.alt}
-              fill
-              className="object-contain lg:object-cover object-center"
-              priority={index <= 1}
-              loading={index <= 1 ? "eager" : "lazy"}
-              sizes="100vw"
-            />
-          </div>
-        ))}
+        {/* Carousel container - Crossfade implementation */}
+        {/* Mobile: 4/3, Tablet: 16/9, Desktop: 21/9 - NO fixed heights */}
+        <div
+          ref={containerRef}
+          className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Stacked slides with crossfade */}
+          {bannerSlides.map((slide, index) => (
+            <div
+              key={slide.id}
+              className="absolute inset-0 w-full h-full"
+              style={{
+                opacity: currentIndex === index ? 1 : 0,
+                zIndex: currentIndex === index ? 1 : 0,
+                transition: reducedMotion ? "none" : `opacity ${CROSSFADE_DURATION}ms ease-in-out`,
+              }}
+            >
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                className="object-contain sm:object-contain lg:object-cover object-center"
+                priority={index <= 1}
+                loading={index <= 1 ? "eager" : "lazy"}
+                sizes="100vw"
+              />
+            </div>
+          ))}
 
         {/* Arrow buttons - visible on hover */}
         <button
