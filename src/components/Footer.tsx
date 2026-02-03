@@ -56,21 +56,21 @@ export default function Footer() {
                 Contáctanos
               </h3>
               {/* Desktop/Tablet: single row, no wrap */}
-              <div className="hidden md:flex flex-nowrap items-center justify-center gap-[14px] lg:gap-[16px] mt-[12px] md:mt-[14px] lg:mt-[16px] whitespace-nowrap">
+              <div className="hidden md:flex flex-nowrap items-center justify-center gap-[8px] lg:gap-[10px] mt-[12px] md:mt-[14px] lg:mt-[16px] whitespace-nowrap">
                 {/* Instagram */}
                 <a
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-[56px] h-[56px] lg:w-[64px] lg:h-[64px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  className="w-[68px] h-[68px] lg:w-[82px] lg:h-[82px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
                   aria-label="Instagram"
                 >
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
                     alt="Instagram"
-                    width={60}
-                    height={60}
-                    className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
+                    width={76}
+                    height={76}
+                    className="w-[64px] h-[64px] lg:w-[76px] lg:h-[76px] object-contain block"
                   />
                 </a>
 
@@ -79,15 +79,15 @@ export default function Footer() {
                   href="https://facebook.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-[56px] h-[56px] lg:w-[64px] lg:h-[64px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  className="w-[68px] h-[68px] lg:w-[82px] lg:h-[82px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
                   aria-label="Facebook"
                 >
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
                     alt="Facebook"
-                    width={60}
-                    height={60}
-                    className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
+                    width={76}
+                    height={76}
+                    className="w-[64px] h-[64px] lg:w-[76px] lg:h-[76px] object-contain block"
                   />
                 </a>
 
@@ -96,30 +96,30 @@ export default function Footer() {
                   href="https://wa.me/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-[56px] h-[56px] lg:w-[64px] lg:h-[64px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  className="w-[68px] h-[68px] lg:w-[82px] lg:h-[82px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
                   aria-label="WhatsApp"
                 >
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
                     alt="WhatsApp"
-                    width={60}
-                    height={60}
-                    className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
+                    width={76}
+                    height={76}
+                    className="w-[64px] h-[64px] lg:w-[76px] lg:h-[76px] object-contain block"
                   />
                 </a>
 
                 {/* Email */}
                 <a
                   href="mailto:contacto@disenare.com"
-                  className="w-[56px] h-[56px] lg:w-[64px] lg:h-[64px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  className="w-[68px] h-[68px] lg:w-[82px] lg:h-[82px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
                   aria-label="Correo"
                 >
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-08-1770149787870.png?width=200&height=200&resize=contain"
                     alt="Email"
-                    width={60}
-                    height={60}
-                    className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
+                    width={76}
+                    height={76}
+                    className="w-[64px] h-[64px] lg:w-[76px] lg:h-[76px] object-contain block"
                   />
                 </a>
               </div>
