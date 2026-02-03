@@ -36,9 +36,9 @@ export default function Footer() {
 
       {/* Footer Content */}
       <div className="w-full bg-[#F5F5F5] pt-6 md:pt-7 lg:pt-[26px] pb-5 md:pb-6 lg:pb-6">
-        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-14 lg:px-[72px]">
+        <div className="w-full max-w-[1540px] mx-auto px-4 md:px-10 lg:px-[56px]">
           {/* Main Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-[1.35fr_1fr_1fr] gap-6 md:gap-6 lg:gap-8 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-[1.1fr_1.3fr_1fr] gap-6 md:gap-4 lg:gap-6 items-start">
             {/* Column 1: Logo */}
             <div className="flex justify-center md:justify-start max-w-[300px]">
               <Image
@@ -55,73 +55,143 @@ export default function Footer() {
               <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-semibold text-[#111111] leading-[1.1]">
                 Contáctanos
               </h3>
-              <div className="flex flex-wrap items-center justify-center gap-[18px] md:gap-[24px] lg:gap-[28px] mt-[12px] md:mt-[14px] lg:mt-[16px]">
-                  {/* Instagram */}
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-[58px] h-[58px] md:w-[68px] md:h-[68px] lg:w-[76px] lg:h-[76px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="Instagram"
-                  >
-                    <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
-                      alt="Instagram"
-                      width={72}
-                      height={72}
-                      className="w-[54px] h-[54px] md:w-[64px] md:h-[64px] lg:w-[72px] lg:h-[72px] object-contain block"
-                    />
-                  </a>
+              {/* Desktop/Tablet: single row, no wrap */}
+              <div className="hidden md:flex flex-nowrap items-center justify-center gap-[14px] lg:gap-[16px] mt-[12px] md:mt-[14px] lg:mt-[16px] whitespace-nowrap">
+                {/* Instagram */}
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-[56px] h-[56px] lg:w-[64px] lg:h-[64px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  aria-label="Instagram"
+                >
+                  <img
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
+                    alt="Instagram"
+                    width={60}
+                    height={60}
+                    className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
+                  />
+                </a>
 
-                  {/* Facebook */}
-                  <a
-                    href="https://facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-[58px] h-[58px] md:w-[68px] md:h-[68px] lg:w-[76px] lg:h-[76px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="Facebook"
-                  >
-                    <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
-                      alt="Facebook"
-                      width={72}
-                      height={72}
-                      className="w-[54px] h-[54px] md:w-[64px] md:h-[64px] lg:w-[72px] lg:h-[72px] object-contain block"
-                    />
-                  </a>
+                {/* Facebook */}
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-[56px] h-[56px] lg:w-[64px] lg:h-[64px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  aria-label="Facebook"
+                >
+                  <img
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
+                    alt="Facebook"
+                    width={60}
+                    height={60}
+                    className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
+                  />
+                </a>
 
-                  {/* WhatsApp */}
-                  <a
-                    href="https://wa.me/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-[58px] h-[58px] md:w-[68px] md:h-[68px] lg:w-[76px] lg:h-[76px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="WhatsApp"
-                  >
-                    <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
-                      alt="WhatsApp"
-                      width={72}
-                      height={72}
-                      className="w-[54px] h-[54px] md:w-[64px] md:h-[64px] lg:w-[72px] lg:h-[72px] object-contain block"
-                    />
-                  </a>
+                {/* WhatsApp */}
+                <a
+                  href="https://wa.me/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-[56px] h-[56px] lg:w-[64px] lg:h-[64px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  aria-label="WhatsApp"
+                >
+                  <img
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
+                    alt="WhatsApp"
+                    width={60}
+                    height={60}
+                    className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
+                  />
+                </a>
 
-                  {/* Email */}
-                  <a
-                    href="mailto:contacto@disenare.com"
-                    className="w-[58px] h-[58px] md:w-[68px] md:h-[68px] lg:w-[76px] lg:h-[76px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="Correo"
-                  >
-                    <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-08-1770149787870.png?width=200&height=200&resize=contain"
-                      alt="Email"
-                      width={72}
-                      height={72}
-                      className="w-[54px] h-[54px] md:w-[64px] md:h-[64px] lg:w-[72px] lg:h-[72px] object-contain block"
-                    />
-                  </a>
-                </div>
+                {/* Email */}
+                <a
+                  href="mailto:contacto@disenare.com"
+                  className="w-[56px] h-[56px] lg:w-[64px] lg:h-[64px] flex-shrink-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  aria-label="Correo"
+                >
+                  <img
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-08-1770149787870.png?width=200&height=200&resize=contain"
+                    alt="Email"
+                    width={60}
+                    height={60}
+                    className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
+                  />
+                </a>
+              </div>
+
+              {/* Mobile: allow wrap if needed */}
+              <div className="flex md:hidden flex-wrap items-center justify-center gap-[12px] mt-[12px]">
+                {/* Instagram */}
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-[48px] h-[48px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  aria-label="Instagram"
+                >
+                  <img
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
+                    alt="Instagram"
+                    width={44}
+                    height={44}
+                    className="w-[44px] h-[44px] object-contain block"
+                  />
+                </a>
+
+                {/* Facebook */}
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-[48px] h-[48px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  aria-label="Facebook"
+                >
+                  <img
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
+                    alt="Facebook"
+                    width={44}
+                    height={44}
+                    className="w-[44px] h-[44px] object-contain block"
+                  />
+                </a>
+
+                {/* WhatsApp */}
+                <a
+                  href="https://wa.me/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-[48px] h-[48px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  aria-label="WhatsApp"
+                >
+                  <img
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
+                    alt="WhatsApp"
+                    width={44}
+                    height={44}
+                    className="w-[44px] h-[44px] object-contain block"
+                  />
+                </a>
+
+                {/* Email */}
+                <a
+                  href="mailto:contacto@disenare.com"
+                  className="w-[48px] h-[48px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  aria-label="Correo"
+                >
+                  <img
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-08-1770149787870.png?width=200&height=200&resize=contain"
+                    alt="Email"
+                    width={44}
+                    height={44}
+                    className="w-[44px] h-[44px] object-contain block"
+                  />
+                </a>
+              </div>
             </div>
 
             {/* Column 3: Menú */}
