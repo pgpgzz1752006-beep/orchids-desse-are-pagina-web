@@ -28,12 +28,29 @@ export default function Footer() {
           </div>
 
             {/* Column 2: Contáctanos */}
-            <div className="flex flex-col items-center">
-              <h3 className="font-['Montserrat'] text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#111111] mb-5 md:mb-6">
+            <div className="flex flex-col items-center text-center">
+              <h3 className="font-['Montserrat'] text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#111111]">
                 Contáctanos
               </h3>
-              <div className="flex items-center justify-center gap-[18px] md:gap-[22px] lg:gap-[26px]">
-                  {/* Facebook */}
+              <div className="flex items-center justify-center gap-[14px] md:gap-[18px] lg:gap-[22px] mt-3 md:mt-4 lg:mt-5">
+                {/* Instagram */}
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  aria-label="Instagram"
+                >
+                  <img
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
+                    alt="Instagram"
+                    width={48}
+                    height={48}
+                    className="w-[36px] h-[36px] md:w-[42px] md:h-[42px] lg:w-[48px] lg:h-[48px] object-contain block"
+                  />
+                </a>
+
+                {/* Facebook */}
                 <a
                   href="https://facebook.com"
                   target="_blank"
@@ -42,11 +59,11 @@ export default function Footer() {
                   aria-label="Facebook"
                 >
                   <img
-                    src="/icons/icon-facebook.png"
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
                     alt="Facebook"
                     width={48}
                     height={48}
-                    className="w-[32px] h-[32px] md:w-[38px] md:h-[38px] lg:w-[44px] lg:h-[44px] object-contain block"
+                    className="w-[36px] h-[36px] md:w-[42px] md:h-[42px] lg:w-[48px] lg:h-[48px] object-contain block"
                   />
                 </a>
 
@@ -59,11 +76,11 @@ export default function Footer() {
                   aria-label="WhatsApp"
                 >
                   <img
-                    src="/icons/icon-whatsapp.png"
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
                     alt="WhatsApp"
                     width={48}
                     height={48}
-                    className="w-[32px] h-[32px] md:w-[38px] md:h-[38px] lg:w-[44px] lg:h-[44px] object-contain block"
+                    className="w-[36px] h-[36px] md:w-[42px] md:h-[42px] lg:w-[48px] lg:h-[48px] object-contain block"
                   />
                 </a>
 
@@ -74,11 +91,11 @@ export default function Footer() {
                   aria-label="Correo"
                 >
                   <img
-                    src="/icons/icon-email.png"
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-08-1770149787870.png?width=200&height=200&resize=contain"
                     alt="Email"
                     width={48}
                     height={48}
-                    className="w-[32px] h-[32px] md:w-[38px] md:h-[38px] lg:w-[44px] lg:h-[44px] object-contain block"
+                    className="w-[36px] h-[36px] md:w-[42px] md:h-[42px] lg:w-[48px] lg:h-[48px] object-contain block"
                   />
                 </a>
               </div>
