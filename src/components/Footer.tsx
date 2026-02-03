@@ -128,11 +128,11 @@ export default function Footer() {
                 <div className="flex md:hidden flex-wrap items-center justify-center mt-[12px]">
                   {/* Instagram */}
                   <a
-                    href="https://instagram.com"
+                    href="https://www.instagram.com/disenare.promocionales?igsh=MWEwb2htdm80bG9yNA%3D%3D&utm_source=qr"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-0 m-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="Instagram"
+                    aria-label="Instagram Diseñare Promocionales"
                   >
                     <img
                       src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
