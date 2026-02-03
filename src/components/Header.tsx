@@ -150,12 +150,23 @@ export default function Header() {
           <div className="lg:hidden fixed inset-0 top-[132px] bg-white dark:bg-[#0E0F12] z-40 transition-colors duration-300">
             <nav className="flex flex-col items-center pt-12 gap-8">
               {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="group relative"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="group relative"
+                    onClick={(e) => {
+                      setMobileMenuOpen(false);
+                      if (item.href.startsWith("#")) {
+                        e.preventDefault();
+                        setTimeout(() => {
+                          const target = document.getElementById(item.href.slice(1));
+                          if (target) {
+                            target.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }
+                        }, 100);
+                      }
+                    }}
+                  >
                   <span
                     className={`
                       font-['Montserrat'] text-[20px] font-medium uppercase tracking-[0.04em]
