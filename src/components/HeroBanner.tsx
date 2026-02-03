@@ -170,14 +170,14 @@ export default function HeroBanner() {
               style={{ width: `${100 / bannerSlides.length}%` }}
             >
               <Image
-                src={slide.src}
-                alt={slide.alt}
-                fill
-                className="object-cover object-center"
-                priority={index === 0}
-                loading={index === 0 ? "eager" : "lazy"}
-                sizes="100vw"
-              />
+                  src={slide.src}
+                  alt={slide.alt}
+                  fill
+                  className="object-cover object-[center_30%] sm:object-[center_35%] md:object-center"
+                  priority={index === 0}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  sizes="100vw"
+                />
             </div>
           ))}
         </div>
