@@ -53,13 +53,13 @@ export default function SolutionsSection() {
             >
               {/* Icon Container */}
                     <div className="w-[62px] h-[62px] md:w-[70px] md:h-[70px] lg:w-[80px] lg:h-[80px] bg-white rounded-[14px] lg:rounded-[16px] flex items-center justify-center mb-4">
-                      <img
-                        src={solution.icon}
-                        alt={solution.title}
-                        width={75}
-                        height={75}
-                        className="w-[88px] h-[88px] md:w-[94px] md:h-[94px] lg:w-[100px] lg:h-[100px] object-contain block"
-                      />
+                        <img
+                          src={solution.icon}
+                          alt={solution.title}
+                          width={75}
+                          height={75}
+                          className="w-[103px] h-[103px] md:w-[109px] md:h-[109px] lg:w-[115px] lg:h-[115px] object-contain block"
+                        />
                   </div>
 
               {/* Title */}
