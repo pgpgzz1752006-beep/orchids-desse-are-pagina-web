@@ -56,7 +56,7 @@ export default function Footer() {
                 Contáctanos
               </h3>
               {/* Desktop/Tablet: single row, no wrap */}
-              <div className="hidden md:flex flex-nowrap items-center justify-center gap-[8px] lg:gap-[10px] mt-[12px] md:mt-[14px] lg:mt-[16px] whitespace-nowrap">
+              <div className="hidden md:flex flex-nowrap items-center justify-center gap-0 mt-[12px] md:mt-[14px] lg:mt-[16px] whitespace-nowrap">
                 {/* Instagram */}
                 <a
                   href="https://instagram.com"
