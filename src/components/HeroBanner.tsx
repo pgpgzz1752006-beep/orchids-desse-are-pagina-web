@@ -143,15 +143,15 @@ export default function HeroBanner() {
       data-autoplay={!reducedMotion && !isPaused ? "on" : "off"}
     >
       {/* Carousel container with fixed height */}
-      <div
-        ref={containerRef}
-        className="relative w-full h-[240px] sm:h-[320px] md:h-[380px] lg:h-[460px] xl:h-[520px]"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
+        <div
+          ref={containerRef}
+          className="relative w-full h-[280px] sm:h-[340px] md:h-[400px] lg:h-[480px] xl:h-[520px]"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
         {/* Track */}
         <div
           className="flex h-full will-change-transform"
