@@ -13,7 +13,7 @@ const colorBarSegments = [
 
 export default function ChatButtonSection() {
   return (
-    <section className="relative w-full min-h-[180px] md:min-h-[200px] lg:min-h-[220px] bg-white overflow-hidden">
+    <section className="relative w-full min-h-[180px] md:min-h-[200px] lg:min-h-[220px] bg-white dark:bg-[#0E0F12] overflow-hidden transition-colors duration-300">
       {/* Multicolor Bar */}
       <div className="absolute left-0 right-0 bottom-0 h-[10px] md:h-[11px] lg:h-[12px] flex z-10">
         {colorBarSegments.map((segment, index) => (
