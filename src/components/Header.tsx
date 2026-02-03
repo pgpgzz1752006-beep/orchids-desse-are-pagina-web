@@ -59,31 +59,31 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-14 xl:gap-16">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="group relative"
-            >
-              <span
-                className={`
-                  font-['Montserrat'] text-[18px] font-medium uppercase tracking-[0.04em]
-                  transition-colors duration-200 ease-out
-                  ${item.active ? "text-[#14C6C9]" : "text-[#111111]"}
-                `}
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="group relative"
               >
-                {item.label}
-              </span>
-              {/* Active underline */}
-              {item.active && (
-                <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9] transform scale-x-100 origin-center animate-underline-grow" />
-              )}
-              {/* Hover underline for inactive items */}
-              {!item.active && (
-                <span className="absolute -bottom-2 left-0 w-full h-[2px] bg-[#14C6C9] transform scale-x-0 origin-left transition-transform duration-200 ease-out group-hover:scale-x-100" />
-              )}
-            </a>
-          ))}
+                <span
+                  className={`
+                    font-['Montserrat'] text-[18px] font-medium uppercase tracking-[0.04em]
+                    transition-colors duration-200 ease-out
+                    ${item.active ? "text-[#14C6C9]" : "text-[#111111] group-hover:text-[#14C6C9]"}
+                  `}
+                >
+                  {item.label}
+                </span>
+                {/* Active underline */}
+                {item.active && (
+                  <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9] transform scale-x-100 origin-center animate-underline-grow" />
+                )}
+                {/* Hover underline for inactive items */}
+                {!item.active && (
+                  <span className="absolute -bottom-2 left-0 w-full h-[2px] bg-[#14C6C9] transform scale-x-0 origin-left transition-transform duration-200 ease-out group-hover:scale-x-100" />
+                )}
+              </a>
+            ))}
         </nav>
 
         {/* Icons */}
