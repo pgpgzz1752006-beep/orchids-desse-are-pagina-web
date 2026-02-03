@@ -38,15 +38,15 @@ export default function Footer() {
       <div className="w-full bg-[#F5F5F5] pt-6 md:pt-7 lg:pt-[26px] pb-5 md:pb-6 lg:pb-6">
         <div className="w-full max-w-[1440px] mx-auto px-6 md:px-14 lg:px-[72px]">
           {/* Main Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_1fr] gap-6 md:gap-6 lg:gap-8 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-[1.35fr_1fr_1fr] gap-6 md:gap-6 lg:gap-8 items-start">
             {/* Column 1: Logo */}
-            <div className="flex justify-center md:justify-start">
+            <div className="flex justify-center md:justify-start max-w-[300px]">
               <Image
                 src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/LOGOTIPO-1770138421366.png?width=8000&height=8000&resize=contain"
                 alt="Diseñare Promocionales"
-                width={220}
-                height={100}
-                className="h-[80px] md:h-[100px] lg:h-[120px] w-auto object-contain"
+                width={260}
+                height={120}
+                className="w-[180px] md:w-[220px] lg:w-[260px] h-auto object-contain"
               />
             </div>
 
@@ -55,7 +55,7 @@ export default function Footer() {
               <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-semibold text-[#111111] leading-[1.1]">
                 Contáctanos
               </h3>
-              <div className="flex items-center justify-center gap-[12px] md:gap-[16px] lg:gap-[18px] mt-[10px] md:mt-[10px] lg:mt-[12px]">
+              <div className="flex items-center justify-center gap-[16px] md:gap-[20px] lg:gap-[24px] mt-[12px] md:mt-[14px] lg:mt-[16px]">
                 {/* Instagram */}
                 <a
                   href="https://instagram.com"
@@ -67,9 +67,9 @@ export default function Footer() {
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
                     alt="Instagram"
-                    width={40}
-                    height={40}
-                    className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
+                    width={60}
+                    height={60}
+                    className="w-[44px] h-[44px] md:w-[52px] md:h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
                   />
                 </a>
 
@@ -84,9 +84,9 @@ export default function Footer() {
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
                     alt="Facebook"
-                    width={40}
-                    height={40}
-                    className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
+                    width={60}
+                    height={60}
+                    className="w-[44px] h-[44px] md:w-[52px] md:h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
                   />
                 </a>
 
@@ -101,9 +101,9 @@ export default function Footer() {
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
                     alt="WhatsApp"
-                    width={40}
-                    height={40}
-                    className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
+                    width={60}
+                    height={60}
+                    className="w-[44px] h-[44px] md:w-[52px] md:h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
                   />
                 </a>
 
@@ -116,9 +116,9 @@ export default function Footer() {
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-08-1770149787870.png?width=200&height=200&resize=contain"
                     alt="Email"
-                    width={40}
-                    height={40}
-                    className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
+                    width={60}
+                    height={60}
+                    className="w-[44px] h-[44px] md:w-[52px] md:h-[52px] lg:w-[60px] lg:h-[60px] object-contain block"
                   />
                 </a>
               </div>
