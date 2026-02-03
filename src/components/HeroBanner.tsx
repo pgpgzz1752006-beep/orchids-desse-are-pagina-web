@@ -139,7 +139,7 @@ export default function HeroBanner() {
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-white"
+      className="relative w-full overflow-hidden bg-white dark:bg-[#0E0F12] transition-colors duration-300"
       data-autoplay={!reducedMotion && !isPaused ? "on" : "off"}
     >
       {/* Carousel container with fixed height */}
