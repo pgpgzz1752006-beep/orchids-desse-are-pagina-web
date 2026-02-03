@@ -1,0 +1,79 @@
+"use client";
+
+import { Droplet, Wand2, Award, Package } from "lucide-react";
+
+const solutions = [
+  {
+    icon: Droplet,
+    title: "Productos",
+    description:
+      "Innovamos en productos, colores y materiales. Tenemos uno de los catálogos más amplios de la industria.",
+  },
+  {
+    icon: Wand2,
+    title: "Personalización",
+    description:
+      "Todos nuestros productos son totalmente personalizables. Puedes utilizar nuestro visualizador con tu logotipo.",
+  },
+  {
+    icon: Award,
+    title: "Proyectos especiales",
+    description:
+      "¿No encontraste lo que buscabas? Podemos crear artículos a tu medida: lonas, flyers, notas de remisión y un sin fin de artículos impresos.",
+  },
+  {
+    icon: Package,
+    title: "Distribución",
+    description:
+      "Entregamos tus productos en cualquier rincón de México, con una logística confiable y eficiente.",
+  },
+];
+
+export default function SolutionsSection() {
+  return (
+    <section className="w-full bg-white py-16 md:py-20 lg:py-16">
+      <div className="w-full max-w-[1280px] mx-auto px-5 md:px-8 lg:px-8">
+        {/* Title */}
+        <h2 className="text-center font-['Montserrat'] text-[30px] md:text-[38px] lg:text-[44px] tracking-[0.03em] text-[#111111] mb-5">
+          <span className="font-normal">NUESTRAS </span>
+          <span className="font-extrabold">SOLUCIONES</span>
+        </h2>
+
+        {/* Description */}
+        <p className="text-center font-['Montserrat'] text-[14px] md:text-[15px] lg:text-[15px] leading-[1.7] text-[#2F2F2F] max-w-[880px] mx-auto mb-10 md:mb-12 lg:mb-14">
+          Importamos, personalizamos y distribuimos los mejores productos promocionales para que tu
+          negocio crezca. Con un catálogo exclusivo, precios competitivos y soluciones a la medida, somos
+          el aliado estratégico que necesitas para ofrecer más y mejor a tus clientes.
+        </p>
+
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+          {solutions.map((solution) => (
+            <div
+              key={solution.title}
+              className="bg-[#F2F2F2] rounded-xl p-5 lg:p-[22px] flex flex-col transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-sm"
+            >
+              {/* Icon Container */}
+              <div className="w-10 h-10 bg-white rounded-[10px] flex items-center justify-center mb-4">
+                <solution.icon
+                  className="w-[22px] h-[22px] text-[#18C6C8]"
+                  strokeWidth={2}
+                />
+              </div>
+
+              {/* Title */}
+              <h3 className="font-['Montserrat'] text-[16px] lg:text-[17px] font-bold text-[#111111] mb-2">
+                {solution.title}
+              </h3>
+
+              {/* Description */}
+              <p className="font-['Montserrat'] text-[13px] lg:text-[13.5px] leading-[1.6] text-[#4A4A4A] min-h-[72px]">
+                {solution.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
