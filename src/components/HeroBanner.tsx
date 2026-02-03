@@ -142,16 +142,16 @@ export default function HeroBanner() {
       className="relative w-full overflow-hidden bg-white dark:bg-[#0E0F12] transition-colors duration-300"
       data-autoplay={!reducedMotion && !isPaused ? "on" : "off"}
     >
-      {/* Carousel container with fixed height */}
-        <div
-          ref={containerRef}
-          className="relative w-full h-[280px] sm:h-[340px] md:h-[400px] lg:h-[480px] xl:h-[520px]"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
+        {/* Carousel container - aspect-ratio for mobile/tablet, fixed height for desktop */}
+          <div
+            ref={containerRef}
+            className="relative w-full aspect-[16/9] sm:aspect-[21/9] lg:aspect-auto lg:h-[480px] xl:h-[520px] min-h-[200px] max-h-[520px]"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
         {/* Track */}
         <div
           className="flex h-full will-change-transform"
