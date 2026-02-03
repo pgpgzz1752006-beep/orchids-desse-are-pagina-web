@@ -202,28 +202,6 @@ export default function HeroBanner() {
           </svg>
         </button>
       </div>
-
-      {/* Dots indicators */}
-      <div className="flex justify-center items-center gap-[10px] sm:gap-[12px] py-3 sm:py-4">
-        {bannerSlides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handleDotClick(index)}
-            className={`
-              w-[6px] h-[6px] sm:w-[7px] sm:h-[7px] md:w-[8px] md:h-[8px]
-              rounded-full transition-all duration-200
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9] focus-visible:ring-offset-2
-              ${
-                currentIndex === index
-                  ? "bg-[#666666] dark:bg-[#AAAAAA] scale-110"
-                  : "bg-[#CFCFCF] dark:bg-[#555555] hover:bg-[#AAAAAA] dark:hover:bg-[#777777]"
-              }
-            `}
-            aria-label={`Ir al banner ${index + 1}`}
-            aria-current={currentIndex === index ? "true" : "false"}
-          />
-        ))}
-      </div>
-    </section>
+      </section>
   );
 }
