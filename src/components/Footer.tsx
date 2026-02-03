@@ -34,11 +34,11 @@ export default function Footer() {
         ))}
       </div>
 
-        {/* Footer Content */}
-        <div className="w-full bg-[#F5F5F5] pt-6 md:pt-7 lg:pt-[26px] pb-5 md:pb-6 lg:pb-6">
-          <div className="w-full max-w-[1440px] mx-auto px-6 md:px-14 lg:px-[72px]">
-            {/* Main Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_1fr] gap-6 md:gap-6 lg:gap-8 items-start">
+      {/* Footer Content */}
+      <div className="w-full bg-[#F5F5F5] pt-6 md:pt-7 lg:pt-[26px] pb-5 md:pb-6 lg:pb-6">
+        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-14 lg:px-[72px]">
+          {/* Main Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_1fr] gap-6 md:gap-6 lg:gap-8 items-start">
             {/* Column 1: Logo */}
             <div className="flex justify-center md:justify-start">
               <Image
@@ -46,16 +46,16 @@ export default function Footer() {
                 alt="Diseñare Promocionales"
                 width={220}
                 height={100}
-                className="h-[100px] md:h-[120px] lg:h-[140px] w-auto object-contain"
+                className="h-[80px] md:h-[100px] lg:h-[120px] w-auto object-contain"
               />
             </div>
 
-              {/* Column 2: Contáctanos */}
-              <div className="flex flex-col items-center justify-start text-center">
-                <h3 className="font-['Montserrat'] text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#111111] leading-[1.1]">
-                  Contáctanos
-                </h3>
-                <div className="flex items-center justify-center gap-[12px] md:gap-[16px] lg:gap-[18px] mt-[10px] md:mt-[10px] lg:mt-[12px]">
+            {/* Column 2: Contáctanos */}
+            <div className="flex flex-col items-center justify-start text-center">
+              <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-semibold text-[#111111] leading-[1.1]">
+                Contáctanos
+              </h3>
+              <div className="flex items-center justify-center gap-[12px] md:gap-[16px] lg:gap-[18px] mt-[10px] md:mt-[10px] lg:mt-[12px]">
                 {/* Instagram */}
                 <a
                   href="https://instagram.com"
@@ -67,9 +67,9 @@ export default function Footer() {
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
                     alt="Instagram"
-                    width={52}
-                    height={52}
-                      className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
+                    width={40}
+                    height={40}
+                    className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
                   />
                 </a>
 
@@ -84,9 +84,9 @@ export default function Footer() {
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
                     alt="Facebook"
-                    width={52}
-                    height={52}
-                      className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
+                    width={40}
+                    height={40}
+                    className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
                   />
                 </a>
 
@@ -101,9 +101,9 @@ export default function Footer() {
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
                     alt="WhatsApp"
-                    width={52}
-                    height={52}
-                      className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
+                    width={40}
+                    height={40}
+                    className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
                   />
                 </a>
 
@@ -116,36 +116,36 @@ export default function Footer() {
                   <img
                     src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-08-1770149787870.png?width=200&height=200&resize=contain"
                     alt="Email"
-                    width={52}
-                    height={52}
-                      className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
+                    width={40}
+                    height={40}
+                    className="w-[30px] h-[30px] md:w-[36px] md:h-[36px] lg:w-[40px] lg:h-[40px] object-contain block"
                   />
                 </a>
               </div>
             </div>
 
-              {/* Column 3: Menú */}
-              <div className="flex flex-col items-center md:items-end">
-                <h3 className="font-['Montserrat'] text-[26px] md:text-[28px] lg:text-[32px] font-bold text-[#111111] leading-[1.1] mb-2 md:mb-3">
-                  Menú
-                </h3>
-                <nav className="flex flex-col items-center md:items-end gap-[6px] md:gap-[8px]">
-                  {menuLinks.map((link) => (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      className="font-['Montserrat'] text-[18px] md:text-[20px] lg:text-[22px] font-normal text-[#111111] leading-[1.25] transition-opacity duration-150 hover:opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    >
-                      {link.label}
-                    </a>
-                  ))}
-                </nav>
-              </div>
+            {/* Column 3: Menú */}
+            <div className="flex flex-col items-center md:items-end">
+              <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-bold text-[#111111] leading-[1.1] mb-2 md:mb-3">
+                Menú
+              </h3>
+              <nav className="flex flex-col items-center md:items-end gap-[6px] md:gap-[8px]">
+                {menuLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className="font-['Montserrat'] text-[16px] md:text-[18px] lg:text-[20px] font-normal text-[#111111] leading-[1.25] transition-opacity duration-150 hover:opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </nav>
             </div>
+          </div>
 
-            {/* Copyright */}
-            <div className="mt-5 md:mt-6 lg:mt-7 text-center">
-              <p className="font-['Montserrat'] text-[14px] md:text-[15px] lg:text-[16px] text-[#111111] italic">
+          {/* Copyright */}
+          <div className="mt-5 md:mt-6 lg:mt-7 text-center">
+            <p className="font-['Montserrat'] text-[13px] md:text-[14px] lg:text-[15px] text-[#111111] italic">
               Diseñare Promocionales 2026®. Todos los derechos reservados.
             </p>
           </div>
