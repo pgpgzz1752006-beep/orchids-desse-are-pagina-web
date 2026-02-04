@@ -150,10 +150,10 @@ export default function HeroBanner() {
         data-autoplay={!reducedMotion && !isPaused ? "on" : "off"}
       >
         {/* Carousel container - Crossfade implementation */}
-        {/* Mobile: 4/3, Tablet: 16/9, Desktop: 21/9 - NO fixed heights */}
+        {/* Mobile: 4/3, Tablet: 16/9, Desktop: 19/7 (taller) for full-bleed without crop */}
         <div
           ref={containerRef}
-          className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]"
+          className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[19/7] xl:h-[clamp(480px,48vh,640px)] 2xl:h-[clamp(520px,52vh,720px)]"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onTouchStart={handleTouchStart}
@@ -175,7 +175,7 @@ export default function HeroBanner() {
                 src={slide.src}
                 alt={slide.alt}
                 fill
-                className="object-contain sm:object-contain lg:object-cover object-center"
+                className="object-contain sm:object-contain lg:object-cover object-[18%_50%] lg:object-[18%_50%] 2xl:object-[15%_50%]"
                 priority={index <= 1}
                 loading={index <= 1 ? "eager" : "lazy"}
                 sizes="100vw"
