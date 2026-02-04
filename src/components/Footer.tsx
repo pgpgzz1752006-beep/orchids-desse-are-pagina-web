@@ -130,72 +130,76 @@ export default function Footer() {
 
                 {/* Mobile: allow wrap if needed */}
                 <div className="flex md:hidden flex-wrap items-center justify-center mt-[12px]">
-                  {/* Instagram */}
-                  <a
-                    href="https://www.instagram.com/disenare.promocionales?igsh=MWEwb2htdm80bG9yNA%3D%3D&utm_source=qr"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-0 m-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="Instagram Diseñare Promocionales"
-                  >
-                    <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
-                      alt="Instagram"
-                      width={70}
-                      height={70}
-                      className="w-[70px] h-[70px] object-contain block"
-                    />
-                  </a>
-
-                  {/* Facebook */}
-                  <a
-                    href="https://www.facebook.com/share/14UPMcQd31J/?mibextid=wwXIfr"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-0 m-0 -ml-[8px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="Facebook Diseñare Promocionales"
-                  >
-                    <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
-                      alt="Facebook"
-                      width={70}
-                      height={70}
-                      className="w-[70px] h-[70px] object-contain block"
-                    />
-                  </a>
-
-                  {/* WhatsApp */}
+                    {/* Instagram */}
                     <a
-                      href="https://wa.me/529512424333"
+                      href="https://www.instagram.com/disenare.promocionales?igsh=MWEwb2htdm80bG9yNA%3D%3D&utm_source=qr"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-0 m-0 -ml-[8px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                      aria-label="Abrir WhatsApp +52 951 242 4333"
+                      className="p-0 m-0 flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                      aria-label="Instagram Diseñare Promocionales"
                     >
                       <img
-                        src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
-                        alt="WhatsApp"
+                        src="/icons/icon-instagram.png"
+                        alt="Instagram"
                         width={70}
                         height={70}
                         className="w-[70px] h-[70px] object-contain block"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                     </a>
 
-                  {/* Email */}
-                  <a
-                    href="mailto:disenarepromocionales@gmail.com?subject=Cotizaci%C3%B3n%20de%20promocionales&body=Hola%2C%20me%20gustar%C3%ADa%20cotizar%20promocionales.%20Mi%20nombre%20es%3A%20_____%20%0A%0AGracias."
-                    className="p-0 m-0 -ml-[8px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
-                    aria-label="Enviar correo a disenarepromocionales@gmail.com"
-                  >
-                    <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-08-1770149787870.png?width=200&height=200&resize=contain"
-                      alt="Email"
-                      width={70}
-                      height={70}
-                      className="w-[70px] h-[70px] object-contain block"
-                    />
-                  </a>
-                </div>
+                    {/* Facebook */}
+                    <a
+                      href="https://www.facebook.com/share/14UPMcQd31J/?mibextid=wwXIfr"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-0 m-0 -ml-[8px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                      aria-label="Facebook Diseñare Promocionales"
+                    >
+                      <img
+                        src="/icons/icon-facebook.png"
+                        alt="Facebook"
+                        width={70}
+                        height={70}
+                        className="w-[70px] h-[70px] object-contain block"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                    </a>
+
+                    {/* WhatsApp */}
+                      <a
+                        href="https://wa.me/529512424333"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-0 m-0 -ml-[8px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                        aria-label="Abrir WhatsApp +52 951 242 4333"
+                      >
+                        <img
+                          src="/icons/icon-whatsapp.png"
+                          alt="WhatsApp"
+                          width={70}
+                          height={70}
+                          className="w-[70px] h-[70px] object-contain block"
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
+                      </a>
+
+                    {/* Email */}
+                    <a
+                      href="mailto:disenarepromocionales@gmail.com?subject=Cotizaci%C3%B3n%20de%20promocionales&body=Hola%2C%20me%20gustar%C3%ADa%20cotizar%20promocionales.%20Mi%20nombre%20es%3A%20_____%20%0A%0AGracias."
+                      className="p-0 m-0 -ml-[8px] flex items-center justify-center transition-all duration-[160ms] hover:opacity-85 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00B7B3]/50 rounded"
+                      aria-label="Enviar correo a disenarepromocionales@gmail.com"
+                    >
+                      <img
+                        src="/icons/icon-email.png"
+                        alt="Email"
+                        width={70}
+                        height={70}
+                        className="w-[70px] h-[70px] object-contain block"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                    </a>
+                  </div>
             </div>
 
               {/* Column 3: Menú */}
