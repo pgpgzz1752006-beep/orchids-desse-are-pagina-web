@@ -11,11 +11,12 @@ export default function WhatsAppButton() {
     >
       {/* White backplate for contrast */}
       <div className="w-[50px] h-[50px] md:w-[62px] md:h-[62px] lg:w-[70px] lg:h-[70px] rounded-full bg-white flex items-center justify-center">
-        <img
-          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770154790463.png?width=200&height=200&resize=contain"
-          alt="WhatsApp"
-          className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] lg:w-[56px] lg:h-[56px] object-contain block"
-        />
+          <img
+            src="/icons/icon-whatsapp.png"
+            alt="WhatsApp"
+            className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] lg:w-[56px] lg:h-[56px] object-contain block"
+            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+          />
       </div>
     </a>
   );
