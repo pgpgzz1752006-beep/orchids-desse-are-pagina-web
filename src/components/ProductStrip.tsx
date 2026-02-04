@@ -74,9 +74,9 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     
     const handleResize = () => {
       setSpeed(getSpeed());
-      // Recalculate track width
+      // Recalculate track width (1/4 of total since we have 4 copies)
       if (trackRef.current) {
-        setTrackWidth(trackRef.current.scrollWidth / 2);
+        setTrackWidth(trackRef.current.scrollWidth / 4);
       }
     };
     handleResize();
