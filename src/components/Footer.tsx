@@ -102,12 +102,13 @@ export default function Footer() {
                       aria-label="Abrir WhatsApp +52 951 242 4333"
                     >
                     <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-07-1770149779669.png?width=200&height=200&resize=contain"
-                      alt="WhatsApp"
-                      width={122}
-                      height={122}
-                      className="w-[96px] h-[96px] lg:w-[122px] lg:h-[122px] object-contain block"
-                    />
+                        src="/icons/icon-whatsapp.png"
+                        alt="WhatsApp"
+                        width={122}
+                        height={122}
+                        className="w-[96px] h-[96px] lg:w-[122px] lg:h-[122px] object-contain block"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
                   </a>
 
                   {/* Email */}
