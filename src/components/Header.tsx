@@ -43,10 +43,10 @@ export default function Header() {
         ))}
       </div>
 
-        {/* Main Header */}
-        <div className="w-full flex items-center justify-between h-[90px] md:h-[100px] lg:h-[110px] pl-2 pr-4 md:pl-3 md:pr-8 lg:pl-3 lg:pr-12">
-          {/* Logo - larger and flush left */}
-          <div className="flex-shrink-0 flex items-center">
+        {/* Main Header - 3 Column Grid */}
+        <div className="w-full grid grid-cols-[auto_1fr_auto] items-center h-[90px] md:h-[100px] lg:h-[110px] pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-4 lg:pr-6">
+          {/* Column 1: Logo - flush left */}
+          <div className="justify-self-start flex items-center">
             <a href="/" className="block">
               <Image
                 src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/LOGOTIPO-1770138421366.png?width=8000&height=8000&resize=contain"
@@ -59,8 +59,8 @@ export default function Header() {
             </a>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-14 xl:gap-16">
+          {/* Column 2: Desktop Navigation - centered */}
+          <nav className="hidden lg:flex items-center justify-self-center gap-11 xl:gap-14 max-w-[800px]">
               {navItems.map((item) => (
                 <a
                   key={item.label}
@@ -97,8 +97,8 @@ export default function Header() {
             ))}
         </nav>
 
-          {/* Icons */}
-          <div className="flex items-center gap-7 lg:gap-8">
+          {/* Column 3: Action Icons - flush right */}
+          <div className="flex items-center justify-self-end gap-5 lg:gap-6">
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
