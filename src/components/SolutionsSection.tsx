@@ -51,16 +51,16 @@ export default function SolutionsSection() {
               key={solution.title}
               className="bg-[#F2F2F2] dark:bg-[#1A1D24] rounded-xl p-7 lg:p-8 flex flex-col min-h-[260px] md:min-h-[280px] lg:min-h-[300px] will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] active:-translate-y-[3px] active:scale-[1.02] focus-within:ring-2 focus-within:ring-[#14C6C9]/60 focus-within:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-md"
             >
-              {/* Icon Container - larger +30% */}
-              <div className="w-[80px] h-[80px] md:w-[96px] md:h-[96px] lg:w-[110px] lg:h-[110px] bg-white dark:bg-white rounded-[18px] lg:rounded-[20px] flex items-center justify-center mb-5 overflow-hidden">
-                <img
-                  src={solution.icon}
-                  alt={solution.title}
-                  width={110}
-                  height={110}
-                  className="w-[64px] h-[64px] md:w-[76px] md:h-[76px] lg:w-[88px] lg:h-[88px] object-contain block"
-                />
-              </div>
+                {/* Icon Container - same size, icon +40px */}
+                <div className="w-[80px] h-[80px] md:w-[96px] md:h-[96px] lg:w-[110px] lg:h-[110px] bg-white dark:bg-white rounded-[18px] lg:rounded-[20px] flex items-center justify-center mb-5 overflow-hidden">
+                  <img
+                    src={solution.icon}
+                    alt={solution.title}
+                    width={150}
+                    height={150}
+                    className="w-[104px] h-[104px] md:w-[116px] md:h-[116px] lg:w-[128px] lg:h-[128px] object-contain block"
+                  />
+                </div>
 
               {/* Title - larger */}
               <h3 className="font-['Montserrat'] text-[18px] md:text-[20px] lg:text-[21px] font-bold text-[#111111] dark:text-[#F2F2F2] mb-2">
