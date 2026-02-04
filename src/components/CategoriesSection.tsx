@@ -59,10 +59,10 @@ export default function CategoriesSection() {
 <section className="w-full bg-white dark:bg-[#0E0F12] py-12 md:py-16 lg:py-[72px] transition-colors duration-300 ease-in-out">
         {/* Title */}
         <div className="w-full max-w-[1440px] mx-auto px-6 md:px-8 lg:px-12 mb-8 md:mb-10 lg:mb-12">
-          <h2 className="text-center font-['Montserrat'] text-[32px] md:text-[44px] lg:text-[52px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
-            <span className="font-normal">CATEGORÍAS </span>
-            <span className="font-bold">DESTACADAS</span>
-          </h2>
+<h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
+              <span className="font-normal">CATEGORÍAS </span>
+              <span className="font-extrabold">DESTACADAS</span>
+            </h2>
         </div>
 
         {/* Categories Grid */}
