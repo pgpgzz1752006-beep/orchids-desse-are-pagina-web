@@ -24,8 +24,8 @@ const MARQUEE_SPEED_MOBILE = 22;
 export default function ProductStrip({ titleRegular, titleBold, products, autoplay = false }: ProductStripProps) {
   const carouselId = useId();
   
-  // Duplicate products for seamless loop: items + items
-  const duplicatedProducts = [...products, ...products];
+  // Quadruple products for seamless infinite loop
+  const duplicatedProducts = [...products, ...products, ...products, ...products];
   
   const [isPaused, setIsPaused] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
