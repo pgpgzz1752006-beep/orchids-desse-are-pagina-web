@@ -226,45 +226,47 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     setOffset(newOffset);
   };
   
-  // For reduced motion: show static carousel with manual navigation
-  if (prefersReducedMotion && autoplay) {
-    return (
-      <section 
-        className="w-full bg-white dark:bg-[#0E0F12] py-14 md:py-16 lg:py-[72px] transition-colors duration-300"
-        data-autoplay="reduced-motion"
-        data-carousel-id={carouselId}
-      >
-        <div className="w-full max-w-[1320px] mx-auto px-6 md:px-10 lg:px-10">
-          <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2] mb-10 md:mb-12">
-            <span className="font-normal">{titleRegular} </span>
-            <span className="font-extrabold">{titleBold}</span>
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {products.slice(0, 5).map((product, index) => (
-              <a
-                key={`${product.name}-${index}`}
-                href={product.href}
-                className="block bg-white dark:bg-[#1A1D24] border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2"
-              >
-                <div className="flex items-center justify-center h-[100px] md:h-[110px] lg:h-[120px] mb-3">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={120}
-                    height={120}
-                    className="max-h-[90px] md:max-h-[100px] lg:max-h-[110px] w-auto object-contain"
-                  />
-                </div>
-                <p className="font-['Montserrat'] text-[10px] md:text-[11px] font-medium text-[#333333] dark:text-[#E0E0E0] text-center uppercase leading-[1.4] min-h-[28px]">
-                  {product.name}
-                </p>
-              </a>
-            ))}
+    // For reduced motion: show static carousel with manual navigation
+    if (prefersReducedMotion && autoplay) {
+      return (
+        <section 
+          className="w-full bg-white dark:bg-[#0E0F12] py-14 md:py-16 lg:py-[72px] transition-colors duration-300 overflow-hidden"
+          data-autoplay="reduced-motion"
+          data-carousel-id={carouselId}
+        >
+          <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 mb-10 md:mb-12">
+            <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
+              <span className="font-normal">{titleRegular} </span>
+              <span className="font-extrabold">{titleBold}</span>
+            </h2>
           </div>
-        </div>
-      </section>
-    );
-  }
+          <div className="w-full px-2 md:px-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {products.slice(0, 6).map((product, index) => (
+                <a
+                  key={`${product.name}-${index}`}
+                  href={product.href}
+                  className="block bg-white dark:bg-[#1A1D24] border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2"
+                >
+                  <div className="flex items-center justify-center h-[100px] md:h-[110px] lg:h-[120px] mb-3">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={120}
+                      height={120}
+                      className="max-h-[90px] md:max-h-[100px] lg:max-h-[110px] w-auto object-contain"
+                    />
+                  </div>
+                  <p className="font-['Montserrat'] text-[10px] md:text-[11px] font-medium text-[#333333] dark:text-[#E0E0E0] text-center uppercase leading-[1.4] min-h-[28px]">
+                    {product.name}
+                  </p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
   
     return (
       <section 
