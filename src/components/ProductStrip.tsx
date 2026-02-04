@@ -84,14 +84,14 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     return () => window.removeEventListener("resize", handleResize);
   }, [getSpeed, isMounted]);
   
-  // Calculate track width once mounted
+  // Calculate track width once mounted (1/4 of total since we have 4 copies)
   useEffect(() => {
     if (!isMounted || !trackRef.current) return;
     
     // Wait for layout to settle
     const timeout = setTimeout(() => {
       if (trackRef.current) {
-        setTrackWidth(trackRef.current.scrollWidth / 2);
+        setTrackWidth(trackRef.current.scrollWidth / 4);
       }
     }, 100);
     
