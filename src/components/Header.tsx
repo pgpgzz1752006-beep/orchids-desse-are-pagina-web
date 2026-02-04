@@ -43,21 +43,21 @@ export default function Header() {
         ))}
       </div>
 
-      {/* Main Header */}
-      <div className="w-full max-w-[1440px] mx-auto px-12 lg:px-16 h-[120px] flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex-shrink-0">
-          <a href="/" className="block">
-            <Image
-              src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/LOGOTIPO-1770138421366.png?width=8000&height=8000&resize=contain"
-              alt="Diseñare Promocionales"
-              width={180}
-              height={80}
-              className="h-[70px] w-auto object-contain lg:h-[80px]"
-              priority
-            />
-          </a>
-        </div>
+        {/* Main Header */}
+        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 h-[100px] md:h-[110px] lg:h-[120px] flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex-shrink-0 flex items-center">
+            <a href="/" className="block">
+              <Image
+                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/LOGOTIPO-1770138421366.png?width=8000&height=8000&resize=contain"
+                alt="Diseñare Promocionales"
+                width={240}
+                height={100}
+                className="h-[58px] w-auto object-contain md:h-[78px] lg:h-[95px]"
+                priority
+              />
+            </a>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-14 xl:gap-16">
