@@ -66,12 +66,13 @@ export default function Footer() {
                     aria-label="Instagram Diseñare Promocionales"
                   >
                     <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-06-1770149849866.png?width=200&height=200&resize=contain"
-                      alt="Instagram"
-                      width={122}
-                      height={122}
-                      className="w-[96px] h-[96px] lg:w-[122px] lg:h-[122px] object-contain block"
-                    />
+                        src="/icons/icon-instagram.png"
+                        alt="Instagram"
+                        width={122}
+                        height={122}
+                        className="w-[96px] h-[96px] lg:w-[122px] lg:h-[122px] object-contain block"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
                   </a>
 
                   {/* Facebook */}
