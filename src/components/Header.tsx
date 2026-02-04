@@ -44,16 +44,16 @@ export default function Header() {
       </div>
 
         {/* Main Header */}
-        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 h-[100px] md:h-[110px] lg:h-[120px] flex items-center justify-between">
-          {/* Logo */}
+        <div className="w-full flex items-center justify-between h-[90px] md:h-[100px] lg:h-[110px] pl-2 pr-4 md:pl-3 md:pr-8 lg:pl-3 lg:pr-12">
+          {/* Logo - larger and flush left */}
           <div className="flex-shrink-0 flex items-center">
             <a href="/" className="block">
               <Image
                 src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/LOGOTIPO-1770138421366.png?width=8000&height=8000&resize=contain"
                 alt="Diseñare Promocionales"
-                width={240}
-                height={100}
-                className="h-[58px] w-auto object-contain md:h-[78px] lg:h-[95px]"
+                width={320}
+                height={140}
+                className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[130px]"
                 priority
               />
             </a>
