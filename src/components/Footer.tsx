@@ -84,12 +84,13 @@ export default function Footer() {
                     aria-label="Facebook Diseñare Promocionales"
                   >
                     <img
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/disenare-maqueta-09-1770149791022.png?width=200&height=200&resize=contain"
-                      alt="Facebook"
-                      width={122}
-                      height={122}
-                      className="w-[96px] h-[96px] lg:w-[122px] lg:h-[122px] object-contain block"
-                    />
+                        src="/icons/icon-facebook.png"
+                        alt="Facebook"
+                        width={122}
+                        height={122}
+                        className="w-[96px] h-[96px] lg:w-[122px] lg:h-[122px] object-contain block"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
                   </a>
 
                   {/* WhatsApp */}
