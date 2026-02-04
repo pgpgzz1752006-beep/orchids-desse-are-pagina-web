@@ -69,12 +69,12 @@ export default function Home() {
         <Header />
         <main className="w-full">
           <HeroBanner />
-          <ProductStrip
-              titleRegular="PRODUCTOS"
-              titleBold="DESTACADOS"
-              products={featuredProducts}
-              autoplay
-            />
+<ProductStrip
+                titleRegular="MÁS"
+                titleBold="VENDIDOS"
+                products={featuredProducts}
+                autoplay
+              />
           <CategoriesSection />
           <ProductStrip
               titleRegular="PRODUCTOS"
