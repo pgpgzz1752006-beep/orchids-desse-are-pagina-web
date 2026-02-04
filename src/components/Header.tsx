@@ -31,7 +31,7 @@ export default function Header() {
     return (
         <header className="sticky top-0 z-50 bg-white dark:bg-[#0E0F12] transition-colors duration-300">
       {/* Multicolor Top Bar */}
-      <div className="flex w-full h-[12px]">
+      <div className="flex w-full" style={{ height: 'var(--colorbar-height)' }}>
         {colorBarSegments.map((segment, index) => (
           <div
             key={index}
