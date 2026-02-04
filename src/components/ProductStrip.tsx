@@ -266,65 +266,66 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     );
   }
   
-  return (
-    <section 
-      className="w-full bg-white dark:bg-[#0E0F12] py-14 md:py-16 lg:py-[72px] transition-colors duration-300"
-      data-autoplay={autoplay ? "on" : "off"}
-      data-carousel-id={carouselId}
-    >
-      <div className="w-full max-w-[1320px] mx-auto px-6 md:px-10 lg:px-10">
-        {/* Title */}
-        <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2] mb-10 md:mb-12">
-          <span className="font-normal">{titleRegular} </span>
-          <span className="font-extrabold">{titleBold}</span>
-        </h2>
+    return (
+      <section 
+        className="w-full bg-white dark:bg-[#0E0F12] py-14 md:py-16 lg:py-[72px] transition-colors duration-300 overflow-hidden"
+        data-autoplay={autoplay ? "on" : "off"}
+        data-carousel-id={carouselId}
+      >
+        {/* Title - centered with max-width */}
+        <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 mb-10 md:mb-12">
+          <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
+            <span className="font-normal">{titleRegular} </span>
+            <span className="font-extrabold">{titleBold}</span>
+          </h2>
+        </div>
 
-        {/* Carousel Container */}
+        {/* Full-width Carousel Container */}
         <div 
-          className="relative flex items-center justify-center"
+          className="relative w-full"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          {/* Left Arrow - nudge */}
+          {/* Left Arrow - positioned at edge */}
           <button
             onClick={handlePrevClick}
-            className="hidden md:flex absolute left-0 z-10 w-11 h-11 items-center justify-center text-[#777777] hover:text-[#333333] dark:text-[#888888] dark:hover:text-[#CCCCCC] transition-colors duration-180 cursor-pointer"
+            className="hidden md:flex absolute left-2 lg:left-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center text-[#777777] hover:text-[#333333] dark:text-[#888888] dark:hover:text-[#CCCCCC] transition-colors duration-180 cursor-pointer bg-white/80 dark:bg-[#0E0F12]/80 rounded-full shadow-sm"
             aria-label="Anterior"
           >
             <ChevronLeft className="w-7 h-7" strokeWidth={1.5} />
           </button>
 
-            {/* Products Track - Continuous Marquee */}
+          {/* Products Track - Full width marquee */}
+          <div 
+            ref={containerRef}
+            className="w-full overflow-hidden select-none pt-[12px] pb-[16px] px-2 md:px-4"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+          >
             <div 
-              ref={containerRef}
-              className="w-full md:px-14 lg:px-16 overflow-hidden select-none pt-[12px] pb-[16px]"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
+              ref={trackRef}
+              className="flex will-change-transform"
+              style={{
+                transform: `translateX(-${offset}px)`,
+              }}
             >
-              <div 
-                ref={trackRef}
-                className="flex will-change-transform"
-                style={{
-                  transform: `translateX(-${offset}px)`,
-                }}
-              >
-                {duplicatedProducts.map((product, index) => (
-                  <div
-                    key={`${product.name}-${index}`}
-                    className="flex-shrink-0 px-2 lg:px-[10px]"
-                    style={{ width: "220px" }} // Fixed width for consistent spacing
+              {duplicatedProducts.map((product, index) => (
+                <div
+                  key={`${product.name}-${index}`}
+                  className="flex-shrink-0 px-2 lg:px-[10px]"
+                  style={{ width: "220px" }}
+                >
+                  <a
+                    href={product.href}
+                    className="block bg-white dark:bg-[#1A1D24] border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.04] hover:border-[#BDBDBD] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] dark:hover:border-[#3A3D44] dark:hover:shadow-[0_16px_34px_rgba(0,0,0,0.3)] active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm"
+                    onClick={(e) => isDragging && e.preventDefault()}
+                    draggable={false}
                   >
-                    <a
-                      href={product.href}
-                      className="block bg-white dark:bg-[#1A1D24] border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.04] hover:border-[#BDBDBD] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] dark:hover:border-[#3A3D44] dark:hover:shadow-[0_16px_34px_rgba(0,0,0,0.3)] active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm"
-                      onClick={(e) => isDragging && e.preventDefault()}
-                      draggable={false}
-                    >
                     {/* Image Container */}
                     <div className="flex items-center justify-center h-[100px] md:h-[110px] lg:h-[120px] mb-3">
                       <Image
@@ -347,16 +348,15 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
             </div>
           </div>
 
-          {/* Right Arrow - nudge */}
+          {/* Right Arrow - positioned at edge */}
           <button
             onClick={handleNextClick}
-            className="hidden md:flex absolute right-0 z-10 w-11 h-11 items-center justify-center text-[#777777] hover:text-[#333333] dark:text-[#888888] dark:hover:text-[#CCCCCC] transition-colors duration-180 cursor-pointer"
+            className="hidden md:flex absolute right-2 lg:right-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center text-[#777777] hover:text-[#333333] dark:text-[#888888] dark:hover:text-[#CCCCCC] transition-colors duration-180 cursor-pointer bg-white/80 dark:bg-[#0E0F12]/80 rounded-full shadow-sm"
             aria-label="Siguiente"
           >
             <ChevronRight className="w-7 h-7" strokeWidth={1.5} />
           </button>
-          </div>
         </div>
       </section>
-  );
+    );
 }
