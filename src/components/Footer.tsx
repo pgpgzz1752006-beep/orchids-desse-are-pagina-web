@@ -25,7 +25,7 @@ export default function Footer() {
   return (
     <footer className="w-full bg-white dark:bg-[#0E0F12] transition-colors duration-300">
       {/* Multicolor Bar */}
-      <div className="w-full flex" style={{ height: 'var(--colorbar-height)' }}>
+      <div className="w-full flex h-[10px]">
         {colorBarSegments.map((segment, index) => (
           <div
             key={index}
