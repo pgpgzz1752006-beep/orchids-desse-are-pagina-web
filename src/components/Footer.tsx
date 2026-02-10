@@ -40,15 +40,24 @@ export default function Footer() {
           {/* Main Grid */}
           <div className="grid grid-cols-1 md:grid-cols-[1fr_1.6fr_1fr] gap-6 md:gap-4 lg:gap-6 items-start">
             {/* Column 1: Logo */}
-              <div className="flex justify-center md:justify-start max-w-[300px]">
-                <Image
-                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/LOGOTIPO-1770138421366.png?width=8000&height=8000&resize=contain"
-                  alt="Diseñare Promocionales"
-                  width={260}
-                  height={120}
-                  className="w-[180px] md:w-[220px] lg:w-[260px] h-auto object-contain"
-                />
-              </div>
+              <div className="flex justify-center md:justify-start max-w-[300px] relative">
+                  {/* Logo light mode */}
+                  <Image
+                    src="/brand/logo-light.png"
+                    alt="Diseñare Promocionales"
+                    width={260}
+                    height={120}
+                    className="w-[180px] md:w-[220px] lg:w-[260px] h-auto object-contain block dark:hidden transition-opacity duration-200 ease-in-out"
+                  />
+                  {/* Logo dark mode */}
+                  <Image
+                    src="/brand/logo-dark.png"
+                    alt="Diseñare Promocionales"
+                    width={260}
+                    height={120}
+                    className="w-[180px] md:w-[220px] lg:w-[260px] h-auto object-contain hidden dark:block transition-opacity duration-200 ease-in-out"
+                  />
+                </div>
 
             {/* Column 2: Contáctanos */}
               <div id="contacto" className="flex flex-col items-center justify-start text-center scroll-mt-[140px]">
