@@ -32,7 +32,7 @@ export default function SolutionsSection() {
     <section className="w-full bg-white dark:bg-[#0E0F12] pt-1 md:pt-2 lg:pt-2 pb-14 md:pb-16 lg:pb-14 transition-colors duration-300 overflow-visible">
       <div className="w-full max-w-[1440px] mx-auto px-5 md:px-8 lg:px-10">
         {/* Title - larger +30% */}
-        <h2 className="text-center font-['Montserrat'] text-[42px] md:text-[54px] lg:text-[62px] tracking-[0.03em] text-[#111111] dark:text-[#F2F2F2] mb-3">
+        <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.03em] text-[#111111] dark:text-[#F2F2F2] mb-3">
           <span className="font-normal">NUESTRAS </span>
           <span className="font-extrabold">SOLUCIONES</span>
         </h2>
