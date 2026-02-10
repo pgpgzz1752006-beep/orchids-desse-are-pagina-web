@@ -98,7 +98,7 @@ export default function Header() {
         </nav>
 
           {/* Column 3: Action Icons - flush right */}
-          <div className="flex items-center justify-self-end flex-shrink-0 min-w-[200px] justify-end gap-4 lg:gap-5 pr-1 lg:pr-3">
+          <div className="flex items-center justify-self-end flex-shrink-0 min-w-[180px] justify-end gap-3 lg:gap-4 xl:gap-5 pr-1 lg:pr-3">
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
