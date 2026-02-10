@@ -53,7 +53,7 @@ export default function Header() {
                 alt="Diseñare Promocionales"
                 width={320}
                 height={140}
-                className="h-[70px] w-auto object-contain md:h-[150px] lg:h-[330px]"
+                className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[230px]"
                 priority
               />
             </a>
