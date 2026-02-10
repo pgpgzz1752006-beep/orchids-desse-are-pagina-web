@@ -33,6 +33,11 @@ const featuredProducts = [
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-011-01_1-1770140356623.jpg?width=400&height=400&resize=contain",
     href: "/productos/pelota-antistress-futbol",
   },
+  {
+    name: "TERMO SOCCER ACERO",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-090-1770140352614.jpg?width=400&height=400&resize=contain",
+    href: "/productos/termo-soccer-acero",
+  },
 ];
 
 const recommendedProducts = [
@@ -60,6 +65,11 @@ const recommendedProducts = [
     name: "PELOTA ANTI-STRESS FÚTBOL",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-011-01_1-1770140356623.jpg?width=400&height=400&resize=contain",
     href: "/productos/pelota-antistress-futbol",
+  },
+  {
+    name: "LLAVERO SOCCER BALÓN",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-011-01_1-1770140356623.jpg?width=400&height=400&resize=contain",
+    href: "/productos/llavero-soccer-balon",
   },
 ];
 
