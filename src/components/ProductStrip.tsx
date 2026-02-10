@@ -108,7 +108,7 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     }, 100);
     
     return () => clearTimeout(timeout);
-  }, [isMounted, products, cardWidth]);
+  }, [isMounted, products]);
   
   // Continuous marquee animation using requestAnimationFrame
   useEffect(() => {
