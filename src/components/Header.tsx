@@ -50,7 +50,7 @@ export default function Header() {
               <a href="/" className="block relative h-[70px] md:h-[100px] lg:h-[200px]">
                 {/* Logo light mode */}
                 <Image
-                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/LOGOTIPO-1770138421366.png?width=8000&height=8000&resize=contain"
+                    src="/brand/logo-light.png"
                   alt="Diseñare Promocionales"
                   width={320}
                   height={140}
