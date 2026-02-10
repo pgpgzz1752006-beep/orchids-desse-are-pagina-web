@@ -44,9 +44,9 @@ export default function Header() {
       </div>
 
         {/* Main Header - 3 Column Grid */}
-        <div className="w-full grid grid-cols-[auto_1fr_auto] items-center h-[90px] md:h-[120px] lg:h-[220px] pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-4 lg:pr-6">
+        <div className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-x-6 h-[90px] md:h-[120px] lg:h-[220px] pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-4 lg:pr-6">
           {/* Column 1: Logo - flush left */}
-          <div className="justify-self-start flex items-center">
+          <div className="justify-self-start flex-shrink-0 flex items-center">
             <a href="/" className="block">
               <Image
                 src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/LOGOTIPO-1770138421366.png?width=8000&height=8000&resize=contain"
@@ -60,7 +60,7 @@ export default function Header() {
           </div>
 
           {/* Column 2: Desktop Navigation - centered */}
-          <nav className="hidden lg:flex items-center justify-self-center gap-11 xl:gap-14 max-w-[800px]">
+          <nav className="hidden lg:flex items-center justify-self-center min-w-0 max-w-[760px] w-full justify-center gap-7 xl:gap-11 2xl:gap-14 overflow-hidden">
               {navItems.map((item) => (
                 <a
                   key={item.label}
@@ -74,11 +74,11 @@ export default function Header() {
                       }
                     }
                   }}
-                  className="group relative"
+                  className="group relative whitespace-nowrap flex-shrink-0"
                 >
                 <span
                     className={`
-                      font-['Montserrat'] text-[22px] font-medium uppercase tracking-[0.04em]
+                      font-['Montserrat'] text-[18px] xl:text-[20px] 2xl:text-[22px] font-medium uppercase tracking-[0.04em]
                       transition-colors duration-200 ease-out
                       ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white group-hover:text-[#14C6C9]"}
                     `}
@@ -98,7 +98,7 @@ export default function Header() {
         </nav>
 
           {/* Column 3: Action Icons - flush right */}
-          <div className="flex items-center justify-self-end gap-5 lg:gap-6">
+          <div className="flex items-center justify-self-end flex-shrink-0 min-w-[200px] justify-end gap-4 lg:gap-5 pr-1 lg:pr-3">
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
