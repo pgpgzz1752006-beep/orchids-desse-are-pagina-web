@@ -246,7 +246,7 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
                 <a
                   key={`${product.name}-${index}`}
                   href={product.href}
-                  className="block bg-white dark:bg-[#1A1D24] border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2"
+                  className="block bg-white dark:bg-white border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2"
                 >
                   <div className="flex items-center justify-center h-[100px] md:h-[110px] lg:h-[120px] mb-3">
                     <Image
