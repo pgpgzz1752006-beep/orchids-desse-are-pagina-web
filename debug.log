@@ -2,3 +2,11 @@
 
 Previous: %s
 Incoming: %s useEffect [true, [object Object],[object Object],[object Object],[object Object],[object Object]] [true, [object Object],[object Object],[object Object],[object Object],[object Object], 221.33333333333334]
+2026-02-10T22:34:57.283Z [console][error] The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useEffect [true, [object Object],[object Object],[object Object],[object Object],[object Object]] [true, [object Object],[object Object],[object Object],[object Object],[object Object], 221.33333333333334]
+2026-02-10T22:34:57.283Z [console][error] The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useEffect [true, [object Object],[object Object],[object Object],[object Object],[object Object]] [true, [object Object],[object Object],[object Object],[object Object],[object Object], 221.33333333333334]
