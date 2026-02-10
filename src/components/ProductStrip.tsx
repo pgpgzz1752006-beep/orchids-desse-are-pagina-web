@@ -94,17 +94,21 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
   
   // Calculate track width once mounted (1/4 of total since we have 4 copies)
   useEffect(() => {
-    if (!isMounted || !trackRef.current) return;
+    if (!isMounted || !trackRef.current || !containerRef.current) return;
     
     // Wait for layout to settle
     const timeout = setTimeout(() => {
+      if (containerRef.current) {
+        const containerW = containerRef.current.clientWidth;
+        setCardWidth(containerW / 6);
+      }
       if (trackRef.current) {
         setTrackWidth(trackRef.current.scrollWidth / 4);
       }
     }, 100);
     
     return () => clearTimeout(timeout);
-  }, [isMounted, products]);
+  }, [isMounted, products, cardWidth]);
   
   // Continuous marquee animation using requestAnimationFrame
   useEffect(() => {
