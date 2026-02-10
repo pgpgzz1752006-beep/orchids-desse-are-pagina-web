@@ -74,7 +74,7 @@ export default function Header() {
                       }
                     }
                   }}
-                  className="group relative whitespace-nowrap flex-shrink-0"
+                  className="group relative whitespace-nowrap flex-shrink-0 overflow-visible"
                 >
                 <span
                     className={`
