@@ -324,7 +324,7 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
                 >
                   <a
                     href={product.href}
-                    className="block bg-white dark:bg-[#1A1D24] border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.04] hover:border-[#BDBDBD] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] dark:hover:border-[#3A3D44] dark:hover:shadow-[0_16px_34px_rgba(0,0,0,0.3)] active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm"
+                    className="block bg-white dark:bg-white border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.04] hover:border-[#BDBDBD] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] dark:hover:border-[#3A3D44] dark:hover:shadow-[0_16px_34px_rgba(0,0,0,0.3)] active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm"
                     onClick={(e) => isDragging && e.preventDefault()}
                     draggable={false}
                   >
