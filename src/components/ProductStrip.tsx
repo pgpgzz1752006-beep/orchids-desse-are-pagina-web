@@ -38,6 +38,9 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
   const animationRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
   
+  // Card width: container / 6 visible items
+  const [cardWidth, setCardWidth] = useState(220);
+  
   // Touch/drag state for manual interaction
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
