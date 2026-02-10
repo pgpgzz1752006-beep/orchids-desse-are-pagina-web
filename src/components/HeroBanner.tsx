@@ -14,11 +14,7 @@ const bannerSlides = [
     src: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/BANNER2-resized-1770155627092.jpg?width=8000&height=8000&resize=contain",
     alt: "Conoce los Nuevos Productos 2026",
   },
-  {
-    id: 3,
-    src: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/BANNER3-resized-1770155628548.jpg?width=8000&height=8000&resize=contain",
-    alt: "Super Bowl - Productos promocionales para el evento",
-  },
+
   {
     id: 4,
     src: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/BANNER4-resized-1770155629990.jpg?width=8000&height=8000&resize=contain",
