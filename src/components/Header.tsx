@@ -47,17 +47,27 @@ export default function Header() {
         <div className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-x-6 h-[90px] md:h-[120px] lg:h-[220px] pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-4 lg:pr-6">
           {/* Column 1: Logo - flush left */}
           <div className="justify-self-start flex-shrink-0 flex items-center">
-            <a href="/" className="block">
-              <Image
-                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/LOGOTIPO-1770138421366.png?width=8000&height=8000&resize=contain"
-                alt="Diseñare Promocionales"
-                width={320}
-                height={140}
-                className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[200px]"
-                priority
-              />
-            </a>
-          </div>
+              <a href="/" className="block relative h-[70px] md:h-[100px] lg:h-[200px]">
+                {/* Logo light mode */}
+                <Image
+                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/LOGOTIPO-1770138421366.png?width=8000&height=8000&resize=contain"
+                  alt="Diseñare Promocionales"
+                  width={320}
+                  height={140}
+                  className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[200px] block dark:hidden transition-opacity duration-200 ease-in-out"
+                  priority
+                />
+                {/* Logo dark mode */}
+                <Image
+                  src="/brand/logo-dark.png"
+                  alt="Diseñare Promocionales"
+                  width={320}
+                  height={140}
+                  className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[200px] hidden dark:block absolute inset-0 transition-opacity duration-200 ease-in-out"
+                  priority
+                />
+              </a>
+            </div>
 
           {/* Column 2: Desktop Navigation - centered */}
           <nav className="hidden lg:flex items-center justify-self-center min-w-0 max-w-[820px] w-full justify-center gap-5 xl:gap-9 2xl:gap-14 overflow-visible flex-wrap [row-gap:8px]">
