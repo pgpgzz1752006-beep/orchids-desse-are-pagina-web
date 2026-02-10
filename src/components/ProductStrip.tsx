@@ -321,7 +321,7 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
           {/* Products Track - Full width marquee */}
           <div 
             ref={containerRef}
-            className="w-full overflow-hidden select-none pt-[12px] pb-[16px] px-2 md:px-4"
+              className="w-full overflow-hidden select-none pt-[12px] pb-[16px]"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
