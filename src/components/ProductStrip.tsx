@@ -223,17 +223,15 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     }
   };
   
-  // Arrow click handlers - nudge the carousel
-  const nudgeAmount = 200; // px
-  
+  // Arrow click handlers - nudge by one card width
   const handlePrevClick = () => {
-    let newOffset = offset - nudgeAmount;
+    let newOffset = offset - cardWidth;
     if (newOffset < 0) newOffset = trackWidth + newOffset;
     setOffset(newOffset);
   };
   
   const handleNextClick = () => {
-    let newOffset = offset + nudgeAmount;
+    let newOffset = offset + cardWidth;
     if (newOffset >= trackWidth) newOffset = newOffset - trackWidth;
     setOffset(newOffset);
   };
