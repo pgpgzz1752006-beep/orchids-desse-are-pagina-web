@@ -110,6 +110,17 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     return () => clearTimeout(timeout);
   }, [isMounted, products]);
   
+  // Recalculate track width when cardWidth changes
+  useEffect(() => {
+    if (!isMounted || !trackRef.current) return;
+    const timeout = setTimeout(() => {
+      if (trackRef.current) {
+        setTrackWidth(trackRef.current.scrollWidth / 4);
+      }
+    }, 50);
+    return () => clearTimeout(timeout);
+  }, [isMounted, cardWidth]);
+  
   // Continuous marquee animation using requestAnimationFrame
   useEffect(() => {
     if (!isMounted || !autoplay || prefersReducedMotion || trackWidth === 0) {
