@@ -303,9 +303,9 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
           </h2>
         </div>
 
-        {/* Full-width Carousel Container */}
+        {/* Carousel Container - constrained like the rest of the page */}
         <div 
-          className="relative w-full"
+          className="relative w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
