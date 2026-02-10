@@ -77,6 +77,11 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     
     const handleResize = () => {
       setSpeed(getSpeed());
+      // Calculate card width = container width / 6
+      if (containerRef.current) {
+        const containerW = containerRef.current.clientWidth;
+        setCardWidth(containerW / 6);
+      }
       // Recalculate track width (1/4 of total since we have 4 copies)
       if (trackRef.current) {
         setTrackWidth(trackRef.current.scrollWidth / 4);
