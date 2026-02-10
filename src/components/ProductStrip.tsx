@@ -372,13 +372,13 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
           </div>
 
           {/* Right Arrow - positioned at edge */}
-          <button
-            onClick={handleNextClick}
-            className="hidden md:flex absolute right-2 lg:right-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center text-[#777777] hover:text-[#333333] dark:text-[#888888] dark:hover:text-[#CCCCCC] transition-colors duration-180 cursor-pointer bg-white/80 dark:bg-[#0E0F12]/80 rounded-full shadow-sm"
-            aria-label="Siguiente"
-          >
-            <ChevronRight className="w-7 h-7" strokeWidth={1.5} />
-          </button>
+            <button
+              onClick={handleNextClick}
+              className="hidden md:flex absolute -right-1 lg:right-0 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center text-[#555555] hover:text-[#111111] dark:text-[#E0E0E0] dark:hover:text-white transition-colors duration-180 cursor-pointer bg-white/90 dark:bg-[#23262F]/90 rounded-full shadow-md dark:shadow-[0_2px_12px_rgba(0,0,0,0.5)] border border-[#E0E0E0] dark:border-[#444444]"
+              aria-label="Siguiente"
+            >
+              <ChevronRight className="w-7 h-7" strokeWidth={2} />
+            </button>
         </div>
       </section>
     );
