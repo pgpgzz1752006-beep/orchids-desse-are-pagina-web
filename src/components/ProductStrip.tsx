@@ -310,13 +310,13 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
           onMouseLeave={handleMouseLeave}
         >
           {/* Left Arrow - positioned at edge */}
-          <button
-            onClick={handlePrevClick}
-            className="hidden md:flex absolute left-2 lg:left-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center text-[#777777] hover:text-[#333333] dark:text-[#888888] dark:hover:text-[#CCCCCC] transition-colors duration-180 cursor-pointer bg-white/80 dark:bg-[#0E0F12]/80 rounded-full shadow-sm"
-            aria-label="Anterior"
-          >
-            <ChevronLeft className="w-7 h-7" strokeWidth={1.5} />
-          </button>
+            <button
+              onClick={handlePrevClick}
+              className="hidden md:flex absolute -left-1 lg:left-0 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center text-[#555555] hover:text-[#111111] dark:text-[#E0E0E0] dark:hover:text-white transition-colors duration-180 cursor-pointer bg-white/90 dark:bg-[#23262F]/90 rounded-full shadow-md dark:shadow-[0_2px_12px_rgba(0,0,0,0.5)] border border-[#E0E0E0] dark:border-[#444444]"
+              aria-label="Anterior"
+            >
+              <ChevronLeft className="w-7 h-7" strokeWidth={2} />
+            </button>
 
           {/* Products Track - Full width marquee */}
           <div 
