@@ -47,26 +47,26 @@ export default function Header() {
         <div className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-x-6 h-[90px] md:h-[120px] lg:h-[220px] pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-4 lg:pr-6">
           {/* Column 1: Logo - flush left */}
           <div className="justify-self-start flex-shrink-0 flex items-center">
-              <a href="/" className="block relative h-[70px] md:h-[100px] lg:h-[200px]">
-                {/* Logo light mode */}
-                <Image
+            <a href="/" className="flex items-center overflow-visible">
+                  {/* Logo light mode */}
+                  <Image
                     src="/brand/logo-light.png"
-                  alt="Diseñare Promocionales"
-                  width={320}
-                  height={140}
-                  className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[200px] block dark:hidden transition-opacity duration-200 ease-in-out"
-                  priority
-                />
-                {/* Logo dark mode */}
-                <Image
-                  src="/brand/logo-dark.png"
-                  alt="Diseñare Promocionales"
-                  width={320}
-                  height={140}
-                  className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[200px] hidden dark:block absolute inset-0 transition-opacity duration-200 ease-in-out"
-                  priority
-                />
-              </a>
+                    alt="Diseñare Promocionales"
+                    width={320}
+                    height={140}
+                    className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[200px] block dark:hidden transition-opacity duration-200 ease-in-out"
+                    priority
+                  />
+                  {/* Logo dark mode */}
+                  <Image
+                    src="/brand/logo-dark.png"
+                    alt="Diseñare Promocionales"
+                    width={320}
+                    height={140}
+                    className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[200px] hidden dark:block transition-opacity duration-200 ease-in-out"
+                    priority
+                  />
+                </a>
             </div>
 
           {/* Column 2: Desktop Navigation - centered */}
