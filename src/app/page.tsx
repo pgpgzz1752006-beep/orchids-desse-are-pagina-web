@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import HeroBanner from "@/components/HeroBanner";
 import CategoriesSection from "@/components/CategoriesSection";
 import SolutionsSection from "@/components/SolutionsSection";
