@@ -226,6 +226,16 @@ export default function Header() {
           </div>
         )}
       </header>
+  );
+
+  // Portal the header directly into document.body, completely outside React tree
+  if (!mounted) {
+    return <div className="h-[100px] md:h-[130px] lg:h-[230px]" />;
+  }
+
+  return (
+    <>
+      {createPortal(headerContent, document.body)}
       {/* Spacer to compensate for fixed header */}
       <div className="h-[100px] md:h-[130px] lg:h-[230px]" />
     </>
