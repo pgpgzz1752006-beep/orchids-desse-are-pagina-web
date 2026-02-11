@@ -10,3 +10,35 @@ Incoming: %s useEffect [true, [object Object],[object Object],[object Object],[o
 
 Previous: %s
 Incoming: %s useEffect [true, [object Object],[object Object],[object Object],[object Object],[object Object]] [true, [object Object],[object Object],[object Object],[object Object],[object Object], 221.33333333333334]
+2026-02-11T01:38:50.663Z [console][error] The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useEffect [()=>{
+            if ("TURBOPACK compile-time falsy", 0) {
+                "TURBOPACK unreachable";
+            }
+            return window.innerWidth < 768 ? MARQUEE_SPEED_MOBILE : MARQUEE_SPEED_DESKTOP;
+        }, true] [()=>{
+            if ("TURBOPACK compile-time falsy", 0) {
+                "TURBOPACK unreachable";
+            }
+            return window.innerWidth < 768 ? MARQUEE_SPEED_MOBILE : MARQUEE_SPEED_DESKTOP;
+        }, ()=>{
+            if ("TURBOPACK compile-time falsy", 0) {
+                "TURBOPACK unreachable";
+            }
+            if (window.innerWidth < 640) return 2;
+            if (window.innerWidth < 1024) return 3;
+            return 6;
+        }, true]
+2026-02-11T01:38:59.503Z [console][error] The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useEffect [true, [object Object],[object Object],[object Object],[object Object],[object Object],[object Object]] [true, [object Object],[object Object],[object Object],[object Object],[object Object],[object Object], ()=>{
+            if ("TURBOPACK compile-time falsy", 0) {
+                "TURBOPACK unreachable";
+            }
+            if (window.innerWidth < 640) return 2;
+            if (window.innerWidth < 1024) return 3;
+            return 6;
+        }]
