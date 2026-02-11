@@ -27,18 +27,36 @@ const colorBarSegments = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const onScroll = () => {
+      header.style.transform = `translateY(${window.scrollY}px)`;
+    };
+
+    // Initial position
+    onScroll();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
       <header
+        ref={headerRef}
         id="site-header"
         style={{
-          position: "fixed",
+          position: "relative",
           top: 0,
           left: 0,
           right: 0,
           width: "100%",
           zIndex: 99999,
+          willChange: "transform",
         }}
         className="bg-white dark:bg-[#0E0F12]"
       >
