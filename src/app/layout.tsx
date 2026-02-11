@@ -41,21 +41,6 @@ export default function RootLayout({
                 {children}
               </ThemeProvider>
           <VisualEditsMessenger />
-            <script dangerouslySetInnerHTML={{ __html: `
-              setTimeout(function() {
-                var h = document.getElementById('site-header');
-                var d = document.createElement('div');
-                d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:red;color:white;z-index:999999;font-size:11px;padding:8px;max-height:200px;overflow:auto';
-                if (!h) { d.textContent = 'HEADER NOT FOUND'; document.body.appendChild(d); return; }
-                var s = window.getComputedStyle(h);
-                var info = 'HEADER: position=' + s.position + ' top=' + s.top + ' zIndex=' + s.zIndex + ' display=' + s.display;
-                info += ' | scrollingEl=' + document.scrollingElement.tagName;
-                info += ' | docEl.scrollH=' + document.documentElement.scrollHeight + ' body.scrollH=' + document.body.scrollHeight;
-                info += ' | innerH=' + window.innerHeight;
-                d.textContent = info;
-                document.body.appendChild(d);
-              }, 3000);
-            `}} />
         </body>
     </html>
   );
