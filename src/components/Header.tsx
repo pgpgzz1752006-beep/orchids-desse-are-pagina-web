@@ -28,11 +28,38 @@ const colorBarSegments = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
-    return (
-        <>
+  const [mounted, setMounted] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Continuously enforce fixed position via JS in case anything overrides it
+  useEffect(() => {
+    if (!headerRef.current) return;
+    const el = headerRef.current;
+    const enforce = () => {
+      el.style.position = "fixed";
+      el.style.top = "0px";
+      el.style.left = "0px";
+      el.style.right = "0px";
+      el.style.zIndex = "99999";
+      el.style.width = "100%";
+    };
+    enforce();
+    const interval = setInterval(enforce, 100);
+    const observer = new MutationObserver(enforce);
+    observer.observe(el, { attributes: true, attributeFilter: ["style", "class"] });
+    return () => { clearInterval(interval); observer.disconnect(); };
+  }, [mounted]);
+
+  const headerContent = (
             <header
+              ref={headerRef}
               id="site-header"
-              className="fixed top-0 left-0 right-0 z-[99999] bg-white dark:bg-[#0E0F12]"
+              style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 99999, width: "100%" }}
+              className="bg-white dark:bg-[#0E0F12]"
             >
       {/* Multicolor Top Bar */}
       <div className="flex w-full h-[10px]">
