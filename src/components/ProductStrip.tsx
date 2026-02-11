@@ -115,7 +115,7 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     }, 100);
     
     return () => clearTimeout(timeout);
-  }, [isMounted, products]);
+  }, [isMounted, products, getVisibleCount]);
   
   // Recalculate track width when cardWidth changes
   useEffect(() => {
