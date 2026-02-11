@@ -42,21 +42,21 @@ export default function Footer() {
             {/* Column 1: Logo */}
               <div className="flex justify-center md:justify-start max-w-[300px] relative">
                   {/* Logo light mode */}
-                  <Image
-                    src="/brand/logo-light.png"
-                    alt="Diseñare Promocionales"
-                    width={260}
-                    height={120}
-                    className="w-[180px] md:w-[220px] lg:w-[260px] h-auto object-contain block dark:hidden transition-opacity duration-200 ease-in-out"
-                  />
-                  {/* Logo dark mode */}
-                  <Image
-                    src="/brand/logo-dark.png"
-                    alt="Diseñare Promocionales"
-                    width={260}
-                    height={120}
-                    className="w-[180px] md:w-[220px] lg:w-[260px] h-auto object-contain hidden dark:block transition-opacity duration-200 ease-in-out"
-                  />
+                    <Image
+                      src="/brand/logo-light.png"
+                      alt="Diseñare Promocionales"
+                      width={260}
+                      height={120}
+                      className="h-[80px] md:h-[100px] lg:h-[120px] max-w-[180px] md:max-w-[220px] lg:max-w-[260px] w-auto object-contain block dark:hidden transition-opacity duration-200 ease-in-out"
+                    />
+                    {/* Logo dark mode */}
+                    <Image
+                      src="/brand/logo-dark.png"
+                      alt="Diseñare Promocionales"
+                      width={260}
+                      height={120}
+                      className="h-[80px] md:h-[100px] lg:h-[120px] max-w-[180px] md:max-w-[220px] lg:max-w-[260px] w-auto object-contain hidden dark:block transition-opacity duration-200 ease-in-out"
+                    />
                 </div>
 
             {/* Column 2: Contáctanos */}
