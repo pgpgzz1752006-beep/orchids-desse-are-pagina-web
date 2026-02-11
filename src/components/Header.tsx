@@ -49,23 +49,23 @@ export default function Header() {
           <div className="justify-self-start flex-shrink-0 flex items-center">
             <a href="/" className="flex items-center overflow-visible">
                   {/* Logo light mode */}
-                  <Image
-                    src="/brand/logo-light.png"
-                    alt="Diseñare Promocionales"
-                    width={320}
-                    height={140}
-                    className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[200px] block dark:hidden transition-opacity duration-200 ease-in-out"
-                    priority
-                  />
-                  {/* Logo dark mode */}
-                  <Image
-                    src="/brand/logo-dark.png"
-                    alt="Diseñare Promocionales"
-                    width={320}
-                    height={140}
-                    className="h-[70px] w-auto object-contain md:h-[100px] lg:h-[200px] hidden dark:block transition-opacity duration-200 ease-in-out"
-                    priority
-                  />
+                    <Image
+                      src="/brand/logo-light.png"
+                      alt="Diseñare Promocionales"
+                      width={320}
+                      height={140}
+                      className="h-[70px] max-w-[160px] md:h-[100px] md:max-w-[230px] lg:h-[200px] lg:max-w-[420px] w-auto object-contain block dark:hidden transition-opacity duration-200 ease-in-out"
+                      priority
+                    />
+                    {/* Logo dark mode */}
+                    <Image
+                      src="/brand/logo-dark.png"
+                      alt="Diseñare Promocionales"
+                      width={320}
+                      height={140}
+                      className="h-[70px] max-w-[160px] md:h-[100px] md:max-w-[230px] lg:h-[200px] lg:max-w-[420px] w-auto object-contain hidden dark:block transition-opacity duration-200 ease-in-out"
+                      priority
+                    />
                 </a>
             </div>
 
