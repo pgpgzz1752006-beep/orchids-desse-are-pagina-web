@@ -117,9 +117,9 @@ const categorias = [
     barColor: "bg-[#462681]",
   },
   {
-    title: "NIÑOS",
-    subcategories: ["ALCANCIAS", "ESCOLARES", "JUGUETES"],
-    image: "/antiestres.jpg",
+      title: "NIÑOS",
+      subcategories: ["ALCANCIAS", "ESCOLARES", "JUGUETES"],
+      image: "/cat-ninos.jpg",
     barColor: "bg-[#009EE2]",
   },
   {
