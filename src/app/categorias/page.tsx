@@ -129,10 +129,10 @@ const categorias = [
       barColor: "bg-[#2196F3]",
     },
     {
-      title: "SETS EJECUTIVOS",
-      subcategories: ["SETS EJECUTIVOS"],
+      title: "SETS DE REGALO",
+      subcategories: ["SETS"],
       image: "/antiestres.jpg",
-      barColor: "bg-[#1A237E]",
+      barColor: "bg-[#FF9800]",
     },
     {
       title: "TECNOLOGÍA",
