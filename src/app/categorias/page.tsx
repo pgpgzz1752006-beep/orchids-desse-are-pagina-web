@@ -24,7 +24,7 @@ const categorias = [
       "NECESER",
     ],
     image: "/antiestres.jpg",
-    barColor: "bg-[#4A1E8B]",
+    barColor: "bg-[#462681]",
   },
   {
     title: "BAR",
