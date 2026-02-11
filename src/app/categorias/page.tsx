@@ -13,7 +13,7 @@ const categorias = [
     subcategories: ["FIGURAS ANTIESTRES"],
     image: "/antiestres.jpg",
     bgColor: "bg-sky-200",
-    barColor: "bg-yellow-400",
+    barColor: "bg-[#FFE600]",
   },
   {
     title: "ARTÍCULOS PARA VIAJE",
