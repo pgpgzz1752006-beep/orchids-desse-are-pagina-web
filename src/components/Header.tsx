@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Search, User, ShoppingCart, Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
@@ -28,17 +27,19 @@ const colorBarSegments = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const headerRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const headerElement = (
+  return (
+    <>
       <header
         id="site-header"
-        ref={headerRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          width: "100%",
+          zIndex: 99999,
+        }}
         className="bg-white dark:bg-[#0E0F12]"
       >
       {/* Multicolor Top Bar */}
@@ -206,14 +207,7 @@ export default function Header() {
           </div>
         )}
       </header>
-  );
-
-  return (
-    <>
-      {mounted && typeof document !== 'undefined'
-        ? createPortal(headerElement, document.body)
-        : headerElement}
-      {/* Spacer to compensate for fixed header - stays in normal flow */}
+      {/* Spacer to compensate for fixed header */}
       <div className="h-[100px] md:h-[130px] lg:h-[230px]" />
     </>
   );
