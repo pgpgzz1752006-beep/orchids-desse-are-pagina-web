@@ -28,13 +28,20 @@ const colorBarSegments = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
 
-    return (
-      <>
-        <header
-          id="site-header"
-          className="bg-white dark:bg-[#0E0F12]"
-        >
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const headerContent = (
+    <>
+      <header
+        id="site-header"
+        ref={headerRef}
+        className={`bg-white dark:bg-[#0E0F12] ${theme === 'dark' ? 'dark' : ''}`}
+      >
       {/* Multicolor Top Bar */}
       <div className="flex w-full h-[10px]">
         {colorBarSegments.map((segment, index) => (
