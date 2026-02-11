@@ -73,7 +73,7 @@ export default function Header() {
         </div>
 
         {/* Column 2: Desktop Navigation - centered */}
-        <nav className="hidden lg:flex items-center justify-self-center min-w-0 max-w-[820px] w-full justify-center gap-5 xl:gap-9 2xl:gap-14 overflow-visible flex-nowrap">
+        <nav className="hidden lg:flex items-center justify-self-center min-w-0 max-w-[820px] w-full justify-center gap-5 xl:gap-9 2xl:gap-14 overflow-visible flex-nowrap ml-12 xl:ml-16">
           {navItems.map((item) => (
             <a
               key={item.label}
