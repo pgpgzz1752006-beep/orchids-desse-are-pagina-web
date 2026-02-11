@@ -11,16 +11,15 @@ export default function CategoriasPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Tarjeta Antiestrés */}
           <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-            <div className="flex">
-              <div className="w-1/2 relative aspect-square bg-sky-200">
-                <Image
-                  src="/antiestres.jpg"
-                  alt="Figuras Antiestrés"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="w-1/2 flex flex-col">
+            <div className="flex h-full">
+                <div className="w-1/2 relative aspect-square bg-sky-200">
+                  <Image
+                    src="/antiestres.jpg"
+                    alt="Figuras Antiestrés"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
                 <div className="flex-1 p-4 flex flex-col justify-center">
                   <h3 className="font-['Montserrat'] font-bold text-base md:text-lg">
                     ANTIESTRES
@@ -29,9 +28,8 @@ export default function CategoriasPage() {
                     FIGURAS ANTIESTRES
                   </p>
                 </div>
-                <div className="w-2 bg-yellow-400 self-end h-full" />
+                <div className="w-2 bg-yellow-400" />
               </div>
-            </div>
           </div>
         </div>
       </div>
