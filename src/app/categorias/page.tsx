@@ -27,7 +27,7 @@ const categorias = [
     ],
     image: "/antiestres.jpg",
     bgColor: "bg-amber-100",
-    barColor: "bg-purple-700",
+    barColor: "bg-[#4A1E8B]",
   },
 ];
 
