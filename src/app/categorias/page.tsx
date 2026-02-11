@@ -123,9 +123,9 @@ const categorias = [
     barColor: "bg-[#009EE2]",
   },
   {
-    title: "OFICINA",
-    subcategories: ["ARTICULOS DE OFICINA", "CALCULADORAS", "PORTA NOTAS", "PORTAGAFETE", "RECONOCIMIENTOS", "RELOJES", "SETS EJECUTIVOS"],
-    image: "/antiestres.jpg",
+      title: "OFICINA",
+      subcategories: ["ARTICULOS DE OFICINA", "CALCULADORAS", "PORTA NOTAS", "PORTAGAFETE", "RECONOCIMIENTOS", "RELOJES", "SETS EJECUTIVOS"],
+      image: "/cat-oficina.jpg",
     barColor: "bg-[#762281]",
   },
   {
