@@ -54,8 +54,8 @@ export default function Footer() {
                     <Image
                       src="/brand/logo-dark.png"
                       alt="Diseñare Promocionales"
-                      width={260}
-                      height={120}
+                      width={420}
+                      height={200}
                       className="absolute left-[16px] top-1/2 -translate-y-1/2 h-[86%] w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
                     />
                   </div>
