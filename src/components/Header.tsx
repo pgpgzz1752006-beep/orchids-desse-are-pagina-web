@@ -27,38 +27,12 @@ const colorBarSegments = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const headerRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const header = headerRef.current;
-    if (!header) return;
-
-    let rafId: number;
-    const tick = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      header.style.transform = `translateY(${scrollY}px)`;
-      rafId = requestAnimationFrame(tick);
-    };
-    rafId = requestAnimationFrame(tick);
-
-    return () => cancelAnimationFrame(rafId);
-  }, []);
-
-  return (
-      <>
-          <header
-            ref={headerRef}
-            id="site-header"
-            style={{
-              position: 'relative',
-              top: 0,
-              left: 0,
-              right: 0,
-              zIndex: 99999,
-              willChange: 'transform',
-            }}
-            className="bg-white dark:bg-[#0E0F12]"
-          >
+    return (
+        <>
+            <header
+              id="site-header"
+              className="fixed top-0 left-0 right-0 z-[99999] bg-white dark:bg-[#0E0F12]"
+            >
       {/* Multicolor Top Bar */}
       <div className="flex w-full h-[10px]">
         {colorBarSegments.map((segment, index) => (
