@@ -238,11 +238,13 @@ export default function Footer() {
               </div>
           </div>
 
-            {/* Copyright - centered below Contáctanos */}
-<div className="mt-5 md:mt-6 lg:mt-7 flex justify-center">
-                <p className="font-['Montserrat'] text-[13px] md:text-[14px] lg:text-[15px] text-[#111111] dark:text-[#F2F2F2] italic text-center">
+            {/* Copyright - aligned with center column */}
+            <div className="mt-5 md:mt-6 lg:mt-7 grid grid-cols-1 md:grid-cols-[1fr_1.6fr_1fr]">
+              <div className="hidden md:block" />
+              <p className="font-['Montserrat'] text-[13px] md:text-[14px] lg:text-[15px] text-[#111111] dark:text-[#F2F2F2] italic text-center">
                 Diseñare Promocionales 2026®. Todos los derechos reservados.
               </p>
+              <div className="hidden md:block" />
             </div>
         </div>
       </div>
