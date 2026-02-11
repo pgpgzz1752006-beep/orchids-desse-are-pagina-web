@@ -38,7 +38,7 @@ export default function WhatsAppButton() {
         aria-label="Abrir WhatsApp +52 951 242 4333"
     >
       {/* White backplate for contrast */}
-        <div className="w-[58px] h-[58px] md:w-[72px] md:h-[72px] lg:w-[82px] lg:h-[82px] rounded-full bg-white flex items-center justify-center overflow-visible">
+        <div className="w-[58px] h-[58px] md:w-[72px] md:h-[72px] lg:w-[88px] lg:h-[88px] rounded-full bg-white flex items-center justify-center overflow-visible">
             <img
               src="/icons/icon-whatsapp.png"
               alt="WhatsApp"
