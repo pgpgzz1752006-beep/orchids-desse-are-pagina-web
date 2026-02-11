@@ -41,7 +41,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-[1fr_1.6fr_1fr] gap-6 md:gap-4 lg:gap-6 items-start">
             {/* Column 1: Logo */}
               <div className="flex justify-center md:justify-start">
-                  <div className="relative h-[80px] w-[180px] md:h-[100px] md:w-[220px] lg:h-[120px] lg:w-[260px] overflow-visible">
+                  <div className="relative h-[70px] w-[160px] md:h-[100px] md:w-[230px] lg:h-[200px] lg:w-[420px] overflow-visible">
                     {/* Logo light mode */}
                     <Image
                       src="/brand/logo-light.png"
