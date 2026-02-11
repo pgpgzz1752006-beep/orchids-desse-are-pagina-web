@@ -60,12 +60,14 @@ export default function Footer() {
               />
             </a>
 
-            {/* Mobile Logo */}
-            <div className="flex justify-center md:hidden">
+              {/* Main Grid */}
+              <div className="flex flex-col items-center w-full">
+
+              {/* Mobile Logo - centered with Contáctanos */}
               <a
                 href="#"
                 onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                className="relative h-[75px] w-[170px] overflow-visible block cursor-pointer"
+                className="md:hidden relative h-[75px] w-[170px] overflow-visible block cursor-pointer mb-3"
                 aria-label="Ir al inicio"
               >
                 <Image
@@ -73,22 +75,18 @@ export default function Footer() {
                   alt="Diseñare Promocionales"
                   width={420}
                   height={200}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
+                  className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-full w-auto object-contain block dark:hidden transition-opacity duration-[180ms] ease-in-out"
                 />
                 <Image
                   src="/brand/logo-dark.webp"
                   alt="Diseñare Promocionales"
                   width={420}
                   height={200}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
+                  className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-full w-auto object-contain hidden dark:block transition-opacity duration-[180ms] ease-in-out"
                 />
               </a>
-            </div>
 
-            {/* Main Grid */}
-            <div className="flex flex-col items-center w-full">
-
-            {/* Column 2: Contáctanos */}
+              {/* Column 2: Contáctanos */}
               <div id="contacto" className="flex flex-col items-center justify-start text-center scroll-mt-[110px] md:scroll-mt-[140px] lg:scroll-mt-[240px]">
               <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-semibold text-[#111111] dark:text-[#F2F2F2] leading-[1.1]">
                 Contáctanos
