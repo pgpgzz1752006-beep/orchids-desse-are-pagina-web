@@ -54,7 +54,7 @@ const categorias = [
     title: "COMPLEMENTOS",
     subcategories: ["ACCESORIOS Y COMPLEMENTOS"],
     image: "/antiestres.jpg",
-    barColor: "bg-[#FF9800]",
+    barColor: "bg-[#F6931D]",
   },
   {
     title: "DEPORTES",
