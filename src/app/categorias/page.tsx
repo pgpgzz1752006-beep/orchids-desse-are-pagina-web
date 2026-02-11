@@ -66,7 +66,7 @@ const categorias = [
     title: "ENTRETENIMIENTO",
     subcategories: ["JUEGOS", "SETS DE ENTRETENIMIENTO"],
     image: "/antiestres.jpg",
-    barColor: "bg-gray-300",
+    barColor: "bg-[#BDBDBD]",
   },
   {
     title: "ESCRITURA",
