@@ -37,33 +37,56 @@ export default function Footer() {
       {/* Footer Content */}
       <div className="w-full bg-[#F5F5F5] dark:bg-[#12141A] pt-6 md:pt-7 lg:pt-[26px] pb-5 md:pb-6 lg:pb-6 transition-colors duration-300">
         <div className="w-full max-w-[1600px] mx-auto px-3 md:px-8 lg:px-[48px]">
-          {/* Main Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1.6fr_1fr] gap-6 md:gap-4 lg:gap-6 items-start">
-            {/* Column 1: Logo */}
-              <div className="flex justify-center md:justify-start">
-                  <a
-                    href="#"
-                    onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                      className="relative h-[75px] w-[170px] md:h-[110px] md:w-[260px] lg:h-[190px] lg:w-[420px] overflow-visible block cursor-pointer"
-                    aria-label="Ir al inicio"
-                  >
-                    {/* Logo light mode */}
-                      <Image
-                        src="/brand/logo-light.webp"
-                        alt="Diseñare Promocionales"
-                        width={420}
-                        height={200}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
-                      />
-                      <Image
-                        src="/brand/logo-dark.webp"
-                        alt="Diseñare Promocionales"
-                        width={420}
-                        height={200}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
-                      />
-                  </a>
-                </div>
+            {/* Logo - absolute so it doesn't affect centering */}
+            <a
+              href="#"
+              onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              className="hidden md:block absolute left-3 md:left-8 lg:left-[48px] top-6 md:top-7 lg:top-[26px] h-[75px] w-[170px] md:h-[110px] md:w-[260px] lg:h-[190px] lg:w-[420px] overflow-visible cursor-pointer z-10"
+              aria-label="Ir al inicio"
+            >
+              <Image
+                src="/brand/logo-light.webp"
+                alt="Diseñare Promocionales"
+                width={420}
+                height={200}
+                className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
+              />
+              <Image
+                src="/brand/logo-dark.webp"
+                alt="Diseñare Promocionales"
+                width={420}
+                height={200}
+                className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
+              />
+            </a>
+
+            {/* Mobile Logo */}
+            <div className="flex justify-center md:hidden">
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className="relative h-[75px] w-[170px] overflow-visible block cursor-pointer"
+                aria-label="Ir al inicio"
+              >
+                <Image
+                  src="/brand/logo-light.webp"
+                  alt="Diseñare Promocionales"
+                  width={420}
+                  height={200}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
+                />
+                <Image
+                  src="/brand/logo-dark.webp"
+                  alt="Diseñare Promocionales"
+                  width={420}
+                  height={200}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
+                />
+              </a>
+            </div>
+
+            {/* Main Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 lg:gap-6 items-start md:max-w-[70%] md:mx-auto">
 
             {/* Column 2: Contáctanos */}
               <div id="contacto" className="flex flex-col items-center justify-start text-center scroll-mt-[110px] md:scroll-mt-[140px] lg:scroll-mt-[240px]">
