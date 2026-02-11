@@ -52,24 +52,24 @@ export default function Header() {
       <div className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-x-6 h-[90px] md:h-[120px] lg:h-[220px] pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-4 lg:pr-6">
         {/* Column 1: Logo - flush left */}
         <div className="justify-self-start flex-shrink-0 flex items-center">
-          <a href="/" className="relative flex items-center overflow-visible h-[70px] w-[160px] md:h-[100px] md:w-[230px] lg:h-[200px] lg:w-[420px]">
-              <Image
-                src="/brand/logo-light.webp"
-                alt="Diseñare Promocionales"
-                width={420}
-                height={200}
-                className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
-                priority
-              />
-              <Image
-                src="/brand/logo-dark.webp"
-                alt="Diseñare Promocionales"
-                width={420}
-                height={200}
-                className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
-                priority
-              />
-          </a>
+            <a href="/" className="flex items-center">
+                <Image
+                  src="/brand/logo-light.webp"
+                  alt="Diseñare Promocionales"
+                  width={420}
+                  height={200}
+                  className="h-[60px] md:h-[90px] lg:h-[180px] w-auto object-contain block dark:hidden transition-opacity duration-[180ms] ease-in-out"
+                  priority
+                />
+                <Image
+                  src="/brand/logo-dark.webp"
+                  alt="Diseñare Promocionales"
+                  width={420}
+                  height={200}
+                  className="h-[60px] md:h-[90px] lg:h-[180px] w-auto object-contain hidden dark:block transition-opacity duration-[180ms] ease-in-out"
+                  priority
+                />
+            </a>
         </div>
 
         {/* Column 2: Desktop Navigation - centered */}
