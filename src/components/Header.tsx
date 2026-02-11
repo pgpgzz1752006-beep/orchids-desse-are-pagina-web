@@ -53,22 +53,22 @@ export default function Header() {
         {/* Column 1: Logo - flush left */}
         <div className="justify-self-start flex-shrink-0 flex items-center">
           <a href="/" className="relative flex items-center overflow-visible h-[70px] w-[160px] md:h-[100px] md:w-[230px] lg:h-[200px] lg:w-[420px]">
-            <Image
-              src="/brand/logo-light.png"
-              alt="Diseñare Promocionales"
-              width={420}
-              height={200}
-              className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
-              priority
-            />
-            <Image
-              src="/brand/logo-dark.png"
-              alt="Diseñare Promocionales"
-              width={420}
-              height={200}
-              className="absolute left-[16px] top-1/2 -translate-y-1/2 h-[86%] w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
-              priority
-            />
+              <Image
+                src="/brand/logo-light.webp"
+                alt="Diseñare Promocionales"
+                width={420}
+                height={200}
+                className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
+                priority
+              />
+              <Image
+                src="/brand/logo-dark.webp"
+                alt="Diseñare Promocionales"
+                width={420}
+                height={200}
+                className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
+                priority
+              />
           </a>
         </div>
 
