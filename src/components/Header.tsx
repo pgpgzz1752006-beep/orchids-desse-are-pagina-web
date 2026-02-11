@@ -28,33 +28,19 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
-  // Debug: find what breaks sticky/fixed
-  if (typeof window !== "undefined") {
-    setTimeout(() => {
-      const header = document.getElementById("site-header");
-      if (header) {
-        let el: HTMLElement | null = header.parentElement;
-        while (el) {
-          const style = window.getComputedStyle(el);
-          const tag = el.tagName;
-          const overflow = style.overflow + " " + style.overflowX + " " + style.overflowY;
-          const transform = style.transform;
-          const filter = style.filter;
-          const contain = style.contain;
-          const willChange = style.willChange;
-          const perspective = style.perspective;
-          console.log(`[STICKY-DEBUG] <${tag}> overflow="${overflow}" transform="${transform}" filter="${filter}" contain="${contain}" willChange="${willChange}" perspective="${perspective}"`);
-          el = el.parentElement;
-        }
-      }
-    }, 2000);
-  }
-
   return (
       <>
+          <div id="header-spacer" style={{ height: '100px' }} className="md:h-[130px] lg:h-[230px]" />
           <header
             id="site-header"
-            className="sticky top-0 z-[99999] bg-white dark:bg-[#0E0F12]"
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              zIndex: 99999,
+            }}
+            className="bg-white dark:bg-[#0E0F12]"
           >
       {/* Multicolor Top Bar */}
       <div className="flex w-full h-[10px]">
