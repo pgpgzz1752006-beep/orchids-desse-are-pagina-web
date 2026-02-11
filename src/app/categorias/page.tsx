@@ -62,6 +62,42 @@ const categorias = [
     image: "/antiestres.jpg",
     barColor: "bg-[#1A237E]",
   },
+  {
+    title: "ENTRETENIMIENTO",
+    subcategories: ["JUEGOS", "SETS DE ENTRETENIMIENTO"],
+    image: "/antiestres.jpg",
+    barColor: "bg-gray-300",
+  },
+  {
+    title: "ESCRITURA",
+    subcategories: ["BOLIGRAFOS ECOLOGICOS", "BOLIGRAFOS FUNCIONES", "BOLIGRAFOS METALICOS", "BOLIGRAFOS PLASTICOS", "SETS DE BOLIGRAFOS"],
+    image: "/antiestres.jpg",
+    barColor: "bg-[#9C27B0]",
+  },
+  {
+    title: "HERRAMIENTAS",
+    subcategories: ["AUTOMOVIL", "LAMPARAS", "NAVAJAS", "SET DE HERRAMIENTAS"],
+    image: "/antiestres.jpg",
+    barColor: "bg-[#FFE600]",
+  },
+  {
+    title: "HIELERAS Y PORTAVIANDAS",
+    subcategories: ["MOCHILA - HIELERA", "HIELERAS Y LONCHERAS", "PORTAVIANDAS"],
+    image: "/antiestres.jpg",
+    barColor: "bg-gray-300",
+  },
+  {
+    title: "HOGAR",
+    subcategories: ["BBQ", "CESTOS", "COCINA", "DECORACION", "JARDINERÍA", "MANDILES", "MASCOTAS", "TABLAS Y SETS DE QUESOS"],
+    image: "/antiestres.jpg",
+    barColor: "bg-[#FF9800]",
+  },
+  {
+    title: "LIBRETAS Y CARPETAS",
+    subcategories: ["LIBRETAS EJECUTIVAS", "LIBRETAS ECOLOGICAS", "SETS DE LIBRETAS", "CARPETAS"],
+    image: "/antiestres.jpg",
+    barColor: "bg-[#00BCD4]",
+  },
 ];
 
 export default function CategoriasPage() {
