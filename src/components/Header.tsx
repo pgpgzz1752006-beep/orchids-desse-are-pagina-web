@@ -28,6 +28,28 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
+  // Debug: find what breaks sticky/fixed
+  if (typeof window !== "undefined") {
+    setTimeout(() => {
+      const header = document.getElementById("site-header");
+      if (header) {
+        let el: HTMLElement | null = header.parentElement;
+        while (el) {
+          const style = window.getComputedStyle(el);
+          const tag = el.tagName;
+          const overflow = style.overflow + " " + style.overflowX + " " + style.overflowY;
+          const transform = style.transform;
+          const filter = style.filter;
+          const contain = style.contain;
+          const willChange = style.willChange;
+          const perspective = style.perspective;
+          console.log(`[STICKY-DEBUG] <${tag}> overflow="${overflow}" transform="${transform}" filter="${filter}" contain="${contain}" willChange="${willChange}" perspective="${perspective}"`);
+          el = el.parentElement;
+        }
+      }
+    }, 2000);
+  }
+
   return (
       <>
           <header
