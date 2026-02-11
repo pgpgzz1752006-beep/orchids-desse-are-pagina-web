@@ -4,7 +4,7 @@ const categorias = [
   {
     title: "AGENDAS",
     subcategories: ["DIARIA", "SEMANAL"],
-    image: "/antiestres.jpg",
+    image: "/cat-agendas.jpg",
     barColor: "bg-[#E00273]",
   },
   {
