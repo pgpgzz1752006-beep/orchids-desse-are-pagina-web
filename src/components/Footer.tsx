@@ -40,23 +40,25 @@ export default function Footer() {
           {/* Main Grid */}
           <div className="grid grid-cols-1 md:grid-cols-[1fr_1.6fr_1fr] gap-6 md:gap-4 lg:gap-6 items-start">
             {/* Column 1: Logo */}
-              <div className="flex justify-center md:justify-start max-w-[300px] relative">
-                  {/* Logo light mode */}
+              <div className="flex justify-center md:justify-start">
+                  <div className="relative h-[80px] w-[180px] md:h-[100px] md:w-[220px] lg:h-[120px] lg:w-[260px] overflow-visible">
+                    {/* Logo light mode */}
                     <Image
                       src="/brand/logo-light.png"
                       alt="Diseñare Promocionales"
                       width={260}
                       height={120}
-                      className="h-[80px] md:h-[100px] lg:h-[120px] max-w-[180px] md:max-w-[220px] lg:max-w-[260px] w-auto object-contain block dark:hidden transition-opacity duration-200 ease-in-out"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
                     />
-                    {/* Logo dark mode */}
+                    {/* Logo dark mode – scale(0.86) compensa proporción distinta */}
                     <Image
                       src="/brand/logo-dark.png"
                       alt="Diseñare Promocionales"
                       width={260}
                       height={120}
-                      className="h-[80px] md:h-[100px] lg:h-[120px] max-w-[180px] md:max-w-[220px] lg:max-w-[260px] w-auto object-contain hidden dark:block transition-opacity duration-200 ease-in-out"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out scale-[0.86] origin-left"
                     />
+                  </div>
                 </div>
 
             {/* Column 2: Contáctanos */}
