@@ -87,9 +87,9 @@ const categorias = [
     barColor: "bg-[#F6931D]",
   },
   {
-    title: "HOGAR",
-    subcategories: ["BBQ", "CESTOS", "COCINA", "DECORACION", "JARDINERÍA", "MANDILES", "MASCOTAS", "TABLAS Y SETS DE QUESOS"],
-    image: "/antiestres.jpg",
+      title: "HOGAR",
+      subcategories: ["BBQ", "CESTOS", "COCINA", "DECORACION", "JARDINERÍA", "MANDILES", "MASCOTAS", "TABLAS Y SETS DE QUESOS"],
+      image: "/cat-hogar.jpg",
     barColor: "bg-[#1F5F9F]",
   },
   {
