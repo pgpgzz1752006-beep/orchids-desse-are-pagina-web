@@ -65,7 +65,7 @@ export default function CategoriasPage() {
                     ))}
                   </div>
                 </div>
-                <div className={`w-2 ${cat.barColor}`} />
+                <div className={`w-5 ${cat.barColor}`} />
               </div>
             </div>
           ))}
