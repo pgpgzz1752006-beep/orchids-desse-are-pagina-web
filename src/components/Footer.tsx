@@ -35,7 +35,7 @@ export default function Footer() {
       </div>
 
       {/* Footer Content */}
-      <div className="w-full bg-[#F5F5F5] dark:bg-[#12141A] pt-6 md:pt-7 lg:pt-[26px] pb-5 md:pb-6 lg:pb-6 transition-colors duration-300">
+      <div className="relative w-full bg-[#F5F5F5] dark:bg-[#12141A] pt-6 md:pt-7 lg:pt-[26px] pb-5 md:pb-6 lg:pb-6 transition-colors duration-300">
         <div className="w-full max-w-[1600px] mx-auto px-3 md:px-8 lg:px-[48px]">
             {/* Logo - absolute so it doesn't affect centering */}
             <a
