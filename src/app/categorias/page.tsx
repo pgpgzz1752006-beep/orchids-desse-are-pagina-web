@@ -5,7 +5,7 @@ const categorias = [
     title: "AGENDAS",
     subcategories: ["DIARIA", "SEMANAL"],
     image: "/antiestres.jpg",
-    barColor: "bg-[#E91E63]",
+    barColor: "bg-[#E00273]",
   },
   {
     title: "ANTIESTRES",
