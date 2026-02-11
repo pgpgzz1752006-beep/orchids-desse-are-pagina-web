@@ -156,9 +156,6 @@
   }
 }
 
-/* Header kept at top via JS scroll listener */
-
-
 /* Header animations */
 @keyframes underline-grow {
   from {
