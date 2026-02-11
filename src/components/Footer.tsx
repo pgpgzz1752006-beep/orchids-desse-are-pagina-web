@@ -217,8 +217,23 @@ export default function Footer() {
                   </div>
             </div>
 
-              {/* Column 3: empty (Menú removed) */}
-                <div />
+              {/* Column 3: Menú */}
+              <div className="flex flex-col items-center md:items-end gap-2">
+                <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-semibold text-[#111111] dark:text-[#F2F2F2] leading-[1.1]">
+                  Menú
+                </h3>
+                <nav className="flex flex-col items-center md:items-end gap-1">
+                  {menuLinks.map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      className="font-['Montserrat'] text-[13px] md:text-[14px] lg:text-[15px] text-[#444] dark:text-[#ccc] hover:text-[#111] dark:hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </nav>
+              </div>
           </div>
 
             {/* Copyright - aligned with center column */}
