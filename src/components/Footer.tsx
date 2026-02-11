@@ -62,7 +62,7 @@ export default function Footer() {
                         height={200}
                         className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
                       />
-                  </div>
+                  </a>
                 </div>
 
             {/* Column 2: Contáctanos */}
