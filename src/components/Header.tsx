@@ -29,12 +29,11 @@ export default function Header() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <>
-        <header
-          id="site-header"
-          style={{ position: 'sticky', top: 0, zIndex: 99999 }}
-          className="bg-white dark:bg-[#0E0F12]"
-        >
+      <>
+          <header
+            id="site-header"
+            className="sticky top-0 z-[99999] bg-white dark:bg-[#0E0F12]"
+          >
       {/* Multicolor Top Bar */}
       <div className="flex w-full h-[10px]">
         {colorBarSegments.map((segment, index) => (
