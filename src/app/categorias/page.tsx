@@ -42,7 +42,7 @@ const categorias = [
     title: "BELLEZA",
     subcategories: ["ARTICULOS PARA DAMA", "BROCHAS Y MAQUILLAJE", "COSMETIQUERAS", "COSTUREROS", "ESPEJOS", "JOYERIA", "MANICURE", "SETS DE BELLEZA"],
     image: "/antiestres.jpg",
-    barColor: "bg-[#00BFA5]",
+    barColor: "bg-[#93C01F]",
     },
     {
       title: "BOLSAS",
