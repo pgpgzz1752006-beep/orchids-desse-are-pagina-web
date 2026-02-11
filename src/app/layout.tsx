@@ -36,14 +36,10 @@ export default function RootLayout({
           data-debug="true"
           data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
         />
-          <ThemeProvider>
-              <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
+            <ThemeProvider>
                 <Header />
-                <div id="scroll-container" style={{ flex: 1, overflowY: "auto" }}>
-                  {children}
-                </div>
-              </div>
-            </ThemeProvider>
+                {children}
+              </ThemeProvider>
         <VisualEditsMessenger />
       </body>
     </html>
