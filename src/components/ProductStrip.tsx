@@ -107,7 +107,7 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     const timeout = setTimeout(() => {
       if (containerRef.current) {
         const containerW = containerRef.current.clientWidth;
-        setCardWidth(containerW / 6);
+        setCardWidth(containerW / getVisibleCount());
       }
       if (trackRef.current) {
         setTrackWidth(trackRef.current.scrollWidth / 4);
