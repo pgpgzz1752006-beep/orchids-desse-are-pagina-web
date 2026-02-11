@@ -241,7 +241,7 @@ export default function Footer() {
             </div>
 
               {/* Column 3: Menú */}
-              <div className="flex flex-col items-center md:items-end gap-2">
+              <div className="hidden md:flex flex-col items-end gap-2 absolute right-3 md:right-8 lg:right-[48px] top-6 md:top-7 lg:top-[26px]">
                 <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-semibold text-[#111111] dark:text-[#F2F2F2] leading-[1.1]">
                   Menú
                 </h3>
