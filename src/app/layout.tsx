@@ -3,6 +3,7 @@ import "./globals.css";
 import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
 import ErrorReporter from "@/components/ErrorReporter";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import Header from "@/components/Header";
 import Script from "next/script";
 
 export const metadata: Metadata = {
