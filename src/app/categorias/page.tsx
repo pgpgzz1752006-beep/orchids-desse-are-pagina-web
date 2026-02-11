@@ -84,7 +84,7 @@ const categorias = [
     title: "HIELERAS Y PORTAVIANDAS",
     subcategories: ["MOCHILA - HIELERA", "HIELERAS Y LONCHERAS", "PORTAVIANDAS"],
     image: "/antiestres.jpg",
-    barColor: "bg-gray-300",
+    barColor: "bg-[#BDBDBD]",
   },
   {
     title: "HOGAR",
