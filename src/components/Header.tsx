@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Search, User, ShoppingCart, Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
