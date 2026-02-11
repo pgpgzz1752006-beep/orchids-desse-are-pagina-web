@@ -60,10 +60,10 @@ const categorias = [
     title: "DEPORTES",
     subcategories: ["ARTICULOS DEPORTIVOS", "FÚTBOL"],
     image: "/antiestres.jpg",
-    barColor: "bg-[#1A237E]",
-  },
-  {
-    title: "ENTRETENIMIENTO",
+    barColor: "bg-[#1F5F9F]",
+    },
+    {
+      title: "ENTRETENIMIENTO",
     subcategories: ["JUEGOS", "SETS DE ENTRETENIMIENTO"],
     image: "/antiestres.jpg",
     barColor: "bg-[#BDBDBD]",
