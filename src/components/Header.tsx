@@ -206,6 +206,8 @@ export default function Header() {
           </div>
         )}
       </header>
+      {/* Spacer to compensate for fixed header */}
+      <div className="h-[100px] md:h-[130px] lg:h-[230px]" />
       </>
   );
 }
