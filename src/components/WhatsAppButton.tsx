@@ -38,11 +38,11 @@ export default function WhatsAppButton() {
         aria-label="Abrir WhatsApp +52 951 242 4333"
     >
       {/* White backplate for contrast */}
-        <div className="w-[54px] h-[54px] md:w-[68px] md:h-[68px] lg:w-[78px] lg:h-[78px] rounded-full bg-white flex items-center justify-center overflow-visible">
+        <div className="w-[58px] h-[58px] md:w-[72px] md:h-[72px] lg:w-[82px] lg:h-[82px] rounded-full bg-white flex items-center justify-center overflow-visible">
             <img
               src="/icons/icon-whatsapp.png"
               alt="WhatsApp"
-              className="w-[46px] h-[46px] md:w-[58px] md:h-[58px] lg:w-[68px] lg:h-[68px] object-contain block"
+              className="w-[52px] h-[52px] md:w-[66px] md:h-[66px] lg:w-[76px] lg:h-[76px] object-contain block"
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
           />
       </div>
