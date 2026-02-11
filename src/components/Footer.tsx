@@ -86,7 +86,7 @@ export default function Footer() {
             </div>
 
             {/* Main Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 lg:gap-6 items-start md:max-w-[70%] md:mx-auto">
+            <div className="flex flex-col items-center w-full">
 
             {/* Column 2: Contáctanos */}
               <div id="contacto" className="flex flex-col items-center justify-start text-center scroll-mt-[110px] md:scroll-mt-[140px] lg:scroll-mt-[240px]">
