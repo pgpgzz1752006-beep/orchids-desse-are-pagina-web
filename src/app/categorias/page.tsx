@@ -75,7 +75,7 @@ export default function CategoriasPage() {
               className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
             >
               <div className="flex h-full">
-                <div className={`w-2/5 relative aspect-square ${cat.bgColor}`}>
+                <div className="w-2/5 relative aspect-square bg-gray-100 dark:bg-white/5">
                   <Image
                     src={cat.image}
                     alt={cat.title}
