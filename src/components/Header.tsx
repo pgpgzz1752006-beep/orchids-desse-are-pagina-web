@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Search, User, ShoppingCart, Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
@@ -29,38 +28,13 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Continuously enforce fixed position via JS in case anything overrides it
-  useEffect(() => {
-    if (!headerRef.current) return;
-    const el = headerRef.current;
-    const enforce = () => {
-      el.style.position = "fixed";
-      el.style.top = "0px";
-      el.style.left = "0px";
-      el.style.right = "0px";
-      el.style.zIndex = "99999";
-      el.style.width = "100%";
-    };
-    enforce();
-    const interval = setInterval(enforce, 100);
-    const observer = new MutationObserver(enforce);
-    observer.observe(el, { attributes: true, attributeFilter: ["style", "class"] });
-    return () => { clearInterval(interval); observer.disconnect(); };
-  }, [mounted]);
-
-  const headerContent = (
-            <header
-              ref={headerRef}
-              id="site-header"
-              style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 99999, width: "100%" }}
-              className="bg-white dark:bg-[#0E0F12]"
-            >
+  return (
+    <header className="w-full bg-white dark:bg-[#0E0F12]">
       {/* Multicolor Top Bar */}
       <div className="flex w-full h-[10px]">
         {colorBarSegments.map((segment, index) => (
@@ -74,101 +48,96 @@ export default function Header() {
         ))}
       </div>
 
-        {/* Main Header - 3 Column Grid */}
-        <div className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-x-6 h-[90px] md:h-[120px] lg:h-[220px] pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-4 lg:pr-6">
-          {/* Column 1: Logo - flush left */}
-          <div className="justify-self-start flex-shrink-0 flex items-center">
-            <a href="/" className="relative flex items-center overflow-visible h-[70px] w-[160px] md:h-[100px] md:w-[230px] lg:h-[200px] lg:w-[420px]">
-                  {/* Logo light mode */}
-                  <Image
-                    src="/brand/logo-light.png"
-                    alt="Diseñare Promocionales"
-                    width={420}
-                    height={200}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
-                    priority
-                  />
-                  {/* Logo dark mode – scale(0.86) compensa proporción distinta */}
-                  <Image
-                    src="/brand/logo-dark.png"
-                    alt="Diseñare Promocionales"
-                    width={420}
-                    height={200}
-                    className="absolute left-[16px] top-1/2 -translate-y-1/2 h-[86%] w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
-                    priority
-                  />
-                </a>
-            </div>
+      {/* Main Header - 3 Column Grid */}
+      <div className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-x-6 h-[90px] md:h-[120px] lg:h-[220px] pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-4 lg:pr-6">
+        {/* Column 1: Logo - flush left */}
+        <div className="justify-self-start flex-shrink-0 flex items-center">
+          <a href="/" className="relative flex items-center overflow-visible h-[70px] w-[160px] md:h-[100px] md:w-[230px] lg:h-[200px] lg:w-[420px]">
+            <Image
+              src="/brand/logo-light.png"
+              alt="Diseñare Promocionales"
+              width={420}
+              height={200}
+              className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
+              priority
+            />
+            <Image
+              src="/brand/logo-dark.png"
+              alt="Diseñare Promocionales"
+              width={420}
+              height={200}
+              className="absolute left-[16px] top-1/2 -translate-y-1/2 h-[86%] w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
+              priority
+            />
+          </a>
+        </div>
 
-          {/* Column 2: Desktop Navigation - centered */}
-          <nav className="hidden lg:flex items-center justify-self-center min-w-0 max-w-[820px] w-full justify-center gap-5 xl:gap-9 2xl:gap-14 overflow-visible flex-nowrap">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={(e) => {
-                    if (item.href.startsWith("#")) {
-                      e.preventDefault();
-                      const target = document.getElementById(item.href.slice(1));
-                      if (target) {
-                        target.scrollIntoView({ behavior: "smooth", block: "start" });
-                      }
-                    }
-                  }}
-                  className="group relative whitespace-nowrap flex-shrink-0 overflow-visible"
-                >
-                <span
-                    className={`
-                      font-['Montserrat'] text-[15px] xl:text-[18px] 2xl:text-[22px] font-medium uppercase tracking-[0.04em]
-                      transition-colors duration-200 ease-out
-                      ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white group-hover:text-[#14C6C9]"}
-                    `}
-                  >
-                    {item.label}
-                  </span>
-                {/* Active underline */}
-                {item.active && (
-                  <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9] transform scale-x-100 origin-center animate-underline-grow" />
-                )}
-                {/* Hover underline for inactive items */}
-                {!item.active && (
-                  <span className="absolute -bottom-2 left-0 w-full h-[2px] bg-[#14C6C9] transform scale-x-0 origin-left transition-transform duration-200 ease-out group-hover:scale-x-100" />
-                )}
-              </a>
-            ))}
+        {/* Column 2: Desktop Navigation - centered */}
+        <nav className="hidden lg:flex items-center justify-self-center min-w-0 max-w-[820px] w-full justify-center gap-5 xl:gap-9 2xl:gap-14 overflow-visible flex-nowrap">
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              onClick={(e) => {
+                if (item.href.startsWith("#")) {
+                  e.preventDefault();
+                  const target = document.getElementById(item.href.slice(1));
+                  if (target) {
+                    target.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }
+                }
+              }}
+              className="group relative whitespace-nowrap flex-shrink-0 overflow-visible"
+            >
+              <span
+                className={`
+                  font-['Montserrat'] text-[15px] xl:text-[18px] 2xl:text-[22px] font-medium uppercase tracking-[0.04em]
+                  transition-colors duration-200 ease-out
+                  ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white group-hover:text-[#14C6C9]"}
+                `}
+              >
+                {item.label}
+              </span>
+              {item.active && (
+                <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9] transform scale-x-100 origin-center animate-underline-grow" />
+              )}
+              {!item.active && (
+                <span className="absolute -bottom-2 left-0 w-full h-[2px] bg-[#14C6C9] transform scale-x-0 origin-left transition-transform duration-200 ease-out group-hover:scale-x-100" />
+              )}
+            </a>
+          ))}
         </nav>
 
-          {/* Column 3: Action Icons - flush right */}
-          <div className="flex items-center justify-self-end flex-shrink-0 min-w-[180px] justify-end gap-3 lg:gap-4 xl:gap-5 pr-1 lg:pr-3">
-            {/* Dark Mode Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] dark:hover:text-white hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/30 rounded"
-              aria-label={theme === "light" ? "Cambiar a modo oscuro" : "Cambiar a modo claro"}
-            >
-                {theme === "light" ? (
-                  <Moon className="w-7 h-7" strokeWidth={1.5} />
-                ) : (
-                  <Sun className="w-7 h-7" strokeWidth={1.5} />
-                )}
-              </button>
-              <button
-                className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
-                aria-label="Buscar"
-              >
-              <Search className="w-7 h-7" strokeWidth={1.5} />
-            </button>
-            <button
-              className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
-              aria-label="Mi cuenta"
-            >
-              <User className="w-7 h-7" strokeWidth={1.5} />
-            </button>
-            <button
-              className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
-              aria-label="Carrito"
-            >
-              <ShoppingCart className="w-7 h-7" strokeWidth={1.5} />
+        {/* Column 3: Action Icons - flush right */}
+        <div className="flex items-center justify-self-end flex-shrink-0 min-w-[180px] justify-end gap-3 lg:gap-4 xl:gap-5 pr-1 lg:pr-3">
+          <button
+            onClick={toggleTheme}
+            className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] dark:hover:text-white hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/30 rounded"
+            aria-label={theme === "light" ? "Cambiar a modo oscuro" : "Cambiar a modo claro"}
+          >
+            {theme === "light" ? (
+              <Moon className="w-7 h-7" strokeWidth={1.5} />
+            ) : (
+              <Sun className="w-7 h-7" strokeWidth={1.5} />
+            )}
+          </button>
+          <button
+            className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
+            aria-label="Buscar"
+          >
+            <Search className="w-7 h-7" strokeWidth={1.5} />
+          </button>
+          <button
+            className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
+            aria-label="Mi cuenta"
+          >
+            <User className="w-7 h-7" strokeWidth={1.5} />
+          </button>
+          <button
+            className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
+            aria-label="Carrito"
+          >
+            <ShoppingCart className="w-7 h-7" strokeWidth={1.5} />
           </button>
 
           {/* Mobile Menu Button */}
@@ -187,57 +156,44 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu Overlay */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden fixed inset-0 top-[132px] bg-white dark:bg-[#0E0F12] z-40 transition-colors duration-300">
-            <nav className="flex flex-col items-center pt-12 gap-8">
-              {navItems.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="group relative"
-                    onClick={(e) => {
-                      setMobileMenuOpen(false);
-                      if (item.href.startsWith("#")) {
-                        e.preventDefault();
-                        setTimeout(() => {
-                          const target = document.getElementById(item.href.slice(1));
-                          if (target) {
-                            target.scrollIntoView({ behavior: "smooth", block: "start" });
-                          }
-                        }, 100);
+      {mobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 top-[132px] bg-white dark:bg-[#0E0F12] z-40 transition-colors duration-300">
+          <nav className="flex flex-col items-center pt-12 gap-8">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="group relative"
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  if (item.href.startsWith("#")) {
+                    e.preventDefault();
+                    setTimeout(() => {
+                      const target = document.getElementById(item.href.slice(1));
+                      if (target) {
+                        target.scrollIntoView({ behavior: "smooth", block: "start" });
                       }
-                    }}
-                  >
-                  <span
-                      className={`
-                        font-['Montserrat'] text-[20px] font-medium uppercase tracking-[0.04em]
-                        transition-colors duration-200 ease-out
-                        ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white hover:text-[#14C6C9]"}
-                      `}
-                    >
-                      {item.label}
-                    </span>
-                  {item.active && (
-                    <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9]" />
-                  )}
-                </a>
-              ))}
-            </nav>
-          </div>
-        )}
-      </header>
-  );
-
-  // Portal the header directly into document.body, completely outside React tree
-  if (!mounted) {
-    return <div className="h-[100px] md:h-[130px] lg:h-[230px]" />;
-  }
-
-  return (
-    <>
-      {createPortal(headerContent, document.body)}
-      {/* Spacer to compensate for fixed header */}
-      <div className="h-[100px] md:h-[130px] lg:h-[230px]" />
-    </>
+                    }, 100);
+                  }
+                }}
+              >
+                <span
+                  className={`
+                    font-['Montserrat'] text-[20px] font-medium uppercase tracking-[0.04em]
+                    transition-colors duration-200 ease-out
+                    ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white hover:text-[#14C6C9]"}
+                  `}
+                >
+                  {item.label}
+                </span>
+                {item.active && (
+                  <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9]" />
+                )}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
+    </header>
   );
 }
