@@ -35,8 +35,7 @@ export default function Header() {
     setMounted(true);
   }, []);
 
-  const headerContent = (
-    <>
+  const headerElement = (
       <header
         id="site-header"
         ref={headerRef}
