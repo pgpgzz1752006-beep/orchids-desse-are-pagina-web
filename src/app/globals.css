@@ -152,14 +152,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    transition: background-color 300ms ease-in-out;
   }
-}
-
-#site-header {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 99999 !important;
 }
 
 /* Header animations */
