@@ -38,7 +38,14 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
   const animationRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
   
-  // Card width: container / 6 visible items
+  // Visible cards per breakpoint: 2 mobile, 3 tablet, 6 desktop
+  const getVisibleCount = useCallback(() => {
+    if (typeof window === "undefined") return 6;
+    if (window.innerWidth < 640) return 2;
+    if (window.innerWidth < 1024) return 3;
+    return 6;
+  }, []);
+
   const [cardWidth, setCardWidth] = useState(220);
   
   // Touch/drag state for manual interaction
