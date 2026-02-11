@@ -42,7 +42,7 @@ export default function WhatsAppButton() {
             <img
               src="/icons/icon-whatsapp.png"
               alt="WhatsApp"
-              className="w-[52px] h-[52px] md:w-[66px] md:h-[66px] lg:w-[76px] lg:h-[76px] object-contain block"
+              className="w-[52px] h-[52px] md:w-[66px] md:h-[66px] lg:w-[84px] lg:h-[84px] object-contain block"
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
           />
       </div>
