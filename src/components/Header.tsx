@@ -209,6 +209,15 @@ export default function Header() {
       </header>
       {/* Spacer to compensate for fixed header */}
       <div className="h-[100px] md:h-[130px] lg:h-[230px]" />
-      </>
+    </>
   );
+
+  // Use portal to render directly on document.body to avoid any parent
+  // transform/filter/perspective that could break position:fixed
+  if (mounted && typeof document !== 'undefined') {
+    return createPortal(headerContent, document.body);
+  }
+
+  // SSR fallback
+  return headerContent;
 }
