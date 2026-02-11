@@ -44,7 +44,7 @@ export default function Footer() {
                   <a
                     href="#"
                     onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                    className="relative h-[70px] w-[160px] md:h-[100px] md:w-[230px] lg:h-[200px] lg:w-[420px] overflow-visible block cursor-pointer"
+                      className="relative h-[50px] w-[120px] md:h-[70px] md:w-[170px] lg:h-[120px] lg:w-[280px] overflow-visible block cursor-pointer"
                     aria-label="Ir al inicio"
                   >
                     {/* Logo light mode */}
