@@ -36,7 +36,7 @@ const categorias = [
     title: "BEBIDAS",
     subcategories: ["ARTICULOS PARA CAFÉ", "CILINDROS DE PLASTICO", "CILINDROS DE VIDRIO", "CILINDROS METÁLICOS", "TAZAS", "TERMO DE PLASTICO", "TERMO METALICO", "VASOS"],
     image: "/antiestres.jpg",
-    barColor: "bg-[#42A5F5]",
+    barColor: "bg-[#8B1FA2]",
   },
   {
     title: "BELLEZA",
