@@ -56,7 +56,7 @@ export default function Footer() {
                       alt="Diseñare Promocionales"
                       width={260}
                       height={120}
-                      className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out scale-[0.86] origin-left"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 h-[86%] w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
                     />
                   </div>
                 </div>
