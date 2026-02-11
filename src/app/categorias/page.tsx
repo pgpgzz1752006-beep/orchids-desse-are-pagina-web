@@ -136,9 +136,9 @@ const categorias = [
     },
     {
       title: "TECNOLOGÍA",
-      subcategories: ["ACCESORIOS PARA CELULAR", "AUDÍFONOS Y BOCINAS", "BATERÍAS EXTERNAS", "CARGADORES", "MOUSE Y TECLADOS", "WEBCAM"],
+      subcategories: ["CABLES Y CARGADORES", "ACCESORIOS DE COMPUTO", "ACCESORIOS PARA SMARTPHONE Y TABLET", "AUDÍFONOS", "BASES Y SOPORTES", "BOCINAS", "POWER BANKS", "SETS TECNOLOGIA", "USB"],
       image: "/antiestres.jpg",
-      barColor: "bg-[#2196F3]",
+      barColor: "bg-[#4A1E8B]",
     },
     {
       title: "TEXTIL",
