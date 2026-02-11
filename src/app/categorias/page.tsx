@@ -141,10 +141,10 @@ const categorias = [
       barColor: "bg-[#4A1E8B]",
     },
     {
-      title: "TEXTIL",
-      subcategories: ["BUFANDAS Y COBIJAS", "CAMISETAS", "GORRAS Y SOMBREROS", "GUANTES", "MANDILES", "TOALLAS"],
+      title: "TEXTILES",
+      subcategories: ["CHAMARRAS Y CHALECOS", "GORRAS Y SOMBREROS", "PLAYERAS"],
       image: "/antiestres.jpg",
-      barColor: "bg-[#FF9800]",
+      barColor: "bg-[#E91E63]",
     },
     {
       title: "USB",
