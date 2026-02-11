@@ -43,21 +43,20 @@ export default function Footer() {
               <div className="flex justify-center md:justify-start">
                   <div className="relative h-[70px] w-[160px] md:h-[100px] md:w-[230px] lg:h-[200px] lg:w-[420px] overflow-visible">
                     {/* Logo light mode */}
-                    <Image
-                      src="/brand/logo-light.png"
-                      alt="Diseñare Promocionales"
-                      width={420}
-                      height={200}
-                      className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
-                    />
-                    {/* Logo dark mode – scale(0.86) compensa proporción distinta */}
-                    <Image
-                      src="/brand/logo-dark.png"
-                      alt="Diseñare Promocionales"
-                      width={420}
-                      height={200}
-                      className="absolute left-[16px] top-1/2 -translate-y-1/2 h-[86%] w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
-                    />
+                      <Image
+                        src="/brand/logo-light.webp"
+                        alt="Diseñare Promocionales"
+                        width={420}
+                        height={200}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
+                      />
+                      <Image
+                        src="/brand/logo-dark.webp"
+                        alt="Diseñare Promocionales"
+                        width={420}
+                        height={200}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center hidden dark:block transition-opacity duration-[180ms] ease-in-out"
+                      />
                   </div>
                 </div>
 
