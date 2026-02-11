@@ -30,19 +30,19 @@ const categorias = [
     title: "BAR",
     subcategories: ["ARTÍCULOS PARA BAR", "DESTAPADORES", "LICORERAS", "SACA CORCHOS", "SET Y ESTUCHES"],
     image: "/antiestres.jpg",
-    barColor: "bg-[#8BC34A]",
+    barColor: "bg-[#C8A951]",
   },
   {
     title: "BEBIDAS",
     subcategories: ["ARTICULOS PARA CAFÉ", "CILINDROS DE PLASTICO", "CILINDROS DE VIDRIO", "CILINDROS METÁLICOS", "TAZAS", "TERMO DE PLASTICO", "TERMO METALICO", "VASOS"],
     image: "/antiestres.jpg",
-    barColor: "bg-[#2196F3]",
+    barColor: "bg-[#42A5F5]",
   },
   {
     title: "BELLEZA",
     subcategories: ["ARTICULOS PARA DAMA", "BROCHAS Y MAQUILLAJE", "COSMETIQUERAS", "COSTUREROS", "ESPEJOS", "JOYERIA", "MANICURE", "SETS DE BELLEZA"],
     image: "/antiestres.jpg",
-    barColor: "bg-[#7B1FA2]",
+    barColor: "bg-[#9ACA3C]",
   },
   {
     title: "BOLSAS",
