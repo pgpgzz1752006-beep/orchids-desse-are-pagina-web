@@ -27,23 +27,12 @@ const colorBarSegments = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const headerRef = useRef<HTMLElement>(null);
-
-
 
   return (
     <>
       <header
-        ref={headerRef}
         id="site-header"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            width: "100%",
-            zIndex: 99999,
-          }}
+        style={{ flexShrink: 0, zIndex: 99999 }}
         className="bg-white dark:bg-[#0E0F12]"
       >
       {/* Multicolor Top Bar */}
