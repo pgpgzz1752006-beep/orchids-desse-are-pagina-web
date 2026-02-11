@@ -132,7 +132,7 @@ const categorias = [
       title: "SETS DE REGALO",
       subcategories: ["SETS"],
       image: "/antiestres.jpg",
-      barColor: "bg-[#FF9800]",
+      barColor: "bg-[#1A237E]",
     },
     {
       title: "TECNOLOGÍA",
