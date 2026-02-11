@@ -48,7 +48,7 @@ const categorias = [
       title: "BOLSAS",
       subcategories: ["BOLSA MOCHILA", "BOLSAS ECOLOGICAS", "BOLSAS REUTILIZABLES", "BOLSAS CASUALES"],
       image: "/antiestres.jpg",
-      barColor: "bg-[#00BFA5]",
+      barColor: "bg-[#1BAFA6]",
   },
   {
     title: "COMPLEMENTOS",
