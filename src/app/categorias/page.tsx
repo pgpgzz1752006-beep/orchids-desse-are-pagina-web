@@ -146,12 +146,7 @@ const categorias = [
       image: "/antiestres.jpg",
       barColor: "bg-[#E91E63]",
     },
-    {
-      title: "USB",
-      subcategories: ["MEMORIAS USB"],
-      image: "/antiestres.jpg",
-      barColor: "bg-[#26A69A]",
-    },
+
 ];
 
 export default function CategoriasPage() {
