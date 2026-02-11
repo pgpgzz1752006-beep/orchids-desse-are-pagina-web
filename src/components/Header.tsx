@@ -30,7 +30,17 @@ export default function Header() {
 
     return (
       <>
-        <header className="sticky top-0 left-0 right-0 w-full z-[99999] bg-white dark:bg-[#0E0F12]">
+        <header
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          width: '100%',
+          zIndex: 99999,
+        }}
+        className="bg-white dark:bg-[#0E0F12]"
+      >
       {/* Multicolor Top Bar */}
       <div className="flex w-full h-[10px]">
         {colorBarSegments.map((segment, index) => (
