@@ -40,8 +40,20 @@ export default function RootLayout({
                 <Header />
                 {children}
               </ThemeProvider>
-        <VisualEditsMessenger />
-      </body>
+          <VisualEditsMessenger />
+          <script dangerouslySetInnerHTML={{ __html: `
+            setTimeout(function() {
+              var h = document.getElementById('site-header');
+              if (!h) { console.log('[STICKY-DEBUG] header not found'); return; }
+              var el = h.parentElement;
+              while (el) {
+                var s = window.getComputedStyle(el);
+                console.log('[STICKY-DEBUG] <' + el.tagName + '> id=' + el.id + ' class=' + el.className.substring(0,60) + ' overflow=' + s.overflow + '/' + s.overflowX + '/' + s.overflowY + ' transform=' + s.transform + ' contain=' + s.contain + ' willChange=' + s.willChange);
+                el = el.parentElement;
+              }
+            }, 3000);
+          `}} />
+        </body>
     </html>
   );
 }
