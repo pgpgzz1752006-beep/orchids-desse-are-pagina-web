@@ -155,7 +155,7 @@ const categorias = [
   {
     title: "TECNOLOGÍA",
     subcategories: ["CABLES Y CARGADORES", "ACCESORIOS DE COMPUTO", "ACCESORIOS PARA SMARTPHONE Y TABLET", "AUDÍFONOS", "BASES Y SOPORTES", "BOCINAS", "POWER BANKS", "SETS TECNOLOGIA", "USB"],
-    image: "/antiestres.jpg",
+    image: "/cat-tecnologia.jpg",
     barColor: "bg-[#462681]",
   },
   {
