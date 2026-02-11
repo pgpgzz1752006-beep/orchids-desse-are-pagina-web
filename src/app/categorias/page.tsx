@@ -168,7 +168,7 @@ export default function CategoriasPage() {
                       className="object-cover"
                     />
                   </div>
-                    <div className="flex-1 p-3 flex flex-col justify-center overflow-hidden">
+                    <div className="flex-1 p-3 flex flex-col justify-start overflow-hidden">
                       <h3 className="font-['Montserrat'] font-bold text-xs md:text-sm">
                         {cat.title}
                       </h3>
