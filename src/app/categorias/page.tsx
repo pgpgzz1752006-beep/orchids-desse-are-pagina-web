@@ -77,7 +77,7 @@ const categorias = [
   {
     title: "HERRAMIENTAS",
     subcategories: ["AUTOMOVIL", "LAMPARAS", "NAVAJAS", "SET DE HERRAMIENTAS"],
-    image: "/antiestres.jpg",
+    image: "/cat-herramientas.jpg",
     barColor: "bg-[#F3E610]",
   },
   {
