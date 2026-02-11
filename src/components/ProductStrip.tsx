@@ -97,7 +97,7 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [getSpeed, isMounted]);
+  }, [getSpeed, getVisibleCount, isMounted]);
   
   // Calculate track width once mounted (1/4 of total since we have 4 copies)
   useEffect(() => {
