@@ -53,15 +53,14 @@ export default function Header() {
       <header
         ref={headerRef}
         id="site-header"
-        style={{
-          position: "relative",
-          top: 0,
-          left: 0,
-          right: 0,
-          width: "100%",
-          zIndex: 99999,
-          willChange: "transform",
-        }}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            width: "100%",
+            zIndex: 99999,
+          }}
         className="bg-white dark:bg-[#0E0F12]"
       >
       {/* Multicolor Top Bar */}
