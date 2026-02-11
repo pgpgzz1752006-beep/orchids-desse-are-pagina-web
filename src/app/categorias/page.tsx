@@ -95,13 +95,13 @@ const categorias = [
   {
     title: "LIBRETAS Y CARPETAS",
     subcategories: ["LIBRETAS EJECUTIVAS", "LIBRETAS ECOLOGICAS", "SETS DE LIBRETAS", "CARPETAS"],
-    image: "/antiestres.jpg",
-    barColor: "bg-[#00BBB5]",
-  },
-  {
-    title: "LLAVEROS",
-    subcategories: ["LLAVEROS CURPIEL", "LLAVEROS FUNCIONES", "LLAVEROS MADERA", "LLAVEROS METALICOS"],
-    image: "/antiestres.jpg",
+      image: "/cat-libretas.jpg",
+      barColor: "bg-[#00BBB5]",
+    },
+    {
+      title: "LLAVEROS",
+      subcategories: ["LLAVEROS CURPIEL", "LLAVEROS FUNCIONES", "LLAVEROS MADERA", "LLAVEROS METALICOS"],
+      image: "/cat-llaveros.jpg",
     barColor: "bg-[#E00273]",
   },
   {
