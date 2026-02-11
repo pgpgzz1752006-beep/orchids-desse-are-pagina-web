@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { Search, User, ShoppingCart, Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
