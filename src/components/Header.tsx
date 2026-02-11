@@ -39,7 +39,7 @@ export default function Header() {
       <header
         id="site-header"
         ref={headerRef}
-        className={`bg-white dark:bg-[#0E0F12] ${theme === 'dark' ? 'dark' : ''}`}
+        className="bg-white dark:bg-[#0E0F12]"
       >
       {/* Multicolor Top Bar */}
       <div className="flex w-full h-[10px]">
