@@ -157,9 +157,7 @@
 }
 
 /* Header kept at top via JS scroll listener */
-#site-header {
-  z-index: 99999 !important;
-}
+
 
 /* Header animations */
 @keyframes underline-grow {
