@@ -30,7 +30,7 @@ export default function Header() {
 
     return (
       <>
-        <header className="fixed top-0 left-0 right-0 w-full z-[99999] bg-white dark:bg-[#0E0F12] transition-colors duration-300 [transform:translateZ(0)]">
+        <header className="fixed top-0 left-0 right-0 w-full z-[99999] bg-white dark:bg-[#0E0F12] [will-change:auto]" style={{ isolation: 'isolate' }}>
       {/* Multicolor Top Bar */}
       <div className="flex w-full h-[10px]">
         {colorBarSegments.map((segment, index) => (
