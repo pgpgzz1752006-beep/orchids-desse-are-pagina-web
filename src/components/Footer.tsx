@@ -46,8 +46,8 @@ export default function Footer() {
                     <Image
                       src="/brand/logo-light.png"
                       alt="Diseñare Promocionales"
-                      width={260}
-                      height={120}
+                      width={420}
+                      height={200}
                       className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto object-contain object-left-center block dark:hidden transition-opacity duration-[180ms] ease-in-out"
                     />
                     {/* Logo dark mode – scale(0.86) compensa proporción distinta */}
