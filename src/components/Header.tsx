@@ -33,15 +33,19 @@ export default function Header() {
     const header = headerRef.current;
     if (!header) return;
 
-    const onScroll = () => {
-      header.style.transform = `translateY(${window.scrollY}px)`;
-    };
-
-    // Initial position
-    onScroll();
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    // Debug: find what ancestor breaks position:fixed
+    let el: HTMLElement | null = header.parentElement;
+    while (el) {
+      const style = getComputedStyle(el);
+      const tag = el.tagName + (el.id ? `#${el.id}` : '') + (el.className ? `.${String(el.className).split(' ').slice(0,2).join('.')}` : '');
+      if (style.transform !== 'none') console.log('FIXED-BREAKER transform:', tag, style.transform);
+      if (style.filter !== 'none') console.log('FIXED-BREAKER filter:', tag, style.filter);
+      if (style.perspective !== 'none') console.log('FIXED-BREAKER perspective:', tag, style.perspective);
+      if (style.willChange && style.willChange !== 'auto') console.log('FIXED-BREAKER will-change:', tag, style.willChange);
+      if (style.contain && style.contain !== 'none') console.log('FIXED-BREAKER contain:', tag, style.contain);
+      if (style.backdropFilter && style.backdropFilter !== 'none') console.log('FIXED-BREAKER backdrop-filter:', tag, style.backdropFilter);
+      el = el.parentElement;
+    }
   }, []);
 
   return (
