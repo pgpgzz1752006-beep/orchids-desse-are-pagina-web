@@ -92,12 +92,66 @@ const categorias = [
     image: "/antiestres.jpg",
     barColor: "bg-[#FF9800]",
   },
-  {
-    title: "LIBRETAS Y CARPETAS",
-    subcategories: ["LIBRETAS EJECUTIVAS", "LIBRETAS ECOLOGICAS", "SETS DE LIBRETAS", "CARPETAS"],
-    image: "/antiestres.jpg",
-    barColor: "bg-[#00BCD4]",
-  },
+    {
+      title: "LIBRETAS Y CARPETAS",
+      subcategories: ["LIBRETAS EJECUTIVAS", "LIBRETAS ECOLOGICAS", "SETS DE LIBRETAS", "CARPETAS"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#00BCD4]",
+    },
+    {
+      title: "MALETAS Y PORTAFOLIOS",
+      subcategories: ["MALETAS", "PORTAFOLIOS"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#E91E63]",
+    },
+    {
+      title: "MOCHILAS",
+      subcategories: ["MOCHILAS", "MALETAS Y PORTAFOLIOS"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#4A1E8B]",
+    },
+    {
+      title: "OFICINA",
+      subcategories: ["ACCESORIOS DE ESCRITORIO", "CLIPS Y SACAPUNTAS", "MOUSE PAD", "ORGANIZADORES DE ESCRITORIO", "PORTA TARJETAS", "REGLAS"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#FFE600]",
+    },
+    {
+      title: "PARAGUAS",
+      subcategories: ["PARAGUAS AUTOMATICOS", "PARAGUAS MANUALES", "SOMBRILLAS"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#8BC34A]",
+    },
+    {
+      title: "SALUD",
+      subcategories: ["BOTIQUÍN", "CUBRE BOCAS", "GEL ANTIBACTERIAL", "KIT SANITIZANTE"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#F44336]",
+    },
+    {
+      title: "SETS EJECUTIVOS",
+      subcategories: ["SETS EJECUTIVOS"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#1A237E]",
+    },
+    {
+      title: "TECNOLOGÍA",
+      subcategories: ["ACCESORIOS PARA CELULAR", "AUDÍFONOS Y BOCINAS", "BATERÍAS EXTERNAS", "CARGADORES", "MOUSE Y TECLADOS", "WEBCAM"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#2196F3]",
+    },
+    {
+      title: "TEXTIL",
+      subcategories: ["BUFANDAS Y COBIJAS", "CAMISETAS", "GORRAS Y SOMBREROS", "GUANTES", "MANDILES", "TOALLAS"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#FF9800]",
+    },
+    {
+      title: "USB",
+      subcategories: ["MEMORIAS USB"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#26A69A]",
+    },
 ];
 
 export default function CategoriasPage() {
