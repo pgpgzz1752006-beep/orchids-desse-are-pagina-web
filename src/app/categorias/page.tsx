@@ -99,6 +99,24 @@ const categorias = [
         barColor: "bg-[#1BAFA6]",
     },
     {
+      title: "LLAVEROS",
+      subcategories: ["LLAVEROS CURPIEL", "LLAVEROS FUNCIONES", "LLAVEROS MADERA", "LLAVEROS METALICOS"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#E5006D]",
+    },
+    {
+      title: "MALETAS",
+      subcategories: ["MALETAS DE MANO", "MALETAS TROLLEY"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#F3E300]",
+    },
+    {
+      title: "NIÑOS",
+      subcategories: ["ALCANCIAS", "ESCOLARES", "JUGUETES"],
+      image: "/antiestres.jpg",
+      barColor: "bg-[#009EE2]",
+    },
+    {
       title: "PORTAFOLIOS",
       subcategories: ["PORTAFOLIOS Y PORTALAPTOPS"],
       image: "/antiestres.jpg",
