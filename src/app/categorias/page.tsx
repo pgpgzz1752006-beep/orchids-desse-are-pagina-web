@@ -168,19 +168,19 @@ export default function CategoriasPage() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="flex-1 p-4 flex flex-col justify-center overflow-hidden">
-                    <h3 className="font-['Montserrat'] font-bold text-sm md:text-base">
-                      {cat.title}
-                    </h3>
-                    <div className="mt-1 space-y-0.5 overflow-y-auto">
-                      {cat.subcategories.map((sub) => (
-                        <p
-                          key={sub}
-                          className="text-xs text-[#7A7A7A] dark:text-gray-400"
-                        >
-                          {sub}
-                        </p>
-                      ))}
+                    <div className="flex-1 p-3 flex flex-col justify-center overflow-hidden">
+                      <h3 className="font-['Montserrat'] font-bold text-xs md:text-sm">
+                        {cat.title}
+                      </h3>
+                      <div className="mt-1 space-y-0 overflow-hidden">
+                        {cat.subcategories.map((sub) => (
+                          <p
+                            key={sub}
+                            className="text-[10px] leading-tight text-[#7A7A7A] dark:text-gray-400"
+                          >
+                            {sub}
+                          </p>
+                        ))}
                     </div>
                   </div>
                   <div className={`w-5 ${cat.barColor}`} />
