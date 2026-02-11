@@ -40,7 +40,7 @@ export default function WhatsAppButton() {
       {/* White backplate for contrast */}
         <div className="w-[58px] h-[58px] md:w-[72px] md:h-[72px] lg:w-[88px] lg:h-[88px] rounded-full bg-white flex items-center justify-center overflow-visible">
             <img
-              src="/icons/icon-whatsapp.png"
+              src="/icons/icon-whatsapp-v2.png"
               alt="WhatsApp"
               className="w-[52px] h-[52px] md:w-[66px] md:h-[66px] lg:w-[84px] lg:h-[84px] object-contain block"
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
