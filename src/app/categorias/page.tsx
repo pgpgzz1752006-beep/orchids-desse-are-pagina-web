@@ -124,9 +124,9 @@ const categorias = [
     },
     {
       title: "SALUD",
-      subcategories: ["BOTIQUÍN", "CUBRE BOCAS", "GEL ANTIBACTERIAL", "KIT SANITIZANTE"],
+      subcategories: ["CUIDADO PERSONAL", "GELES Y SANITIZANTES", "PASTILLEROS"],
       image: "/antiestres.jpg",
-      barColor: "bg-[#F44336]",
+      barColor: "bg-[#2196F3]",
     },
     {
       title: "SETS EJECUTIVOS",
