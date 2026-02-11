@@ -44,13 +44,18 @@ export default function RootLayout({
           <script dangerouslySetInnerHTML={{ __html: `
             setTimeout(function() {
               var h = document.getElementById('site-header');
-              if (!h) { console.log('[STICKY-DEBUG] header not found'); return; }
+              var d = document.createElement('div');
+              d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:red;color:white;z-index:999999;font-size:11px;padding:8px;max-height:200px;overflow:auto';
+              if (!h) { d.textContent = 'HEADER NOT FOUND'; document.body.appendChild(d); return; }
+              var info = [];
               var el = h.parentElement;
               while (el) {
                 var s = window.getComputedStyle(el);
-                console.log('[STICKY-DEBUG] <' + el.tagName + '> id=' + el.id + ' class=' + el.className.substring(0,60) + ' overflow=' + s.overflow + '/' + s.overflowX + '/' + s.overflowY + ' transform=' + s.transform + ' contain=' + s.contain + ' willChange=' + s.willChange);
+                info.push(el.tagName + ' overflow=' + s.overflow + ' transform=' + s.transform + ' contain=' + s.contain + ' willChange=' + s.willChange + ' filter=' + s.filter);
                 el = el.parentElement;
               }
+              d.textContent = info.join(' | ');
+              document.body.appendChild(d);
             }, 3000);
           `}} />
         </body>
