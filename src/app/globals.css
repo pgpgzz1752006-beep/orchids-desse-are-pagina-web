@@ -156,13 +156,8 @@
   }
 }
 
-/* Force fixed header - highest specificity */
+/* Header kept at top via JS scroll listener */
 #site-header {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
   z-index: 99999 !important;
 }
 
