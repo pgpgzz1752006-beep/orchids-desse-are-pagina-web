@@ -11,7 +11,7 @@ const categorias = [
     title: "ANTIESTRES",
     subcategories: ["FIGURAS ANTIESTRES"],
     image: "/antiestres.jpg",
-    barColor: "bg-[#FFE600]",
+    barColor: "bg-[#F3E610]",
   },
   {
     title: "ARTÍCULOS PARA VIAJE",
