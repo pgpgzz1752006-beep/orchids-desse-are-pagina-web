@@ -30,7 +30,7 @@ const categorias = [
     title: "BAR",
     subcategories: ["ARTÍCULOS PARA BAR", "DESTAPADORES", "LICORERAS", "SACA CORCHOS", "SET Y ESTUCHES"],
     image: "/antiestres.jpg",
-    barColor: "bg-[#C8A951]",
+    barColor: "bg-[#29ABE2]",
   },
   {
     title: "BEBIDAS",
