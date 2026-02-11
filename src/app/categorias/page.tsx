@@ -161,7 +161,7 @@ const categorias = [
   {
     title: "TEXTILES",
     subcategories: ["CHAMARRAS Y CHALECOS", "GORRAS Y SOMBREROS", "PLAYERAS"],
-    image: "/antiestres.jpg",
+    image: "/cat-textiles.jpg",
     barColor: "bg-[#E00273]",
   },
 
