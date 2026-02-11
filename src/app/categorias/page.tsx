@@ -99,10 +99,10 @@ const categorias = [
       barColor: "bg-[#00BCD4]",
     },
     {
-      title: "MALETAS Y PORTAFOLIOS",
-      subcategories: ["MALETAS", "PORTAFOLIOS"],
+      title: "PORTAFOLIOS",
+      subcategories: ["PORTAFOLIOS Y PORTALAPTOPS"],
       image: "/antiestres.jpg",
-      barColor: "bg-[#E91E63]",
+      barColor: "bg-[#26A69A]",
     },
     {
       title: "MOCHILAS",
