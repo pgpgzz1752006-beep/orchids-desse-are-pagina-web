@@ -41,7 +41,7 @@ const categorias = [
   {
     title: "BELLEZA",
     subcategories: ["ARTICULOS PARA DAMA", "BROCHAS Y MAQUILLAJE", "COSMETIQUERAS", "COSTUREROS", "ESPEJOS", "JOYERIA", "MANICURE", "SETS DE BELLEZA"],
-    image: "/antiestres.jpg",
+    image: "/cat-belleza.jpg",
     barColor: "bg-[#93C01F]",
   },
   {
