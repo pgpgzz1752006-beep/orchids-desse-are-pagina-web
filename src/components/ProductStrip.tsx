@@ -298,8 +298,8 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
   
     return (
       <section 
-        className="w-full bg-white dark:bg-[#0E0F12] py-14 md:py-16 lg:py-[72px] transition-colors duration-300 overflow-hidden"
-        data-autoplay={autoplay ? "on" : "off"}
+className="w-full bg-white dark:bg-[#0E0F12] py-6 md:py-16 lg:py-[72px] transition-colors duration-300 overflow-hidden"
+          data-autoplay={autoplay ? "on" : "off"}
         data-carousel-id={carouselId}
       >
         {/* Title - centered with max-width */}
