@@ -115,29 +115,29 @@ export default function Header() {
             className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] dark:hover:text-white hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/30 rounded"
             aria-label={theme === "light" ? "Cambiar a modo oscuro" : "Cambiar a modo claro"}
           >
-            {theme === "light" ? (
-              <Moon className="w-7 h-7" strokeWidth={1.5} />
-            ) : (
-              <Sun className="w-7 h-7" strokeWidth={1.5} />
-            )}
-          </button>
-          <button
-            className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
-            aria-label="Buscar"
-          >
-            <Search className="w-7 h-7" strokeWidth={1.5} />
-          </button>
-          <button
-            className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
-            aria-label="Mi cuenta"
-          >
-            <User className="w-7 h-7" strokeWidth={1.5} />
-          </button>
-          <button
-            className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
-            aria-label="Carrito"
-          >
-            <ShoppingCart className="w-7 h-7" strokeWidth={1.5} />
+              {theme === "light" ? (
+                <Moon className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
+              ) : (
+                <Sun className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
+              )}
+            </button>
+            <button
+              className="p-1.5 md:p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
+              aria-label="Buscar"
+            >
+              <Search className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
+            </button>
+            <button
+              className="p-1.5 md:p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
+              aria-label="Mi cuenta"
+            >
+              <User className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
+            </button>
+            <button
+              className="p-1.5 md:p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
+              aria-label="Carrito"
+            >
+              <ShoppingCart className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
           </button>
 
           {/* Mobile Menu Button */}
