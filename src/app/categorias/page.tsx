@@ -113,7 +113,7 @@ const categorias = [
   {
     title: "MOCHILAS",
     subcategories: ["MOCHILAS DE VIAJE", "MOCHILAS DEPORTIVAS", "MOCHILAS EJECUTIVAS", "MOCHILAS ESCOLARES", "MOCHILAS TROLLEY"],
-    image: "/antiestres.jpg",
+    image: "/cat-mochilas.jpg",
     barColor: "bg-[#462681]",
   },
   {
