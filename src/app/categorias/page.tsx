@@ -71,11 +71,11 @@ const categorias = [
   {
     title: "ESCRITURA",
     subcategories: ["BOLIGRAFOS ECOLOGICOS", "BOLIGRAFOS FUNCIONES", "BOLIGRAFOS METALICOS", "BOLIGRAFOS PLASTICOS", "SETS DE BOLIGRAFOS"],
-    image: "/antiestres.jpg",
-    barColor: "bg-[#E00273]",
-  },
-  {
-    title: "HERRAMIENTAS",
+      image: "/cat-escritura.jpg",
+      barColor: "bg-[#E00273]",
+    },
+    {
+      title: "HERRAMIENTAS",
     subcategories: ["AUTOMOVIL", "LAMPARAS", "NAVAJAS", "SET DE HERRAMIENTAS"],
     image: "/cat-herramientas.jpg",
     barColor: "bg-[#F3E610]",
