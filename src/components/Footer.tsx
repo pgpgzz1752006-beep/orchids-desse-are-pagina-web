@@ -29,7 +29,7 @@ export default function Footer({ lineHeight = 10 }: FooterProps) {
   return (
     <footer className="w-full bg-white dark:bg-[#0E0F12] transition-colors duration-300">
       {/* Multicolor Bar */}
-      <div className="w-full flex h-[10px]">
+      <div className="w-full flex" style={{ height: `${lineHeight}px` }}>
         {colorBarSegments.map((segment, index) => (
           <div
             key={index}
