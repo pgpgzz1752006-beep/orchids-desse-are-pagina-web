@@ -149,7 +149,7 @@ const categorias = [
     {
       title: "SETS DE REGALO",
     subcategories: ["SETS"],
-    image: "/antiestres.jpg",
+    image: "/cat-sets-regalo.jpg",
     barColor: "bg-[#1F5F9F]",
   },
   {
