@@ -143,11 +143,11 @@ const categorias = [
   {
     title: "SALUD",
     subcategories: ["CUIDADO PERSONAL", "GELES Y SANITIZANTES", "PASTILLEROS"],
-    image: "/antiestres.jpg",
-    barColor: "bg-[#F6931D]",
-  },
-  {
-    title: "SETS DE REGALO",
+      image: "/cat-salud.jpg",
+      barColor: "bg-[#F6931D]",
+    },
+    {
+      title: "SETS DE REGALO",
     subcategories: ["SETS"],
     image: "/antiestres.jpg",
     barColor: "bg-[#1F5F9F]",
