@@ -187,7 +187,7 @@ export default function CategoriasPage() {
                     />
                   </div>
                     <div className="flex-1 p-3 flex flex-col justify-start overflow-hidden">
-                      <h3 className="font-['Montserrat'] font-bold text-xs md:text-sm">
+                      <h3 className="font-['Montserrat'] font-bold text-sm md:text-base">
                         {cat.title}
                       </h3>
                       <div className="mt-1 space-y-0">
