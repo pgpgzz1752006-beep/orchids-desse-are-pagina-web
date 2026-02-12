@@ -131,11 +131,11 @@ const categorias = [
   {
     title: "PARAGUAS E IMPERMEABLES",
     subcategories: ["IMPERMEABLES", "PARAGUAS"],
-    image: "/antiestres.jpg",
-    barColor: "bg-[#93C01F]",
-  },
-  {
-    title: "PORTAFOLIOS",
+      image: "/cat-paraguas.jpg",
+      barColor: "bg-[#93C01F]",
+    },
+    {
+      title: "PORTAFOLIOS",
     subcategories: ["PORTAFOLIOS Y PORTALAPTOPS"],
     image: "/antiestres.jpg",
     barColor: "bg-[#00BBB5]",
