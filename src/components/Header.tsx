@@ -49,7 +49,7 @@ export default function Header() {
       </div>
 
       {/* Main Header - 3 Column Grid */}
-      <div className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-x-6 h-[90px] md:h-[110px] lg:h-[190px] pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-4 lg:pr-6">
+      <div className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-x-6 h-[70px] md:h-[110px] lg:h-[190px] pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-4 lg:pr-6">
         {/* Column 1: Logo - flush left */}
         <div className="justify-self-start flex-shrink-0 flex items-center">
             <a href="/" className="flex items-center">
