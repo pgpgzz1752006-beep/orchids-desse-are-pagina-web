@@ -21,7 +21,11 @@ const colorBarSegments = [
   { color: "#3E2A84", width: "6%" },
 ];
 
-export default function Footer() {
+interface FooterProps {
+  lineHeight?: number;
+}
+
+export default function Footer({ lineHeight = 10 }: FooterProps) {
   return (
     <footer className="w-full bg-white dark:bg-[#0E0F12] transition-colors duration-300">
       {/* Multicolor Bar */}
