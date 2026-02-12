@@ -107,7 +107,7 @@ const categorias = [
   {
     title: "MALETAS",
     subcategories: ["MALETAS DE MANO", "MALETAS TROLLEY"],
-    image: "/antiestres.jpg",
+    image: "/cat-maletas.jpg",
     barColor: "bg-[#F3E610]",
   },
   {
