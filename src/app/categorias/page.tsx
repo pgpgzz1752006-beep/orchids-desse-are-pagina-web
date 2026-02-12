@@ -190,7 +190,7 @@ export default function CategoriasPage() {
                       <h3 className="font-['Montserrat'] font-bold text-xs md:text-sm">
                         {cat.title}
                       </h3>
-                      <div className="mt-1 space-y-0 overflow-hidden">
+                      <div className="mt-1 space-y-0 overflow-y-auto">
                         {cat.subcategories.map((sub) => (
                           <p
                             key={sub}
