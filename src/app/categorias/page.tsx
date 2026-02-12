@@ -137,7 +137,7 @@ const categorias = [
     {
       title: "PORTAFOLIOS",
     subcategories: ["PORTAFOLIOS Y PORTALAPTOPS"],
-    image: "/antiestres.jpg",
+    image: "/cat-portafolios.jpg",
     barColor: "bg-[#00BBB5]",
   },
   {
