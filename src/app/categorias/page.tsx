@@ -208,7 +208,7 @@ export default function CategoriasPage() {
           ))}
         </div>
       </div>
-      <Footer />
+      <Footer lineHeight={15} />
     </main>
   );
 }
