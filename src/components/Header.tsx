@@ -109,7 +109,7 @@ export default function Header() {
         </nav>
 
         {/* Column 3: Action Icons - flush right */}
-        <div className="flex items-center justify-self-end flex-shrink-0 min-w-[180px] justify-end gap-3 lg:gap-4 xl:gap-5 pr-1 lg:pr-3">
+        <div className="flex items-center justify-self-end flex-shrink-0 min-w-0 md:min-w-[180px] justify-end gap-1 md:gap-3 lg:gap-4 xl:gap-5 pr-1 lg:pr-3">
           <button
             onClick={toggleTheme}
             className="p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] dark:hover:text-white hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/30 rounded"
