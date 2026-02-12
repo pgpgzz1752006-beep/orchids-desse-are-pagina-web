@@ -194,7 +194,7 @@ export default function CategoriasPage() {
                           {cat.subcategories.map((sub) => (
                             <p
                               key={sub}
-                              className="text-[11px] leading-tight font-medium text-[#7A7A7A] dark:text-gray-400"
+                              className="text-[11px] leading-tight font-semibold text-[#7A7A7A] dark:text-gray-400"
                             >
                             {sub}
                           </p>
