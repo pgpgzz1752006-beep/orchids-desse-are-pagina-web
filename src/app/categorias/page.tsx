@@ -59,7 +59,7 @@ const categorias = [
   {
     title: "DEPORTES",
     subcategories: ["ARTICULOS DEPORTIVOS", "FÚTBOL"],
-    image: "/antiestres.jpg",
+    image: "/cat-deportes.jpg",
     barColor: "bg-[#1F5F9F]",
   },
   {
