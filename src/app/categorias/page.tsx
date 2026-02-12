@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { useState } from "react";
 
 const categorias = [
   {
