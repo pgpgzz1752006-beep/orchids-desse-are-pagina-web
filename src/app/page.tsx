@@ -93,7 +93,7 @@ export default function Home() {
           <SolutionsSection />
           <ChatButtonSection />
         </main>
-        <Footer />
+        <Footer lineHeight={3} />
         <WhatsAppButton />
       </div>
   );
