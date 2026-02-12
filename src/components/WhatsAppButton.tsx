@@ -40,7 +40,7 @@ export default function WhatsAppButton() {
         <img
           src="/whatsapp-business.webp"
           alt="WhatsApp Business"
-          className="w-[48px] h-[48px] md:w-[60px] md:h-[60px] lg:w-[68px] lg:h-[68px] object-contain"
+          className="w-[36px] h-[36px] md:w-[44px] md:h-[44px] lg:w-[50px] lg:h-[50px] object-contain"
         />
       </a>
     );
