@@ -252,7 +252,7 @@ export default function Footer({ lineHeight = 10 }: FooterProps) {
                       <a
                         key={link.label}
                         href={link.href}
-                        className="group relative font-['Montserrat'] text-[13px] md:text-[14px] lg:text-[15px] text-[#444] dark:text-[#ccc] hover:text-[#14C6C9] transition-colors duration-200 ease-out"
+                        className="group relative font-['Montserrat'] text-[15px] md:text-[16px] lg:text-[17px] text-[#444] dark:text-[#ccc] hover:text-[#14C6C9] transition-colors duration-200 ease-out"
                       >
                         {link.label}
                         <span className="absolute -bottom-[2px] right-0 w-full h-[1.5px] bg-[#14C6C9] transform scale-x-0 origin-right transition-transform duration-200 ease-out group-hover:scale-x-100" />
