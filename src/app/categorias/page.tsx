@@ -173,45 +173,100 @@ const categorias = [
 ];
 
 export default function CategoriasPage() {
+  const [selected, setSelected] = useState<typeof categorias[number] | null>(null);
+
   return (
     <main className="min-h-screen bg-white dark:bg-[#0E0F12] text-[#111111] dark:text-white">
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categorias.map((cat) => (
-              <div
-                key={cat.title}
-                className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-52"
-              >
-                <div className="flex h-full">
-                  <div className="w-2/5 relative bg-gray-100 dark:bg-white/5">
-                    <Image
-                      src={cat.image}
-                      alt={cat.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                    <div className="flex-1 p-3 flex flex-col justify-start overflow-hidden">
-                      <h3 className="font-['Montserrat'] font-bold text-sm md:text-base">
-                        {cat.title}
-                      </h3>
-                      <div className="mt-1 space-y-0">
-                          {cat.subcategories.map((sub) => (
-                            <p
-                              key={sub}
-                              className="text-xs leading-tight font-semibold text-[#7A7A7A] dark:text-gray-400"
-                            >
-                            {sub}
-                          </p>
-                        ))}
-                    </div>
-                  </div>
-                  <div className={`w-5 ${cat.barColor}`} />
+            <div
+              key={cat.title}
+              onClick={() => setSelected(cat)}
+              className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-52"
+            >
+              <div className="flex h-full">
+                <div className="w-2/5 relative bg-gray-100 dark:bg-white/5">
+                  <Image
+                    src={cat.image}
+                    alt={cat.title}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
+                <div className="flex-1 p-3 flex flex-col justify-start overflow-hidden">
+                  <h3 className="font-['Montserrat'] font-bold text-sm md:text-base">
+                    {cat.title}
+                  </h3>
+                  <div className="mt-1 space-y-0">
+                    {cat.subcategories.map((sub) => (
+                      <p
+                        key={sub}
+                        className="text-xs leading-tight font-semibold text-[#7A7A7A] dark:text-gray-400"
+                      >
+                        {sub}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+                <div className={`w-5 ${cat.barColor}`} />
               </div>
+            </div>
           ))}
         </div>
       </div>
+
+      {/* Pop-up modal */}
+      {selected && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          onClick={() => setSelected(null)}
+        >
+          <div
+            className="bg-white dark:bg-[#1A1B1F] rounded-2xl shadow-2xl max-w-lg w-[90%] overflow-hidden animate-in fade-in zoom-in duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Image */}
+            <div className="relative w-full h-56">
+              <Image
+                src={selected.image}
+                alt={selected.title}
+                fill
+                className="object-cover"
+              />
+              <div className={`absolute bottom-0 left-0 right-0 h-2 ${selected.barColor}`} />
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              <h2 className="font-['Montserrat'] font-bold text-xl md:text-2xl mb-4">
+                {selected.title}
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {selected.subcategories.map((sub) => (
+                  <span
+                    key={sub}
+                    className="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 dark:bg-white/10 text-[#555] dark:text-gray-300"
+                  >
+                    {sub}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Close button */}
+            <div className="px-6 pb-5">
+              <button
+                onClick={() => setSelected(null)}
+                className="w-full py-2.5 rounded-lg bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 font-semibold text-sm transition-colors"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer lineHeight={15} />
       <WhatsAppButton />
     </main>
