@@ -210,6 +210,7 @@ export default function CategoriasPage() {
         </div>
       </div>
       <Footer lineHeight={15} />
+      <WhatsAppButton />
     </main>
   );
 }
