@@ -23,11 +23,11 @@ const categorias = [
       "PORTA DOCUMENTOS",
       "NECESER",
     ],
-    image: "/antiestres.jpg",
-    barColor: "bg-[#462681]",
-  },
-  {
-    title: "BAR",
+      image: "/cat-viaje.jpg",
+      barColor: "bg-[#462681]",
+    },
+    {
+      title: "BAR",
     subcategories: ["ARTÍCULOS PARA BAR", "DESTAPADORES", "LICORERAS", "SACA CORCHOS", "SET Y ESTUCHES"],
     image: "/cat-bar.jpg",
     barColor: "bg-[#009EE2]",
