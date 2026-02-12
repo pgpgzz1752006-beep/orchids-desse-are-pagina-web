@@ -247,17 +247,18 @@ export default function Footer({ lineHeight = 10 }: FooterProps) {
                 <h3 className="font-['Montserrat'] text-[24px] md:text-[26px] lg:text-[28px] font-semibold text-[#111111] dark:text-[#F2F2F2] leading-[1.1]">
                   Menú
                 </h3>
-                <nav className="flex flex-col items-center md:items-end gap-1">
-                  {menuLinks.map((link) => (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      className="font-['Montserrat'] text-[13px] md:text-[14px] lg:text-[15px] text-[#444] dark:text-[#ccc] hover:text-[#111] dark:hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  ))}
-                </nav>
+              <nav className="flex flex-col items-center md:items-end gap-1">
+                    {menuLinks.map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        className="group relative font-['Montserrat'] text-[13px] md:text-[14px] lg:text-[15px] text-[#444] dark:text-[#ccc] hover:text-[#14C6C9] transition-colors duration-200 ease-out"
+                      >
+                        {link.label}
+                        <span className="absolute -bottom-[2px] right-0 w-full h-[1.5px] bg-[#14C6C9] transform scale-x-0 origin-right transition-transform duration-200 ease-out group-hover:scale-x-100" />
+                      </a>
+                    ))}
+                  </nav>
               </div>
           </div>
 
