@@ -183,7 +183,7 @@ export default function CategoriasPage() {
             <div
               key={cat.title}
               onClick={() => setSelected(cat)}
-              className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-52"
+              className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm cursor-pointer h-52 will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:-translate-y-[3px] active:scale-[1.02]"
             >
               <div className="flex h-full">
                 <div className="w-2/5 relative bg-gray-100 dark:bg-white/5">
