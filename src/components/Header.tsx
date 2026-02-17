@@ -134,12 +134,13 @@ export default function Header() {
             >
               <User className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
             </a>
-            <button
-              className="p-1.5 md:p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
+            <a
+              href="/carrito"
+              className="p-1.5 md:p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] dark:hover:text-white hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
               aria-label="Carrito"
             >
               <ShoppingCart className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
-          </button>
+          </a>
 
           {/* Mobile Menu Button */}
           <button
