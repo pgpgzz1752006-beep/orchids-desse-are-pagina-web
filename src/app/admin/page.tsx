@@ -8,6 +8,7 @@ interface HealthResult {
   dns_ok: boolean;
   graphql_ok: boolean;
   excel_query_ok: boolean;
+  token_configured: boolean;
   status: number | null;
   details: { typename: string | null; excelResponseKeys: string[] };
   error: string | null;
