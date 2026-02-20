@@ -57,23 +57,26 @@ function AutoSyncCard() {
 
   return (
     <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
-      <p className="text-[#888] text-xs uppercase tracking-widest mb-4">Sincronizar desde API</p>
-      <button
-        onClick={handleSync}
-        disabled={loading}
-        className="w-full bg-[#14C6C9] hover:bg-[#11b3b6] disabled:bg-[#14C6C9]/40 text-white font-bold py-3 rounded-xl transition-colors duration-200 uppercase tracking-widest text-sm"
-      >
-        {loading ? (
-          <span className="flex items-center justify-center gap-2">
-            <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-            </svg>
-            Sincronizando...
-          </span>
-        ) : (
-          "Sincronizar catálogo"
-        )}
+        <p className="text-[#888] text-xs uppercase tracking-widest mb-2">Sincronizar desde API</p>
+        <p className="text-[#555] text-xs mb-4">
+          Presiona el botón para generar y cargar el Excel automáticamente desde la API de Promocionales Online.
+        </p>
+        <button
+          onClick={handleSync}
+          disabled={loading}
+          className="w-full bg-[#14C6C9] hover:bg-[#11b3b6] disabled:bg-[#14C6C9]/40 text-white font-bold py-3 rounded-xl transition-colors duration-200 uppercase tracking-widest text-sm"
+        >
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+              </svg>
+              Sincronizando...
+            </span>
+          ) : (
+            "Sincronizar catálogo desde API"
+          )}
       </button>
 
       {result && (
