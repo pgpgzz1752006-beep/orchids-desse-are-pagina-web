@@ -42,13 +42,13 @@ const categories = [
   },
   {
     label: "Artículos del hogar",
-    href: "/categorias/hogar",
+    href: "/productos?category=hogar",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/KTC-850-BE_5-1770139578681.jpg?width=800&height=800&resize=contain",
     overlayColor: "rgba(122, 174, 43, 0.78)",
   },
   {
     label: "Gorras y playeras",
-    href: "/categorias/gorras-playeras",
+    href: "/productos?category=gorras",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/CAP-021-AC_3-1770139581820.jpg?width=800&height=800&resize=contain",
     overlayColor: "rgba(210, 138, 27, 0.78)",
   },
