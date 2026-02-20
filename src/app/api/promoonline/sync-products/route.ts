@@ -4,8 +4,9 @@ import axios from 'axios'
 import { supabaseAdmin } from '@/lib/supabase'
 import { mapToSlug, detectColumn } from '@/lib/categoryMapper'
 
-const GRAPHQL_ENDPOINT =
-  process.env.GRAPHQL_ENDPOINT || 'https://www.promocionalesonlinea.net/graphql'
+const GRAPHQL_PRIMARY   = 'https://www.promocionalesenlinea.net/graphql'
+const GRAPHQL_FALLBACK  = 'https://promocionalesenlinea.net/graphql'
+const GRAPHQL_ENDPOINT  = process.env.GRAPHQL_ENDPOINT || GRAPHQL_PRIMARY
 
 const GQL_QUERY = 'query GenerateProductsExcel { generateProductsExcel }'
 
