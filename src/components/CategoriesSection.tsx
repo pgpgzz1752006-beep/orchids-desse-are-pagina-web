@@ -30,7 +30,7 @@ const categories = [
   },
   {
     label: "Sets de regalo",
-    href: "/categorias/sets-regalo",
+    href: "/productos?category=regalos",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SET-023-N_6-1770139576900.jpg?width=800&height=800&resize=contain",
     overlayColor: "rgba(34, 167, 214, 0.78)",
   },
