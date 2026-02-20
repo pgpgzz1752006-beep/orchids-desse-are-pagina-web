@@ -35,7 +35,6 @@ async function tryPost(url: string, body: object, useAxios: boolean): Promise<At
         body: payload,
         redirect: 'follow',
         cache: 'no-store',
-        // @ts-expect-error – Node 18 fetch signal timeout
         signal: AbortSignal.timeout(12_000),
       })
       const ct = res.headers.get('content-type') || ''
