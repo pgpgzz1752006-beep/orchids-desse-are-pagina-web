@@ -38,13 +38,12 @@ type GQLResult = {
 }
 
 // ── Single attempt against one URL ───────────────────────────────
-async function tryFetch(url: string, useAxios: boolean): Promise<GQLResult> {
+async function tryFetch(
+  url: string,
+  headers: Record<string, string>,
+  useAxios: boolean
+): Promise<GQLResult> {
   const body = JSON.stringify({ query: GQL_QUERY, variables: {} })
-  const headers = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    'User-Agent': 'Mozilla/5.0',
-  }
 
   if (!useAxios) {
     const res = await fetch(url, {
@@ -79,8 +78,7 @@ async function tryFetch(url: string, useAxios: boolean): Promise<GQLResult> {
 }
 
 // ── Fetch GraphQL: primary www → fallback no-www → axios ─────────
-async function fetchGraphQL(): Promise<GQLResult> {
-  // Attempt plan: [primary+fetch, primary+fetch retry, fallback+fetch, fallback+axios]
+async function fetchGraphQL(headers: Record<string, string>): Promise<GQLResult> {
   const attempts: { url: string; useAxios: boolean; delay: number }[] = [
     { url: GRAPHQL_ENDPOINT,  useAxios: false, delay: 0    },
     { url: GRAPHQL_ENDPOINT,  useAxios: false, delay: 500  },
@@ -95,8 +93,7 @@ async function fetchGraphQL(): Promise<GQLResult> {
     const tag = `${attempt.useAxios ? 'axios' : 'fetch'} → ${attempt.url}`
     console.log(`[sync] trying ${tag}`)
     try {
-      const result = await tryFetch(attempt.url, attempt.useAxios)
-      // Success if we got data or a real HTTP response (even error codes)
+      const result = await tryFetch(attempt.url, headers, attempt.useAxios)
       if (result.statusCode !== undefined || result.data) return result
       lastResult = result
     } catch (err: unknown) {
@@ -119,15 +116,15 @@ async function fetchGraphQL(): Promise<GQLResult> {
 }
 
 // ── Classify error for UI ─────────────────────────────────────────
-function classifyError(result: Awaited<ReturnType<typeof fetchGraphQL>>): string {
+function classifyError(result: GQLResult): string {
   if (result.networkError && !result.statusCode) {
-    return `No se pudo conectar al endpoint GraphQL (network/TLS/DNS). Revisa logs. Detalle: ${result.networkError}`
+    return classifyGraphQLError({ errorMessage: result.networkError })
   }
   if (result.statusCode === 401 || result.statusCode === 403) {
-    return 'Autenticación requerida (token). El servidor devolvió 401/403.'
+    return classifyGraphQLError({ status: result.statusCode })
   }
   if (result.errors?.length) {
-    return result.errors[0].message
+    return classifyGraphQLError({ status: result.statusCode, errorMessage: result.errors[0].message })
   }
   if (result.rawText) {
     return `El servidor no devolvió JSON. Status ${result.statusCode}. Respuesta: ${result.rawText.slice(0, 300)}`
