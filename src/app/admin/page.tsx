@@ -78,6 +78,108 @@ export default function AdminPage() {
   );
 }
 
+/* ─── Token config card ──────────────────────────────────────────── */
+function TokenCard() {
+  const [masked, setMasked] = useState<string | null>(null);
+  const [source, setSource] = useState<"env" | "db" | null>(null);
+  const [input, setInput] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/token")
+      .then((r) => r.json())
+      .then((d) => {
+        setMasked(d.set ? d.masked : null);
+        setSource(d.source);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function saveToken() {
+    setSaving(true);
+    setSaveMsg(null);
+    try {
+      const res = await fetch("/api/admin/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: input.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setSaveMsg("Error: " + (data.error || "desconocido"));
+      } else {
+        setSaveMsg(input.trim() ? "Token guardado correctamente." : "Token eliminado.");
+        setMasked(input.trim() ? "••••••••" + input.trim().slice(-4) : null);
+        setSource("db");
+        setInput("");
+      }
+    } catch {
+      setSaveMsg("Error de red al guardar.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <p className="text-[#888] text-xs uppercase tracking-widest mb-1">Token de autenticación</p>
+      <p className="text-[#555] text-xs mb-4">
+        Solo necesario si la API requiere autenticación. Se guarda en la base de datos y se usa server-side.
+        No se expone al cliente.
+      </p>
+
+      {loading ? (
+        <p className="text-[#555] text-xs">Cargando...</p>
+      ) : (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-[#555] text-xs shrink-0">Estado</span>
+            {masked ? (
+              <span className="text-emerald-400 text-xs font-semibold">
+                ✅ Configurado{source === "env" ? " (env var)" : " (BD)"} — {masked}
+              </span>
+            ) : (
+              <span className="text-yellow-500 text-xs">⚠ Sin token</span>
+            )}
+          </div>
+
+          {source === "env" ? (
+            <p className="text-[#555] text-xs italic">
+              El token proviene de la variable de entorno <code className="text-[#888]">PROMO_GRAPHQL_TOKEN</code>. Para cambiarlo edita las env vars.
+            </p>
+          ) : (
+            <div className="flex gap-2">
+              <input
+                type="password"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={masked ? "Reemplazar token..." : "Pegar token aquí..."}
+                className="flex-1 bg-[#0E0F12] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9] transition-colors"
+              />
+              <button
+                onClick={saveToken}
+                disabled={saving || input.trim() === ""}
+                className="bg-[#14C6C9]/20 hover:bg-[#14C6C9]/30 border border-[#14C6C9]/40 text-[#14C6C9] text-xs font-bold px-4 py-2 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed uppercase tracking-wider"
+              >
+                {saving ? "Guardando..." : "Guardar"}
+              </button>
+            </div>
+          )}
+
+          {saveMsg && (
+            <p className={`text-xs ${saveMsg.startsWith("Error") ? "text-red-400" : "text-emerald-400"}`}>
+              {saveMsg}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─── Health card ────────────────────────────────────────────────── */
 function HealthCard({
   health,
