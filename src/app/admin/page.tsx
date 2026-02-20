@@ -94,15 +94,11 @@ function AutoSyncCard() {
       )}
 
       {error && (
-        <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-sm">
-          <p className="text-red-400 font-bold mb-1 uppercase tracking-wider text-xs">Error</p>
-          <p className="text-red-300 break-words">{error}</p>
-          <p className="text-[#666] text-xs mt-2">
-            Este error puede ocurrir en entornos locales/sandbox donde el dominio externo no es accesible.
-            Prueba usar la carga manual de Excel, o ejecuta desde el servidor de producción.
-          </p>
-        </div>
-      )}
+          <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-sm">
+            <p className="text-red-400 font-bold mb-1 uppercase tracking-wider text-xs">Error</p>
+            <p className="text-red-300 break-words">{error}</p>
+          </div>
+        )}
     </div>
   );
 }
