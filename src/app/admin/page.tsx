@@ -145,10 +145,10 @@ function ManualUploadCard() {
 
   return (
     <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
-      <p className="text-[#888] text-xs uppercase tracking-widest mb-4">Carga manual de Excel</p>
-      <p className="text-[#666] text-xs mb-4">
-        Descarga el Excel de tu proveedor y súbelo aquí para importar el catálogo sin depender de la API.
-      </p>
+      <p className="text-[#888] text-xs uppercase tracking-widest mb-2">Carga manual de Excel</p>
+        <p className="text-[#555] text-xs mb-4">
+          Alternativa opcional: si tienes el archivo .xlsx descargado, puedes subirlo directamente aquí.
+        </p>
 
       <label
         className={`flex flex-col items-center justify-center w-full border-2 border-dashed rounded-xl py-6 cursor-pointer transition-colors
