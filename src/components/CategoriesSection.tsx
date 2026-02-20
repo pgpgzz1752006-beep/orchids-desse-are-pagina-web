@@ -18,7 +18,7 @@ const categories = [
   },
   {
     label: "Libretas y carpetas",
-    href: "/categorias/libretas-carpetas",
+    href: "/productos?category=libretas",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/HL-9046-H_7-1770139580279.jpg?width=800&height=800&resize=contain",
     overlayColor: "rgba(216, 27, 125, 0.78)",
   },
