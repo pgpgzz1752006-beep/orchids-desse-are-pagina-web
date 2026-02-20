@@ -12,7 +12,7 @@ const categories = [
   },
   {
     label: "Bolsas y maletas",
-    href: "/categorias/bolsas-maletas",
+    href: "/productos?category=bolsas",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SIN-761-G_8-1770139575048.jpg?width=800&height=800&resize=contain",
     overlayColor: "rgba(182, 167, 0, 0.78)",
   },
