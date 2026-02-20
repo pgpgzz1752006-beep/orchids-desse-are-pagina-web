@@ -150,8 +150,8 @@ export async function POST() {
       imported += data?.length ?? 0
     }
 
-    // Auto-assign best_sellers and recommended (first 12 of each category as best_seller, next 12 as recommended)
-    await supabaseAdmin.rpc('assign_featured_products').catch(() => null)
+      // Auto-assign best_sellers and recommended (first 12 of each category as best_seller, next 12 as recommended)
+      try { await supabaseAdmin.rpc('assign_featured_products') } catch { /* optional RPC */ }
 
     return NextResponse.json({
       success: true,
