@@ -151,9 +151,15 @@ export async function POST(req: NextRequest) {
       workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' })
     } else {
       // ── Auto sync from GraphQL ──────────────────────────────
-        const token = await resolvePromoToken()
-        const gqlHeaders = buildGraphQLHeaders(token)
-        console.log(`[sync] Starting GraphQL fetch → ${GRAPHQL_ENDPOINT} (token=${token ? 'set' : 'none'})`)
+          const token = await resolvePromoToken()
+          if (!token) {
+            return NextResponse.json(
+              { error: 'TOKEN_MISSING', message: 'Falta configurar el token de la API.' },
+              { status: 401 }
+            )
+          }
+          const gqlHeaders = buildGraphQLHeaders(token)
+          console.log(`[sync] Starting GraphQL fetch → ${GRAPHQL_ENDPOINT} (token=set)`)
 
         const gqlResult = await fetchGraphQL(gqlHeaders)
 
