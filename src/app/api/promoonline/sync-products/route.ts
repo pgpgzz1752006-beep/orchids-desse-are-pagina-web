@@ -151,9 +151,11 @@ export async function POST(req: NextRequest) {
       workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' })
     } else {
       // ── Auto sync from GraphQL ──────────────────────────────
-      console.log(`[sync] Starting GraphQL fetch → ${GRAPHQL_ENDPOINT}`)
+        const token = await resolvePromoToken()
+        const gqlHeaders = buildGraphQLHeaders(token)
+        console.log(`[sync] Starting GraphQL fetch → ${GRAPHQL_ENDPOINT} (token=${token ? 'set' : 'none'})`)
 
-      const gqlResult = await fetchGraphQL()
+        const gqlResult = await fetchGraphQL(gqlHeaders)
 
       if (!gqlResult.data && (gqlResult.networkError || gqlResult.rawText || gqlResult.errors)) {
         const msg = classifyError(gqlResult)
