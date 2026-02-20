@@ -3,6 +3,7 @@ import * as XLSX from 'xlsx'
 import axios from 'axios'
 import { supabaseAdmin } from '@/lib/supabase'
 import { mapToSlug, detectColumn } from '@/lib/categoryMapper'
+import { resolvePromoToken, buildGraphQLHeaders, classifyGraphQLError } from '@/lib/promoAuth'
 
 const GRAPHQL_PRIMARY   = 'https://www.promocionalesenlinea.net/graphql'
 const GRAPHQL_FALLBACK  = 'https://promocionalesenlinea.net/graphql'
