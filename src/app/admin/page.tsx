@@ -52,7 +52,10 @@ export default function AdminPage() {
           <p className="text-[#888] text-sm mt-1">Sincronización del catálogo</p>
         </div>
 
-        {/* Health check */}
+          {/* Token config */}
+          <TokenCard />
+
+          {/* Health check */}
         <HealthCard
           health={health}
           loading={healthLoading}
