@@ -5,14 +5,23 @@ import Link from "next/link";
 
 interface HealthResult {
   endpoint_used: string;
+  token_ok: boolean;
   dns_ok: boolean;
-  graphql_ok: boolean;
   excel_query_ok: boolean;
-  token_configured: boolean;
   status: number | null;
-  details: { typename: string | null; excelResponseKeys: string[] };
+  details: { excelResponseKeys: string[] };
   error: string | null;
   error_code: string | null;
+}
+
+function errorLabel(code: string | null, message: string | null): string {
+  if (code === "TOKEN_MISSING" || message === "TOKEN_MISSING")
+    return "Falta configurar el token de la API.";
+  if (code === "TOKEN_INVALID" || message === "TOKEN_INVALID")
+    return "Token inválido o expirado.";
+  if (code === "NETWORK_ERROR" || message === "NETWORK_ERROR")
+    return "No se pudo conectar al endpoint GraphQL (network/TLS/DNS). Revisa logs del servidor.";
+  return message ?? "Error desconocido.";
 }
 
 export default function AdminPage() {
@@ -25,19 +34,18 @@ export default function AdminPage() {
     try {
       const res = await fetch("/api/promoonline/health");
       const data = await res.json();
-      setHealth(data);
+      setHealth(data as HealthResult);
     } catch (e) {
-        setHealth({
-          endpoint_used: "—",
-          dns_ok: false,
-          graphql_ok: false,
-          excel_query_ok: false,
-          token_configured: false,
-          status: null,
-          details: { typename: null, excelResponseKeys: [] },
-          error: e instanceof Error ? e.message : "Error de red al llamar /health",
-          error_code: "FETCH_FAILED",
-        });
+      setHealth({
+        endpoint_used: "—",
+        token_ok: false,
+        dns_ok: false,
+        excel_query_ok: false,
+        status: null,
+        details: { excelResponseKeys: [] },
+        error: e instanceof Error ? e.message : "Error de red al llamar /health",
+        error_code: "NETWORK_ERROR",
+      });
     } finally {
       setHealthLoading(false);
     }
@@ -53,18 +61,19 @@ export default function AdminPage() {
           <p className="text-[#888] text-sm mt-1">Sincronización del catálogo</p>
         </div>
 
-          {/* Token config */}
-          <TokenCard />
+        {/* Token config */}
+        <TokenCard />
 
-          {/* Health check */}
-        <HealthCard
-          health={health}
-          loading={healthLoading}
-          onCheck={checkHealth}
-        />
+        {/* Health check */}
+        <HealthCard health={health} loading={healthLoading} onCheck={checkHealth} />
 
         {/* Auto sync from API */}
-        <AutoSyncCard graphqlOk={health?.graphql_ok ?? null} excelOk={health?.excel_query_ok ?? null} />
+        <AutoSyncCard
+          tokenOk={health?.token_ok ?? null}
+          excelOk={health?.excel_query_ok ?? null}
+          dnsOk={health?.dns_ok ?? null}
+          healthChecked={health !== null}
+        />
 
         {/* Manual Excel upload */}
         <ManualUploadCard />
@@ -126,10 +135,9 @@ function TokenCard() {
 
   return (
     <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
-      <p className="text-[#888] text-xs uppercase tracking-widest mb-1">Token de autenticación</p>
+      <p className="text-[#888] text-xs uppercase tracking-widest mb-1">Token API</p>
       <p className="text-[#555] text-xs mb-4">
-        Solo necesario si la API requiere autenticación. Se guarda en la base de datos y se usa server-side.
-        No se expone al cliente.
+        Esta API requiere token. Configúralo aquí para sincronizar. Se guarda solo del lado servidor y nunca se expone al cliente.
       </p>
 
       {loading ? (
@@ -143,13 +151,14 @@ function TokenCard() {
                 ✅ Configurado{source === "env" ? " (env var)" : " (BD)"} — {masked}
               </span>
             ) : (
-              <span className="text-yellow-500 text-xs">⚠ Sin token</span>
+              <span className="text-yellow-500 text-xs">⚠ Sin token — sincronización deshabilitada</span>
             )}
           </div>
 
           {source === "env" ? (
             <p className="text-[#555] text-xs italic">
-              El token proviene de la variable de entorno <code className="text-[#888]">PROMO_GRAPHQL_TOKEN</code>. Para cambiarlo edita las env vars.
+              El token proviene de la variable de entorno{" "}
+              <code className="text-[#888]">PROMO_GRAPHQL_TOKEN</code>. Para cambiarlo, edita las env vars.
             </p>
           ) : (
             <div className="flex gap-2">
@@ -165,7 +174,7 @@ function TokenCard() {
                 disabled={saving || input.trim() === ""}
                 className="bg-[#14C6C9]/20 hover:bg-[#14C6C9]/30 border border-[#14C6C9]/40 text-[#14C6C9] text-xs font-bold px-4 py-2 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed uppercase tracking-wider"
               >
-                {saving ? "Guardando..." : "Guardar"}
+                {saving ? "Guardando..." : "Guardar token"}
               </button>
             </div>
           )}
@@ -191,7 +200,7 @@ function HealthCard({
   loading: boolean;
   onCheck: () => void;
 }) {
-  function statusBadge(ok: boolean | null, labelOk: string, labelFail: string) {
+  function badge(ok: boolean | null, labelOk: string, labelFail: string) {
     if (ok === null) return <span className="text-[#555] text-xs">—</span>;
     return ok ? (
       <span className="text-emerald-400 font-semibold text-xs">✅ {labelOk}</span>
@@ -200,19 +209,17 @@ function HealthCard({
     );
   }
 
-  function errorMessage(h: HealthResult): string | null {
+  function resolvedError(h: HealthResult): string | null {
+    if (!h.token_ok) return "Falta configurar el token de la API.";
     if (!h.dns_ok) {
       const code = h.error_code ? ` (${h.error_code})` : "";
-      return `No se pudo conectar al endpoint GraphQL (network/TLS/DNS)${code}. Revisa logs del servidor.${h.error ? " Detalle: " + h.error : ""}`;
+      return `No se pudo conectar al endpoint GraphQL (network/TLS/DNS)${code}.${h.error ? " Detalle: " + h.error : ""}`;
     }
-    if (h.status === 401 || h.status === 403) {
-      return "Autenticación requerida (token). El servidor devolvió " + h.status + ".";
+    if (h.status === 401 || h.status === 403 || h.error_code === "TOKEN_INVALID" || h.error === "TOKEN_INVALID") {
+      return "Token inválido o expirado. Actualiza el token en la sección anterior.";
     }
-    if (!h.graphql_ok && h.error) {
-      return "Error GraphQL: " + h.error;
-    }
-    if (h.graphql_ok && !h.excel_query_ok) {
-      return "La API responde, pero no permite generateProductsExcel / falta permiso / query no existe. " + (h.error ?? "");
+    if (!h.excel_query_ok && h.error) {
+      return errorLabel(h.error_code, h.error);
     }
     return null;
   }
@@ -224,15 +231,12 @@ function HealthCard({
       {health && (
         <div className="mb-4 space-y-2">
           <Row label="Endpoint" value={<span className="text-[#AAA] text-xs break-all">{health.endpoint_used}</span>} />
-          <Row label="Conectividad DNS/Red" value={statusBadge(health.dns_ok, "OK", "Sin conexión")} />
-          <Row label="GraphQL válido" value={statusBadge(health.graphql_ok, "OK", "Fallo")} />
+          <Row label="Token" value={badge(health.token_ok, "Configurado", "Falta")} />
+          <Row label="Conectividad DNS/Red" value={badge(health.dns_ok, "OK", "Sin conexión")} />
           <Row
             label="generateProductsExcel"
-            value={statusBadge(health.excel_query_ok, "Disponible", "No disponible")}
+            value={badge(health.excel_query_ok, "Disponible", "No disponible")}
           />
-          {health.details.typename && (
-            <Row label="__typename" value={<span className="text-[#AAA] text-xs">{health.details.typename}</span>} />
-          )}
           {health.details.excelResponseKeys.length > 0 && (
             <Row
               label="Claves respuesta"
@@ -240,13 +244,13 @@ function HealthCard({
             />
           )}
 
-          {errorMessage(health) && (
+          {resolvedError(health) && (
             <div className="mt-3 bg-red-500/10 border border-red-500/30 rounded-xl p-3">
-              <p className="text-red-300 text-xs break-words">{errorMessage(health)}</p>
+              <p className="text-red-300 text-xs break-words">{resolvedError(health)}</p>
             </div>
           )}
 
-          {health.dns_ok && health.graphql_ok && health.excel_query_ok && (
+          {health.token_ok && health.dns_ok && health.excel_query_ok && (
             <div className="mt-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
               <p className="text-emerald-300 text-xs">
                 Conexión verificada. Puedes sincronizar el catálogo.
@@ -288,18 +292,30 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
 
 /* ─── Auto sync card ─────────────────────────────────────────────── */
 function AutoSyncCard({
-  graphqlOk,
+  tokenOk,
+  dnsOk,
   excelOk,
+  healthChecked,
 }: {
-  graphqlOk: boolean | null;
+  tokenOk: boolean | null;
+  dnsOk: boolean | null;
   excelOk: boolean | null;
+  healthChecked: boolean;
 }) {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const canSync = graphqlOk === true;
-  const excelFailed = graphqlOk === true && excelOk === false;
+  // Sync button enabled only when token + dns + excel all OK
+  const canSync = tokenOk === true && dnsOk === true && excelOk === true;
+
+  function disabledReason(): string | null {
+    if (!healthChecked) return "Comprueba la conexión antes de sincronizar.";
+    if (tokenOk === false) return "Falta configurar el token de la API.";
+    if (dnsOk === false) return "No se pudo conectar al endpoint GraphQL (network/TLS/DNS).";
+    if (excelOk === false) return "La API responde, pero generateProductsExcel no está disponible o falta permiso.";
+    return null;
+  }
 
   async function handleSync() {
     setLoading(true);
@@ -308,8 +324,12 @@ function AutoSyncCard({
     try {
       const res = await fetch("/api/promoonline/sync-products", { method: "POST" });
       const data = await res.json();
-      if (!res.ok) setError(data.error || "Error desconocido");
-      else setResult(data);
+      if (!res.ok) {
+        const code = data.error as string | undefined;
+        setError(errorLabel(code ?? null, data.message ?? data.error ?? "Error desconocido"));
+      } else {
+        setResult(data);
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error de red");
     } finally {
@@ -317,28 +337,19 @@ function AutoSyncCard({
     }
   }
 
+  const reason = disabledReason();
+
   return (
     <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
       <p className="text-[#888] text-xs uppercase tracking-widest mb-2">Sincronizar desde API</p>
       <p className="text-[#555] text-xs mb-4">
         Presiona el botón para generar y cargar el Excel automáticamente desde la API de Promocionales en Línea.
-        {graphqlOk === null && (
-          <span className="text-yellow-500/80"> Comprueba la conexión primero.</span>
-        )}
       </p>
-
-      {excelFailed && (
-        <div className="mb-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3">
-          <p className="text-yellow-300 text-xs">
-            La API responde, pero no permite <code>generateProductsExcel</code> / falta permiso / query no existe.
-          </p>
-        </div>
-      )}
 
       <button
         onClick={handleSync}
         disabled={loading || !canSync}
-        title={!canSync ? "Comprueba la conexión antes de sincronizar" : undefined}
+        title={reason ?? undefined}
         className="w-full bg-[#14C6C9] hover:bg-[#11b3b6] disabled:bg-[#14C6C9]/30 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-colors duration-200 uppercase tracking-widest text-sm"
       >
         {loading ? (
@@ -354,15 +365,8 @@ function AutoSyncCard({
         )}
       </button>
 
-      {!canSync && graphqlOk === null && (
-        <p className="mt-2 text-center text-[#555] text-[10px]">
-          Botón habilitado después de comprobar conexión exitosa.
-        </p>
-      )}
-      {!canSync && graphqlOk === false && (
-        <p className="mt-2 text-center text-red-400/70 text-[10px]">
-          No disponible: la conexión GraphQL falló.
-        </p>
+      {reason && !loading && (
+        <p className="mt-2 text-center text-[#555] text-[10px]">{reason}</p>
       )}
 
       {result && (
