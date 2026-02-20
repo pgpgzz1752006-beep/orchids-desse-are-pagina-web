@@ -1,14 +1,9 @@
 import { NextResponse } from 'next/server'
 import axios from 'axios'
+import { resolvePromoToken, buildGraphQLHeaders, classifyGraphQLError } from '@/lib/promoAuth'
 
 const GRAPHQL_PRIMARY  = 'https://www.promocionalesenlinea.net/graphql'
 const GRAPHQL_FALLBACK = 'https://promocionalesenlinea.net/graphql'
-
-const HEADERS = {
-  'Content-Type': 'application/json',
-  Accept: 'application/json',
-  'User-Agent': 'Mozilla/5.0',
-}
 
 async function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms))
@@ -24,14 +19,19 @@ interface AttemptResult {
   errorMessage?: string
 }
 
-async function tryPost(url: string, body: object, useAxios: boolean): Promise<AttemptResult> {
+async function tryPost(
+  url: string,
+  body: object,
+  headers: Record<string, string>,
+  useAxios: boolean
+): Promise<AttemptResult> {
   const payload = JSON.stringify(body)
 
   if (!useAxios) {
     try {
       const res = await fetch(url, {
         method: 'POST',
-        headers: HEADERS,
+        headers,
         body: payload,
         redirect: 'follow',
         cache: 'no-store',
@@ -52,7 +52,7 @@ async function tryPost(url: string, body: object, useAxios: boolean): Promise<At
     }
   } else {
     try {
-      const res = await axios.post(url, body, { timeout: 12_000, headers: HEADERS, maxRedirects: 5 })
+      const res = await axios.post(url, body, { timeout: 12_000, headers, maxRedirects: 5 })
       const ct: string = res.headers['content-type'] || ''
       console.log(`[health] axios ${url} status=${res.status} ct=${ct}`)
       if (typeof res.data === 'string') {
@@ -72,7 +72,7 @@ async function tryPost(url: string, body: object, useAxios: boolean): Promise<At
   }
 }
 
-async function probeEndpoint(url: string): Promise<{
+async function probeEndpoint(url: string, headers: Record<string, string>): Promise<{
   dns_ok: boolean
   graphql_ok: boolean
   typename?: string
@@ -81,13 +81,11 @@ async function probeEndpoint(url: string): Promise<{
   errorMessage?: string
   rawText?: string
 }> {
-  // Step 1 – typename probe (minimal)
-  const r1 = await tryPost(url, { query: 'query { __typename }', variables: {} }, false)
+  const r1 = await tryPost(url, { query: 'query { __typename }', variables: {} }, headers, false)
 
   if (!r1.ok) {
-    // Retry with axios before giving up
     await sleep(300)
-    const r2 = await tryPost(url, { query: 'query { __typename }', variables: {} }, true)
+    const r2 = await tryPost(url, { query: 'query { __typename }', variables: {} }, headers, true)
     if (!r2.ok) {
       return {
         dns_ok: false,
@@ -119,21 +117,22 @@ function parseTypenameResult(r: AttemptResult) {
 }
 
 export async function GET() {
-  let endpointUsed = GRAPHQL_PRIMARY
-  let probe = await probeEndpoint(GRAPHQL_PRIMARY)
+  const token = await resolvePromoToken()
+  const headers = buildGraphQLHeaders(token)
 
-  // Fallback to no-www if primary DNS/network failed
+  let endpointUsed = GRAPHQL_PRIMARY
+  let probe = await probeEndpoint(GRAPHQL_PRIMARY, headers)
+
   if (!probe.dns_ok) {
     console.log('[health] Primary failed, trying fallback...')
     await sleep(300)
-    const probe2 = await probeEndpoint(GRAPHQL_FALLBACK)
+    const probe2 = await probeEndpoint(GRAPHQL_FALLBACK, headers)
     if (probe2.dns_ok) {
       endpointUsed = GRAPHQL_FALLBACK
       probe = probe2
     }
   }
 
-  // Step 2 – excel query probe (only if graphql_ok)
   let excel_query_ok = false
   let excelResponseKeys: string[] = []
   let excelError: string | null = null
@@ -142,15 +141,16 @@ export async function GET() {
     const r = await tryPost(
       endpointUsed,
       { query: 'query GenerateProductsExcel { generateProductsExcel }', variables: {} },
+      headers,
       false
     )
     const json = r.json
     if (!r.ok || !json) {
-      excelError = r.errorMessage || `Status ${r.statusCode}: ${r.rawText?.slice(0, 200)}`
+      excelError = classifyGraphQLError({ status: r.statusCode, errorMessage: r.errorMessage, errorCode: r.errorCode })
     } else {
       const errors = json.errors as { message: string }[] | undefined
       if (errors?.length) {
-        excelError = errors[0].message
+        excelError = classifyGraphQLError({ status: r.statusCode, errorMessage: errors[0].message })
       } else {
         const result = (json.data as Record<string, unknown>)?.generateProductsExcel
         if (result !== null && result !== undefined) {
@@ -167,17 +167,22 @@ export async function GET() {
     }
   }
 
+  const probeError = probe.errorMessage
+    ? classifyGraphQLError({ status: probe.statusCode, errorMessage: probe.errorMessage, errorCode: probe.errorCode })
+    : null
+
   const response = {
     endpoint_used: endpointUsed,
     dns_ok: probe.dns_ok,
     graphql_ok: probe.graphql_ok,
     excel_query_ok,
+    token_configured: !!token,
     status: probe.statusCode ?? null,
     details: {
       typename: probe.typename ?? null,
       excelResponseKeys,
     },
-    error: excelError ?? probe.errorMessage ?? (!probe.dns_ok ? `${probe.errorCode}: ${probe.errorMessage}` : null),
+    error: excelError ?? probeError ?? null,
     error_code: probe.errorCode ?? null,
   }
 
