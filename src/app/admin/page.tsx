@@ -27,16 +27,17 @@ export default function AdminPage() {
       const data = await res.json();
       setHealth(data);
     } catch (e) {
-      setHealth({
-        endpoint_used: "—",
-        dns_ok: false,
-        graphql_ok: false,
-        excel_query_ok: false,
-        status: null,
-        details: { typename: null, excelResponseKeys: [] },
-        error: e instanceof Error ? e.message : "Error de red al llamar /health",
-        error_code: "FETCH_FAILED",
-      });
+        setHealth({
+          endpoint_used: "—",
+          dns_ok: false,
+          graphql_ok: false,
+          excel_query_ok: false,
+          token_configured: false,
+          status: null,
+          details: { typename: null, excelResponseKeys: [] },
+          error: e instanceof Error ? e.message : "Error de red al llamar /health",
+          error_code: "FETCH_FAILED",
+        });
     } finally {
       setHealthLoading(false);
     }
