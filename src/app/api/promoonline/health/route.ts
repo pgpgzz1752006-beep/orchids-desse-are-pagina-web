@@ -178,11 +178,21 @@ function classifyError(opts: {
 }
 
 export async function GET() {
-  const token = await resolvePromoToken()
-
-  // ── Gate: no token → stop here ────────────────────────────────────
-  if (!token) {
-    console.log('[health] No token configured — aborting')
+  let token: string
+  try {
+    token = await getAccessToken()
+  } catch (err: unknown) {
+    const e = err as { code?: string; message?: string }
+    const code = e.code ?? 'CREDENTIALS_MISSING'
+    console.log(`[health] Cannot obtain token — ${code}`)
+    const userMsg =
+      code === 'CREDENTIALS_MISSING'
+        ? 'Faltan las credenciales (PROMO_EMAIL / PROMO_PASSWORD).'
+        : code === 'CREDENTIALS_INVALID'
+        ? 'Credenciales inválidas.'
+        : code === 'NETWORK_ERROR'
+        ? 'No se pudo conectar al endpoint para obtener token.'
+        : `Error de login: ${e.message ?? code}`
     return NextResponse.json({
       endpoint_used: GRAPHQL_PRIMARY,
       token_ok: false,
@@ -190,13 +200,18 @@ export async function GET() {
       excel_query_ok: false,
       status: null,
       details: { excelResponseKeys: [] },
-      error: 'TOKEN_MISSING',
-      error_code: 'TOKEN_MISSING',
+      error: userMsg,
+      error_code: code,
     })
   }
 
-  const headers = buildGraphQLHeaders(token)
-  console.log('[health] Token present — probing generateProductsExcel')
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    'User-Agent': 'Mozilla/5.0',
+    Authorization: `Bearer ${token}`,
+  }
+  console.log('[health] Token obtained — probing generateProductsExcel')
 
   // ── Step 1: probe primary endpoint ────────────────────────────────
   let endpointUsed = GRAPHQL_PRIMARY
