@@ -153,26 +153,24 @@ export default function ProductDetailClient({ product, related }: Props) {
             </p>
           )}
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 mt-2">
-            <a
-              href={waLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] active:bg-[#17a952] text-white font-bold text-[15px] px-6 py-3.5 rounded-xl transition-colors duration-200 min-h-[48px]"
-            >
-              <MessageCircle className="w-5 h-5" />
-              Cotizar por WhatsApp
-            </a>
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3 mt-2">
+              <button
+                onClick={handleAddToCart}
+                className="flex items-center justify-center gap-2 bg-[#14C6C9] hover:bg-[#0fa8ab] active:bg-[#0d9699] text-white font-bold text-[15px] px-6 py-3.5 rounded-xl transition-colors duration-200 min-h-[48px]"
+              >
+                {added ? <Check className="w-5 h-5" /> : <ShoppingCart className="w-5 h-5" />}
+                {added ? '¡Agregado!' : 'Agregar al carrito'}
+              </button>
 
-            <Link
-              href={`/productos?category=${product.category_slug}`}
-              className="flex items-center justify-center gap-2 border border-[#D9D9D9] dark:border-[#333] text-[#555] dark:text-[#CCC] hover:border-[#14C6C9] hover:text-[#14C6C9] font-semibold text-[14px] px-6 py-3.5 rounded-xl transition-colors duration-200 min-h-[48px]"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              Volver a productos
-            </Link>
-          </div>
+              <Link
+                href={`/productos?category=${product.category_slug}`}
+                className="flex items-center justify-center gap-2 border border-[#D9D9D9] dark:border-[#333] text-[#555] dark:text-[#CCC] hover:border-[#14C6C9] hover:text-[#14C6C9] font-semibold text-[14px] px-6 py-3.5 rounded-xl transition-colors duration-200 min-h-[48px]"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Volver a productos
+              </Link>
+            </div>
 
           {/* Stock badge */}
           {product.stock !== null && product.stock > 0 && (
