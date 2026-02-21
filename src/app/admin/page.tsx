@@ -67,13 +67,19 @@ export default function AdminPage() {
         {/* Health check */}
         <HealthCard health={health} loading={healthLoading} onCheck={checkHealth} />
 
-        {/* Auto sync from API */}
-        <AutoSyncCard
-          tokenOk={health?.token_ok ?? null}
-          excelOk={health?.excel_query_ok ?? null}
-          dnsOk={health?.dns_ok ?? null}
-          healthChecked={health !== null}
-        />
+          {/* Auth test */}
+          <AuthTestCard />
+
+          {/* Excel generation test */}
+          <ExcelTestCard />
+
+          {/* Auto sync from API */}
+          <AutoSyncCard
+            tokenOk={health?.token_ok ?? null}
+            excelOk={health?.excel_query_ok ?? null}
+            dnsOk={health?.dns_ok ?? null}
+            healthChecked={health !== null}
+          />
 
         {/* Manual Excel upload */}
         <ManualUploadCard />
