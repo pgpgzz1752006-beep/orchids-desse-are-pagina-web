@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import * as XLSX from 'xlsx'
-import axios from 'axios'
 import { supabaseAdmin } from '@/lib/supabase'
 import { mapToSlug, detectColumn } from '@/lib/categoryMapper'
-import { resolvePromoToken, buildGraphQLHeaders, classifyGraphQLError } from '@/lib/promoAuth'
+import { authedRequest } from '@/lib/promoonlineAuth'
 
-const GRAPHQL_PRIMARY   = 'https://www.promocionalesenlinea.net/graphql'
-const GRAPHQL_FALLBACK  = 'https://promocionalesenlinea.net/graphql'
-const GRAPHQL_ENDPOINT  = process.env.GRAPHQL_ENDPOINT || GRAPHQL_PRIMARY
+const EXCEL_QUERY = `
+  query GenerateProductsExcel {
+    generateProductsExcel {
+      file
+      message
+    }
+  }
+`
 
-const GQL_QUERY = 'query GenerateProductsExcel { generateProductsExcel }'
+interface ExcelData {
+  generateProductsExcel: { file: string; message: string }
+}
 
 interface ProductRow {
   sku: string
@@ -22,114 +28,6 @@ interface ProductRow {
   is_best_seller: boolean
   is_recommended: boolean
   updated_at: string
-}
-
-// ── Retry helper ─────────────────────────────────────────────────
-async function sleep(ms: number) {
-  return new Promise((r) => setTimeout(r, ms))
-}
-
-type GQLResult = {
-  data?: Record<string, unknown>
-  errors?: { message: string }[]
-  rawText?: string
-  statusCode?: number
-  networkError?: string
-}
-
-// ── Single attempt against one URL ───────────────────────────────
-async function tryFetch(
-  url: string,
-  headers: Record<string, string>,
-  useAxios: boolean
-): Promise<GQLResult> {
-  const body = JSON.stringify({ query: GQL_QUERY, variables: {} })
-
-  if (!useAxios) {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers,
-      body,
-      redirect: 'follow',
-      cache: 'no-store',
-    })
-    const ct = res.headers.get('content-type') || ''
-    console.log(`[sync] fetch status=${res.status} content-type=${ct} url=${url}`)
-    const rawText = await res.text()
-    console.log(`[sync] body preview: ${rawText.slice(0, 500)}`)
-    if (!ct.includes('json')) return { rawText, statusCode: res.status }
-    const json = JSON.parse(rawText)
-    return { data: json.data, errors: json.errors, statusCode: res.status }
-  } else {
-    const res = await axios.post(url, { query: GQL_QUERY, variables: {} }, {
-      timeout: 20_000,
-      headers,
-      maxRedirects: 5,
-    })
-    const ct: string = res.headers['content-type'] || ''
-    console.log(`[sync] axios status=${res.status} content-type=${ct} url=${url}`)
-    if (typeof res.data === 'string') {
-      console.log(`[sync] axios body preview: ${(res.data as string).slice(0, 500)}`)
-      return { rawText: res.data as string, statusCode: res.status }
-    }
-    const json = res.data as { data?: Record<string, unknown>; errors?: { message: string }[] }
-    return { data: json.data, errors: json.errors, statusCode: res.status }
-  }
-}
-
-// ── Fetch GraphQL: primary www → fallback no-www → axios ─────────
-async function fetchGraphQL(headers: Record<string, string>): Promise<GQLResult> {
-  const attempts: { url: string; useAxios: boolean; delay: number }[] = [
-    { url: GRAPHQL_ENDPOINT,  useAxios: false, delay: 0    },
-    { url: GRAPHQL_ENDPOINT,  useAxios: false, delay: 500  },
-    { url: GRAPHQL_FALLBACK,  useAxios: false, delay: 0    },
-    { url: GRAPHQL_FALLBACK,  useAxios: true,  delay: 1500 },
-  ]
-
-  let lastResult: GQLResult = { networkError: 'All attempts exhausted' }
-
-  for (const attempt of attempts) {
-    if (attempt.delay > 0) await sleep(attempt.delay)
-    const tag = `${attempt.useAxios ? 'axios' : 'fetch'} → ${attempt.url}`
-    console.log(`[sync] trying ${tag}`)
-    try {
-      const result = await tryFetch(attempt.url, headers, attempt.useAxios)
-      if (result.statusCode !== undefined || result.data) return result
-      lastResult = result
-    } catch (err: unknown) {
-      const e = err as NodeJS.ErrnoException & { cause?: unknown }
-      console.error(
-        `[sync] error ${tag} name=${e.name} msg=${e.message} cause=${JSON.stringify(e.cause)}`
-      )
-      if (axios.isAxiosError(err) && err.response) {
-        const rawText = typeof err.response.data === 'string'
-          ? err.response.data
-          : JSON.stringify(err.response.data)
-        console.log(`[sync] axios error body: ${rawText.slice(0, 500)}`)
-        return { rawText, statusCode: err.response.status, networkError: e.message }
-      }
-      lastResult = { networkError: e.message }
-    }
-  }
-
-  return lastResult
-}
-
-// ── Classify error for UI ─────────────────────────────────────────
-function classifyError(result: GQLResult): string {
-  if (result.networkError && !result.statusCode) {
-    return classifyGraphQLError({ errorMessage: result.networkError })
-  }
-  if (result.statusCode === 401 || result.statusCode === 403) {
-    return classifyGraphQLError({ status: result.statusCode })
-  }
-  if (result.errors?.length) {
-    return classifyGraphQLError({ status: result.statusCode, errorMessage: result.errors[0].message })
-  }
-  if (result.rawText) {
-    return `El servidor no devolvió JSON. Status ${result.statusCode}. Respuesta: ${result.rawText.slice(0, 300)}`
-  }
-  return `Error desconocido (status ${result.statusCode})`
 }
 
 export async function POST(req: NextRequest) {
