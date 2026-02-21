@@ -66,8 +66,8 @@ export default function CategoriesSection() {
       </div>
 
       {/* Categories Grid — full width, minimal padding */}
-      <div className="w-full px-2 md:px-3">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
+        <div className="w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
           {categories.map((category, index) => (
             <Link
               key={category.label}
