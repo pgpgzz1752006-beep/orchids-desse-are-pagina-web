@@ -81,10 +81,13 @@ export default function AdminPage() {
             healthChecked={health !== null}
           />
 
-        {/* Manual Excel upload */}
-        <ManualUploadCard />
+          {/* Manual Excel upload */}
+          <ManualUploadCard />
 
-        <div className="text-center pt-2">
+          {/* DB cleanup */}
+          <CleanupCard />
+
+          <div className="text-center pt-2">
           <Link href="/" className="text-[#14C6C9] text-xs hover:underline">
             ← Volver al sitio
           </Link>
