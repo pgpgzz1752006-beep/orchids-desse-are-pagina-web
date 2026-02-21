@@ -94,8 +94,7 @@ export default async function ProductoPage({ params }: { params: { slug: string 
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300">
-      <Header />
-      <ProductDetailClient
+        <ProductDetailClient
         product={{ ...product, description, image_url: imageUrl }}
         related={related}
       />
