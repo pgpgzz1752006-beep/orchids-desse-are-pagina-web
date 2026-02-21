@@ -89,7 +89,7 @@ export async function authedRequest<T = unknown>(
   variables: Record<string, unknown> = {}
 ): Promise<import("./promoonlineClient").GQLResponse<T>> {
   const token = await getAccessToken();
-  const res = await graphqlRequest<T>(query, variables, token);
+  const res = await graphqlRequest<T>(query, variables, token, "GRAPHQL_CALL");
 
   // Check for auth errors in GraphQL errors array
   const authError = res.errors?.find(
