@@ -227,32 +227,35 @@ export async function POST(req: NextRequest) {
       const chunk = products.slice(i, i + CHUNK_SIZE)
       const chunkSkus = chunk.map((p) => p.sku)
 
-      // Fetch existing values for these SKUs
-      const { data: existing } = await supabaseAdmin
-        .from('products')
-        .select('sku, price, image_url')
-        .in('sku', chunkSkus)
+        // Fetch existing values for these SKUs
+        const { data: existing } = await supabaseAdmin
+          .from('products')
+          .select('sku, price, image_url, slug')
+          .in('sku', chunkSkus)
 
-      const existingMap = new Map<string, { price: number | null; image_url: string | null }>()
-      if (existing) {
-        for (const row of existing) {
-          existingMap.set(row.sku as string, {
-            price: row.price as number | null,
-            image_url: row.image_url as string | null,
-          })
+        const existingMap = new Map<string, { price: number | null; image_url: string | null; slug: string | null }>()
+        if (existing) {
+          for (const row of existing) {
+            existingMap.set(row.sku as string, {
+              price: row.price as number | null,
+              image_url: row.image_url as string | null,
+              slug: row.slug as string | null,
+            })
+          }
         }
-      }
 
-      // Merge: never overwrite existing price/image_url with null
-      const mergedChunk = chunk.map((p) => {
-        const ex = existingMap.get(p.sku)
-        if (!ex) return p
-        return {
-          ...p,
-          price: p.price ?? ex.price,
-          image_url: p.image_url ?? ex.image_url,
-        }
-      })
+        // Merge: never overwrite existing price/image_url with null
+        const mergedChunk = chunk.map((p) => {
+          const ex = existingMap.get(p.sku)
+          if (!ex) return p
+          return {
+            ...p,
+            price: p.price ?? ex.price,
+            image_url: p.image_url ?? ex.image_url,
+            // keep existing slug if already set (stable URLs)
+            slug: ex.slug ?? p.slug,
+          }
+        })
 
       const { data, error } = await supabaseAdmin
         .from('products')
