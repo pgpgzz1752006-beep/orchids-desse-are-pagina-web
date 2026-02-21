@@ -27,35 +27,7 @@ type CartItem = {
   color: string;
 };
 
-const initialItems: CartItem[] = [
-  {
-    id: 1,
-    name: "BOLSA-MOCHILA MÁGICA SOCCER MÉXICO",
-    sku: "SOC-075",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-075-1770140354033.jpg?width=400&height=400&resize=contain",
-    price: 320,
-    quantity: 2,
-    color: "Negro",
-  },
-  {
-    id: 2,
-    name: "VASO CHAMPION ROJO",
-    sku: "SOC-048-R",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-048-R-1770140355309.jpg?width=400&height=400&resize=contain",
-    price: 185,
-    quantity: 1,
-    color: "Rojo",
-  },
-  {
-    id: 3,
-    name: "BALÓN SPORT NEGRO",
-    sku: "SOC-350-N",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-350-N-1770140350957.jpg?width=400&height=400&resize=contain",
-    price: 450,
-    quantity: 1,
-    color: "Negro",
-  },
-];
+const initialItems: CartItem[] = [];
 
 export default function CarritoPage() {
   const [items, setItems] = useState<CartItem[]>(initialItems);
