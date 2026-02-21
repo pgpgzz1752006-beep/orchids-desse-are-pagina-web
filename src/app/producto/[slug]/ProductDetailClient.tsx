@@ -55,13 +55,24 @@ export default function ProductDetailClient({ product, related }: Props) {
   const mainImage = parseImageUrl(product.image_url)
   const [activeImage, setActiveImage] = useState(mainImage)
   const [imgError, setImgError] = useState(false)
+  const [added, setAdded] = useState(false)
 
-  const waMessage = encodeURIComponent(
-    `Hola, me interesa cotizar: ${product.name} (SKU: ${product.sku}).`
-  )
-  const waLink = `https://wa.me/529512424333?text=${waMessage}`
+  const addItem = useCartStore((s) => s.addItem)
 
   const categoryLabel = CATEGORY_LABELS[product.category_slug] ?? product.raw_category ?? product.category_slug
+
+  function handleAddToCart() {
+    addItem({
+      id: product.id,
+      sku: product.sku,
+      name: product.name,
+      slug: product.slug,
+      image: parseImageUrl(product.image_url),
+      price: product.price,
+    })
+    setAdded(true)
+    setTimeout(() => setAdded(false), 2000)
+  }
 
   return (
     <main className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 py-6 md:py-10">
