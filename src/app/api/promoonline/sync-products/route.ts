@@ -20,6 +20,7 @@ interface ExcelData {
 interface ProductRow {
   sku: string
   name: string
+  slug: string
   image_url: string | null
   raw_category: string
   category_slug: string
