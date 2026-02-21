@@ -149,22 +149,7 @@ function ProductsContent() {
           )}
         </div>
 
-        {/* Category chips */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {Object.entries(CATEGORY_LABELS).map(([slug, label]) => (
-            <Link
-              key={slug}
-              href={`/productos?category=${slug}`}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
-                category === slug
-                  ? "bg-[#14C6C9] text-white border-[#14C6C9]"
-                  : "bg-white dark:bg-[#1A1D24] text-[#555] dark:text-[#CCC] border-[#D9D9D9] dark:border-[#333] hover:border-[#14C6C9] hover:text-[#14C6C9]"
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
-        </div>
+
 
           {/* Grid */}
           {loading ? (
