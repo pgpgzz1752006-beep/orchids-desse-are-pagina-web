@@ -652,19 +652,27 @@ function ManualUploadCard() {
         )}
       </label>
 
-      {result && (
-        <div className="mt-4 bg-[#14C6C9]/10 border border-[#14C6C9]/30 rounded-xl p-4 text-sm">
-          <p className="text-[#14C6C9] font-bold mb-3 uppercase tracking-wider text-xs">Resultado</p>
-          <div className="grid grid-cols-2 gap-y-2 text-[#CCC]">
-            <span className="text-[#888]">Total parseados</span>
-            <span className="font-semibold text-white">{String(result.total ?? 0)}</span>
-            <span className="text-[#888]">Importados / Actualizados</span>
-            <span className="font-semibold text-white">{String(result.imported ?? 0)}</span>
-            <span className="text-[#888]">Omitidos</span>
-            <span className="font-semibold text-white">{String(result.skipped ?? 0)}</span>
+        {result && (
+          <div className="mt-4 bg-[#14C6C9]/10 border border-[#14C6C9]/30 rounded-xl p-4 text-sm">
+            <p className="text-[#14C6C9] font-bold mb-3 uppercase tracking-wider text-xs">Resultado</p>
+            <div className="grid grid-cols-2 gap-y-2 text-[#CCC]">
+              <span className="text-[#888]">Total parseados</span>
+              <span className="font-semibold text-white">{String(result.total ?? 0)}</span>
+              <span className="text-[#888]">Nuevos importados</span>
+              <span className="font-semibold text-emerald-300">{String(result.imported ?? 0)}</span>
+              <span className="text-[#888]">Actualizados</span>
+              <span className="font-semibold text-sky-300">{String(result.updated ?? 0)}</span>
+              <span className="text-[#888]">Omitidos</span>
+              <span className="font-semibold text-[#AAA]">{String(result.skipped ?? 0)}</span>
+            </div>
+            <Link
+              href="/productos"
+              className="mt-4 block text-center text-[#14C6C9] text-xs underline hover:text-white transition-colors"
+            >
+              Ver productos →
+            </Link>
           </div>
-        </div>
-      )}
+        )}
 
       {error && (
         <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-sm">
