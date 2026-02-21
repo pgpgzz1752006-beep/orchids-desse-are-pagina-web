@@ -53,21 +53,7 @@ export default function CarritoPage() {
         ))}
       </div>
 
-      {/* Mini Header */}
-      <div className="w-full flex items-center justify-between py-4 px-6 md:px-10 bg-white dark:bg-[#0E0F12] border-b border-[#E8E8E8] dark:border-[#1E2028]">
-        <Link href="/" className="flex items-center gap-2 text-[#7A7A7A] hover:text-[#14C6C9] transition-colors duration-200 text-[13px] font-medium">
-          <ArrowLeft className="w-4 h-4" />
-          Seguir comprando
-        </Link>
-        <Link href="/">
-          <Image src="/brand/logo-light.webp" alt="Diseñare Promocionales" width={160} height={60} className="h-[42px] w-auto object-contain block dark:hidden" priority />
-          <Image src="/brand/logo-dark.webp" alt="Diseñare Promocionales" width={160} height={60} className="h-[42px] w-auto object-contain hidden dark:block" priority />
-        </Link>
-        <div className="flex items-center gap-2 text-[#111] dark:text-white text-[13px] font-semibold">
-          <ShoppingCart className="w-5 h-5 text-[#14C6C9]" />
-          <span>{totalItems} producto{totalItems !== 1 ? "s" : ""}</span>
-        </div>
-      </div>
+
 
       {/* Page title */}
       <div className="w-full bg-white dark:bg-[#0E0F12] pt-8 pb-6 px-6 md:px-10 lg:px-16">
