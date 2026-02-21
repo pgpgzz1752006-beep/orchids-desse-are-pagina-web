@@ -66,13 +66,13 @@ export default function CategoriesSection() {
         </div>
 
         {/* Categories Grid */}
-        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-8 lg:px-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
+        <div className="w-full max-w-[1440px] mx-auto px-3 md:px-4 lg:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
               {categories.map((category, index) => (
                 <Link
                   key={category.label}
                   href={category.href}
-                  className="group relative h-[220px] md:h-[260px] lg:h-[290px] overflow-hidden block will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-md"
+                  className="group relative h-[260px] md:h-[320px] lg:h-[380px] overflow-hidden block will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-md"
                 >
                   {/* Background Image */}
                   <Image
