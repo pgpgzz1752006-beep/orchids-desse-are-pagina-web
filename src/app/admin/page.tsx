@@ -587,6 +587,97 @@ function ExcelTestCard() {
   );
 }
 
+/* ─── Cleanup duplicates card ────────────────────────────────────── */
+interface CleanupResult {
+  ok: boolean
+  duplicates_removed: number
+  products_missing_price: number
+  top_dupes: { sku: string; count: number }[]
+}
+
+function CleanupCard() {
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<CleanupResult | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  async function handleCleanup() {
+    setLoading(true)
+    setResult(null)
+    setError(null)
+    try {
+      const res = await fetch('/api/admin/cleanup-duplicates', { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) setError(data.error ?? 'Error desconocido')
+      else setResult(data as CleanupResult)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Error de red')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <p className="text-[#888] text-xs uppercase tracking-widest mb-2">Limpiar duplicados en BD</p>
+      <p className="text-[#555] text-xs mb-4">
+        Detecta SKUs duplicados en Supabase, conserva el mejor registro (con precio e imagen) y elimina el resto.
+      </p>
+
+      <button
+        onClick={handleCleanup}
+        disabled={loading}
+        className="w-full border border-[#333] hover:border-yellow-500 text-[#888] hover:text-yellow-400 text-xs py-2.5 rounded-xl transition-colors uppercase tracking-wider disabled:opacity-40 flex items-center justify-center gap-2"
+      >
+        {loading ? (
+          <>
+            <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Limpiando...
+          </>
+        ) : (
+          'Limpiar duplicados'
+        )}
+      </button>
+
+      {result && (
+        <div className="mt-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 text-sm space-y-3">
+          <p className="text-yellow-300 font-bold uppercase tracking-wider text-xs">Resultado limpieza</p>
+          <div className="grid grid-cols-2 gap-y-2 text-[#CCC]">
+            <span className="text-[#888]">Duplicados eliminados</span>
+            <span className="font-semibold text-yellow-300">{result.duplicates_removed}</span>
+            <span className="text-[#888]">Sin precio</span>
+            <span className="font-semibold text-[#AAA]">{result.products_missing_price}</span>
+          </div>
+          {result.top_dupes.length > 0 && (
+            <div>
+              <p className="text-[#555] text-[10px] uppercase tracking-wider mb-1">Top SKUs duplicados</p>
+              <div className="space-y-1 max-h-32 overflow-y-auto pr-1">
+                {result.top_dupes.map((d) => (
+                  <div key={d.sku} className="flex justify-between text-[10px]">
+                    <span className="text-[#AAA] font-mono">{d.sku}</span>
+                    <span className="text-yellow-400">{d.count} copias</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {result.duplicates_removed === 0 && (
+            <p className="text-emerald-300 text-xs">✅ No se encontraron duplicados.</p>
+          )}
+        </div>
+      )}
+
+      {error && (
+        <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-xl p-3">
+          <p className="text-red-300 text-xs break-words">{error}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 /* ─── Manual Excel upload card ───────────────────────────────────── */
 function ManualUploadCard() {
   const [loading, setLoading] = useState(false);
