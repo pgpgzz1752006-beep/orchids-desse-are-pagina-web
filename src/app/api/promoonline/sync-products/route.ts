@@ -49,65 +49,44 @@ export async function POST(req: NextRequest) {
       workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' })
     } else {
       // ── Auto sync from GraphQL ──────────────────────────────
-          const token = await resolvePromoToken()
-          if (!token) {
-            return NextResponse.json(
-              { error: 'TOKEN_MISSING', message: 'Falta configurar el token de la API.' },
-              { status: 401 }
-            )
-          }
-          const gqlHeaders = buildGraphQLHeaders(token)
-          console.log(`[sync] Starting GraphQL fetch → ${GRAPHQL_ENDPOINT} (token=set)`)
+      console.log('[sync] Requesting generateProductsExcel via authedRequest')
+      const gqlRes = await authedRequest<ExcelData>(EXCEL_QUERY)
 
-        const gqlResult = await fetchGraphQL(gqlHeaders)
-
-      if (!gqlResult.data && (gqlResult.networkError || gqlResult.rawText || gqlResult.errors)) {
-        const msg = classifyError(gqlResult)
-        return NextResponse.json({ error: msg, _debug: gqlResult }, { status: 502 })
+      if (gqlRes.errors?.length) {
+        const msg = gqlRes.errors[0].message
+        console.error('[sync] GraphQL error:', msg)
+        const code =
+          msg.toLowerCase().includes('no authentication token') ||
+          msg.toLowerCase().includes('token expired') ||
+          msg.toLowerCase().includes('unauthenticated')
+            ? 'TOKEN_INVALID'
+            : 'GRAPHQL_ERROR'
+        const userMsg =
+          code === 'TOKEN_INVALID'
+            ? 'Token inválido o expirado.'
+            : `Error GraphQL: ${msg}`
+        return NextResponse.json({ error: code, message: userMsg }, { status: 400 })
       }
 
-      const excelResult = gqlResult.data?.generateProductsExcel
-
-      if (!excelResult) {
+      const payload = gqlRes.data?.generateProductsExcel
+      if (!payload?.file) {
         return NextResponse.json(
-          { error: 'generateProductsExcel returned null/undefined', _debug: gqlResult.data },
+          { error: 'NO_FILE', message: 'La API respondió pero no devolvió un archivo.' },
           { status: 502 }
         )
       }
 
-      if (typeof excelResult === 'string') {
-        if ((excelResult as string).startsWith('http')) {
-          console.log(`[sync] Downloading Excel from URL: ${(excelResult as string).slice(0, 100)}`)
-          const fileRes = await fetch(excelResult as string)
-          const arrayBuffer = await fileRes.arrayBuffer()
-          workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' })
-        } else {
-          console.log(`[sync] Decoding base64 Excel, length=${(excelResult as string).length}`)
-          const buffer = Buffer.from(excelResult as string, 'base64')
-          workbook = XLSX.read(buffer, { type: 'buffer' })
-        }
-      } else if (typeof excelResult === 'object' && excelResult !== null) {
-        const obj = excelResult as Record<string, string>
-        const url = obj.url || obj.downloadUrl || obj.fileUrl
-        const b64 = obj.base64 || obj.file || obj.data
-        if (url) {
-          console.log(`[sync] Downloading Excel from object URL: ${url.slice(0, 100)}`)
-          const fileRes = await fetch(url)
-          const arrayBuffer = await fileRes.arrayBuffer()
-          workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' })
-        } else if (b64) {
-          console.log(`[sync] Decoding base64 from object, length=${b64.length}`)
-          const buffer = Buffer.from(b64, 'base64')
-          workbook = XLSX.read(buffer, { type: 'buffer' })
-        } else {
-          return NextResponse.json(
-            { error: 'No se pudo detectar el formato de ExcelResponse', _debug: obj },
-            { status: 422 }
-          )
-        }
-      } else {
-        return NextResponse.json({ error: 'Tipo inesperado en ExcelResponse' }, { status: 422 })
+      const fileUrl = payload.file
+      console.log(`[sync] Downloading Excel from: ${fileUrl.slice(0, 100)}`)
+      const fileRes = await fetch(fileUrl)
+      if (!fileRes.ok) {
+        return NextResponse.json(
+          { error: 'DOWNLOAD_FAILED', message: `No se pudo descargar el Excel (status ${fileRes.status})` },
+          { status: 502 }
+        )
       }
+      const arrayBuffer = await fileRes.arrayBuffer()
+      workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' })
     }
 
     // ── Parse sheet ─────────────────────────────────────────────
