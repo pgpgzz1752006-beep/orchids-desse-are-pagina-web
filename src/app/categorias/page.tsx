@@ -177,7 +177,7 @@ export default function CategoriasPage() {
 
   return (
     <main className="min-h-screen bg-white dark:bg-[#0E0F12] text-[#111111] dark:text-white">
-        <div className="w-full px-2 py-10">
+        <div className="w-full pl-3 pr-4 md:pl-4 md:pr-6 py-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
           {categorias.map((cat) => (
             <div
