@@ -370,11 +370,11 @@ className="w-full bg-white dark:bg-[#0E0F12] py-6 md:py-16 lg:py-[72px] transiti
                     </div>
 
                     {/* Product Name */}
-                    <p className="font-['Montserrat'] text-[10px] md:text-[11px] lg:text-[11px] font-medium text-[#333333] dark:text-[#333333] text-center uppercase leading-[1.4] min-h-[28px]">
-                      {product.name}
-                    </p>
-                  </a>
-                </div>
+                      <p className="font-['Montserrat'] text-[10px] md:text-[11px] lg:text-[11px] font-medium text-[#333333] dark:text-[#333333] text-center uppercase leading-[1.4] min-h-[28px]">
+                        {product.name}
+                      </p>
+                    </Link>
+                  </div>
               ))}
             </div>
           </div>
