@@ -18,12 +18,12 @@ const staticFeatured = [
   { name: "TERMO SOCCER ACERO", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-090-1770140352614.jpg?width=400&height=400&resize=contain", href: "/productos/termo-soccer-acero" },
 ];
 
-function dbProductsToStrip(rows: { sku: string; name: string; image_url: string | null; category_slug: string }[]) {
+function dbProductsToStrip(rows: { sku: string; name: string; image_url: string | null; category_slug: string; slug: string | null }[]) {
   return rows.map((p) => ({
     name: p.name,
     image: p.image_url || PLACEHOLDER_IMAGE,
-    href: `/productos/${p.sku.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-  }));
+    href: p.slug ? `/producto/${p.slug}` : `/productos?category=${p.category_slug}`,
+  }))
 }
 
 async function getBestSellers() {
