@@ -56,29 +56,33 @@ const categories = [
 
 export default function CategoriesSection() {
   return (
-<section className="w-full bg-white dark:bg-[#0E0F12] py-12 md:py-16 lg:py-[72px] transition-colors duration-300 ease-in-out">
-        {/* Title */}
-          <div className="w-full max-w-[1440px] mx-auto px-4 mb-8 md:mb-10 lg:mb-12">
+    <section className="w-full bg-white dark:bg-[#0E0F12] py-12 md:py-16 lg:py-[72px] transition-colors duration-300 ease-in-out">
+      {/* Title */}
+      <div className="w-full max-w-[1440px] mx-auto px-4 mb-8 md:mb-10 lg:mb-12">
+        <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
+          <span className="font-normal">CATEGORÍAS </span>
+          <span className="font-extrabold">DESTACADAS</span>
+        </h2>
+      </div>
 
-  ...
-
-          <div className="w-full px-2 md:px-3">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
-              {categories.map((category, index) => (
-                <Link
-                  key={category.label}
-                  href={category.href}
-                  className="group relative h-[260px] md:h-[320px] lg:h-[380px] overflow-hidden block will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-md"
-                >
-                  {/* Background Image */}
-                  <Image
-                    src={category.image}
-                    alt={category.label}
-                    fill
-                    className="object-cover transition-transform duration-[260ms] ease-out group-hover:scale-[1.08]"
-                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
-                  loading={index < 4 ? "eager" : "lazy"}
-                />
+      {/* Categories Grid — full width, minimal padding */}
+      <div className="w-full px-2 md:px-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
+          {categories.map((category, index) => (
+            <Link
+              key={category.label}
+              href={category.href}
+              className="group relative h-[260px] md:h-[300px] lg:h-[320px] overflow-hidden block will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:scale-[1.01] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-md"
+            >
+              {/* Background Image */}
+              <Image
+                src={category.image}
+                alt={category.label}
+                fill
+                className="object-cover transition-transform duration-[260ms] ease-out group-hover:scale-[1.06]"
+                sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+                loading={index < 4 ? "eager" : "lazy"}
+              />
 
               {/* Color Overlay at Bottom */}
               <div
