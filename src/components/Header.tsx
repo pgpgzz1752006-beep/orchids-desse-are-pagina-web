@@ -136,13 +136,18 @@ export default function Header() {
             >
               <User className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
             </a>
-            <a
-              href="/carrito"
-              className="p-1.5 md:p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] dark:hover:text-white hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
-              aria-label="Carrito"
-            >
-              <ShoppingCart className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
-          </a>
+              <a
+                href="/carrito"
+                className="relative p-1.5 md:p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] dark:hover:text-white hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
+                aria-label="Carrito"
+              >
+                <ShoppingCart className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#14C6C9] text-white text-[10px] font-bold flex items-center justify-center leading-none">
+                    {cartCount > 99 ? "99+" : cartCount}
+                  </span>
+                )}
+            </a>
 
           {/* Mobile Menu Button */}
           <button
