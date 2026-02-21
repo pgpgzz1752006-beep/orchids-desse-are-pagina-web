@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Search, User, ShoppingCart, Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
+import { useCartStore } from "@/lib/cartStore";
 
 const navItems = [
   { label: "CATEGORÍAS", href: "/categorias", active: false },
