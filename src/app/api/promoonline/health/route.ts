@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import axios from 'axios'
-import { resolvePromoToken, buildGraphQLHeaders } from '@/lib/promoAuth'
+import { getAccessToken } from '@/lib/promoonlineAuth'
 
 const GRAPHQL_PRIMARY  = 'https://www.promocionalesenlinea.net/graphql'
 const GRAPHQL_FALLBACK = 'https://promocionalesenlinea.net/graphql'
