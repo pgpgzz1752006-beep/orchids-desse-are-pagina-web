@@ -10,12 +10,12 @@ import { supabase } from "@/lib/supabase";
 const PLACEHOLDER_IMAGE = "/placeholder-product.png";
 
 const staticFeatured = [
-  { name: "BOLSA-MOCHILA MÁGICA SOCCER", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-075-1770140354033.jpg?width=400&height=400&resize=contain", href: "/productos/bolsa-mochila-magica-soccer-mexico" },
-  { name: "VASO CHAMPION ROJO", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-048-R-1770140355309.jpg?width=400&height=400&resize=contain", href: "/productos/vaso-champion-rojo" },
-  { name: "BALÓN SPORT NEGRO", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-350-N-1770140350957.jpg?width=400&height=400&resize=contain", href: "/productos/balon-sport-negro" },
-  { name: "SET BBQ SOCCER", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-090-1770140352614.jpg?width=400&height=400&resize=contain", href: "/productos/set-bbq-soccer" },
-  { name: "PELOTA ANTI-STRESS FÚTBOL", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-011-01_1-1770140356623.jpg?width=400&height=400&resize=contain", href: "/productos/pelota-antistress-futbol" },
-  { name: "TERMO SOCCER ACERO", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-090-1770140352614.jpg?width=400&height=400&resize=contain", href: "/productos/termo-soccer-acero" },
+  { name: "VASO CHAMPION", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-048-R-1770140355309.jpg?width=400&height=400&resize=contain", href: "/producto/vaso-champion-soc-048" },
+  { name: "BALÓN SPORT", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-350-N-1770140350957.jpg?width=400&height=400&resize=contain", href: "/producto/bal-n-sport-soc-350" },
+  { name: "BALÓN SPACE", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-090-1770140352614.jpg?width=400&height=400&resize=contain", href: "/producto/bal-n-space-soc-650" },
+  { name: "PELOTA ANTI-STRESS COLORFUL", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-011-01_1-1770140356623.jpg?width=400&height=400&resize=contain", href: "/producto/pelota-anti-stress-colorful-soc-910-" },
+  { name: "BALÓN KIRALY", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-075-1770140354033.jpg?width=400&height=400&resize=contain", href: "/producto/bal-n-kiraly-soc-550" },
+  { name: "PARAGUAS SOCCER FIELD", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-090-1770140352614.jpg?width=400&height=400&resize=contain", href: "/producto/paraguas-soccer-field-soc-062" },
 ];
 
 function dbProductsToStrip(rows: { sku: string; name: string; image_url: string | null; category_slug: string; slug: string | null }[]) {
