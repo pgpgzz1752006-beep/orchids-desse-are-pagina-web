@@ -36,8 +36,9 @@ async function login(): Promise<string> {
 
   const res = await graphqlRequest<{ login: { message: string; accessToken: string } }>(
     LOGIN_MUTATION,
-    { email, password }
-    // No token on login request itself
+    { email, password },
+    undefined, // no token on login
+    "LOGIN"
   );
 
   if (res.errors?.length) {
