@@ -104,7 +104,7 @@ export async function authedRequest<T = unknown>(
     console.warn("[promoonlineAuth] auth error detected, renewing token and retrying...");
     invalidateToken();
     const freshToken = await getAccessToken();
-    return graphqlRequest<T>(query, variables, freshToken);
+      return graphqlRequest<T>(query, variables, freshToken, "GRAPHQL_CALL");
   }
 
   return res;
