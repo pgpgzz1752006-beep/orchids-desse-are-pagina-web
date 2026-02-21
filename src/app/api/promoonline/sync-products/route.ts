@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import * as XLSX from 'xlsx'
 import { supabaseAdmin } from '@/lib/supabase'
-import { mapToSlug, detectColumn } from '@/lib/categoryMapper'
+import { mapToSlug, detectColumn, makeProductSlug } from '@/lib/categoryMapper'
 import { authedRequest } from '@/lib/promoonlineAuth'
 
 const EXCEL_QUERY = `
