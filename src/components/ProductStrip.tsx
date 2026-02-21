@@ -272,24 +272,24 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
           <div className="w-full px-2 md:px-4">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {products.slice(0, 6).map((product, index) => (
-                <a
-                  key={`${product.name}-${index}`}
-                  href={product.href}
-                  className="block bg-white dark:bg-white border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2"
-                >
-                  <div className="flex items-center justify-center h-[100px] md:h-[110px] lg:h-[120px] mb-3">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={120}
-                      height={120}
-                      className="max-h-[90px] md:max-h-[100px] lg:max-h-[110px] w-auto object-contain"
-                    />
-                  </div>
-                  <p className="font-['Montserrat'] text-[10px] md:text-[11px] font-medium text-[#333333] dark:text-[#333333] text-center uppercase leading-[1.4] min-h-[28px]">
-                    {product.name}
-                  </p>
-                </a>
+                  <Link
+                    key={`${product.name}-${index}`}
+                    href={product.href}
+                    className="block bg-white dark:bg-white border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2"
+                  >
+                    <div className="flex items-center justify-center h-[100px] md:h-[110px] lg:h-[120px] mb-3">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={120}
+                        height={120}
+                        className="max-h-[90px] md:max-h-[100px] lg:max-h-[110px] w-auto object-contain"
+                      />
+                    </div>
+                    <p className="font-['Montserrat'] text-[10px] md:text-[11px] font-medium text-[#333333] dark:text-[#333333] text-center uppercase leading-[1.4] min-h-[28px]">
+                      {product.name}
+                    </p>
+                  </Link>
               ))}
             </div>
           </div>
