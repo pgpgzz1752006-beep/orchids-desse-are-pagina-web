@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronLeft, ShoppingCart, Check } from 'lucide-react'
 import { useCartStore } from '@/lib/cartStore'
-import { parseImageUrl as parseImg } from '@/lib/imageUtils'
 
 const PLACEHOLDER = '/placeholder-product.png'
 
