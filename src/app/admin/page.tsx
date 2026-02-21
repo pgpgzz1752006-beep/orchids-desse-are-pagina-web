@@ -399,6 +399,130 @@ function AutoSyncCard({
   );
 }
 
+/* ─── Auth test card ─────────────────────────────────────────────── */
+function AuthTestCard() {
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{ ok: boolean; message?: string; error?: string } | null>(null);
+
+  async function testLogin() {
+    setLoading(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/promoonline/auth/login", { method: "POST" });
+      const data = await res.json();
+      setResult(data);
+    } catch (e) {
+      setResult({ ok: false, error: "NETWORK_ERROR", message: e instanceof Error ? e.message : "Error de red" });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <p className="text-[#888] text-xs uppercase tracking-widest mb-2">Probar Login (token)</p>
+      <p className="text-[#555] text-xs mb-4">
+        Prueba las credenciales configuradas y obtiene un access token del servidor.
+      </p>
+
+      <button
+        onClick={testLogin}
+        disabled={loading}
+        className="w-full border border-[#333] hover:border-[#9B59B6] text-[#888] hover:text-[#9B59B6] text-xs py-2.5 rounded-xl transition-colors uppercase tracking-wider disabled:opacity-40 flex items-center justify-center gap-2"
+      >
+        {loading ? (
+          <>
+            <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Probando login...
+          </>
+        ) : (
+          "Probar login (token)"
+        )}
+      </button>
+
+      {result && (
+        <div className={`mt-3 rounded-xl px-4 py-3 text-xs ${result.ok ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-red-500/10 border border-red-500/30"}`}>
+          <span className={result.ok ? "text-emerald-300" : "text-red-300"}>
+            {result.ok ? "✅ " : "❌ "}{result.message ?? result.error ?? "Sin respuesta"}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Excel test card ────────────────────────────────────────────── */
+function ExcelTestCard() {
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{ ok: boolean; file?: string; message?: string; error?: string } | null>(null);
+
+  async function generateExcel() {
+    setLoading(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/promoonline/excel", { method: "POST" });
+      const data = await res.json();
+      setResult(data);
+    } catch (e) {
+      setResult({ ok: false, error: "NETWORK_ERROR", message: e instanceof Error ? e.message : "Error de red" });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <p className="text-[#888] text-xs uppercase tracking-widest mb-2">Generar Excel (API)</p>
+      <p className="text-[#555] text-xs mb-4">
+        Ejecuta <code className="text-[#AAA]">generateProductsExcel</code> con token automático y muestra la URL del archivo.
+      </p>
+
+      <button
+        onClick={generateExcel}
+        disabled={loading}
+        className="w-full border border-[#333] hover:border-[#14C6C9] text-[#888] hover:text-[#14C6C9] text-xs py-2.5 rounded-xl transition-colors uppercase tracking-wider disabled:opacity-40 flex items-center justify-center gap-2"
+      >
+        {loading ? (
+          <>
+            <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Generando Excel...
+          </>
+        ) : (
+          "Generar Excel (API)"
+        )}
+      </button>
+
+      {result && (
+        <div className={`mt-3 rounded-xl px-4 py-3 text-xs space-y-1 ${result.ok ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-red-500/10 border border-red-500/30"}`}>
+          {result.ok ? (
+            <>
+              <p className="text-emerald-300 font-semibold">✅ {result.message}</p>
+              {result.file && (
+                <a
+                  href={result.file}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#14C6C9] underline break-all"
+                >
+                  {result.file}
+                </a>
+              )}
+            </>
+          ) : (
+            <p className="text-red-300">❌ {result.message ?? result.error}</p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─── Manual Excel upload card ───────────────────────────────────── */
 function ManualUploadCard() {
   const [loading, setLoading] = useState(false);
