@@ -18,6 +18,23 @@ interface Product {
   stock: number | null;
 }
 
+/** Extract a usable URL from image_url, which may be stored as a JSON array string */
+function parseImageUrl(raw: string | null): string | null {
+  if (!raw) return null;
+  const trimmed = raw.trim();
+  if (trimmed.startsWith("[")) {
+    try {
+      const arr = JSON.parse(trimmed) as unknown[];
+      const first = arr[0];
+      if (typeof first === "string" && first.startsWith("http")) return first;
+    } catch {
+      // fall through
+    }
+  }
+  if (trimmed.startsWith("http")) return trimmed;
+  return null;
+}
+
 const CATEGORY_LABELS: Record<string, string> = {
   termos: "Termos y cilindros",
   bolsas: "Bolsas y maletas",
