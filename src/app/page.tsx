@@ -29,7 +29,7 @@ function dbProductsToStrip(rows: { sku: string; name: string; image_url: string 
 async function getBestSellers() {
   const { data, error } = await supabase
     .from("products")
-    .select("sku, name, image_url, category_slug")
+    .select("sku, name, image_url, category_slug, slug")
     .eq("is_best_seller", true)
     .limit(24);
   if (error || !data?.length) return null;
@@ -39,7 +39,7 @@ async function getBestSellers() {
 async function getRecommended() {
   const { data, error } = await supabase
     .from("products")
-    .select("sku, name, image_url, category_slug")
+    .select("sku, name, image_url, category_slug, slug")
     .eq("is_recommended", true)
     .limit(24);
   if (error || !data?.length) return null;
