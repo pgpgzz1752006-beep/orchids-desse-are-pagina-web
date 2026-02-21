@@ -78,37 +78,36 @@ export default function Header() {
         {/* Column 2: Desktop Navigation - centered */}
         <nav className="hidden lg:flex items-center justify-self-center min-w-0 max-w-[820px] w-full justify-center gap-5 xl:gap-9 2xl:gap-14 overflow-visible flex-nowrap mr-8">
           {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={(e) => {
-                if (item.href.startsWith("#")) {
-                  e.preventDefault();
-                  const target = document.getElementById(item.href.slice(1));
-                  if (target) {
-                    target.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }
-                }
-              }}
-              className="group relative whitespace-nowrap flex-shrink-0 overflow-visible"
-            >
-              <span
-                className={`
-                  font-['Montserrat'] text-[15px] xl:text-[18px] 2xl:text-[22px] font-medium uppercase tracking-[0.04em]
-                  transition-colors duration-200 ease-out
-                  ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white group-hover:text-[#14C6C9]"}
-                `}
-              >
-                {item.label}
-              </span>
-              {item.active && (
-                <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9] transform scale-x-100 origin-center animate-underline-grow" />
-              )}
-              {!item.active && (
-                <span className="absolute -bottom-2 left-0 w-full h-[2px] bg-[#14C6C9] transform scale-x-0 origin-left transition-transform duration-200 ease-out group-hover:scale-x-100" />
-              )}
-            </a>
-          ))}
+              item.href.startsWith("#") ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const target = document.getElementById(item.href.slice(1));
+                    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
+                  className="group relative whitespace-nowrap flex-shrink-0 overflow-visible"
+                >
+                  <span className={`font-['Montserrat'] text-[15px] xl:text-[18px] 2xl:text-[22px] font-medium uppercase tracking-[0.04em] transition-colors duration-200 ease-out ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white group-hover:text-[#14C6C9]"}`}>
+                    {item.label}
+                  </span>
+                  <span className="absolute -bottom-2 left-0 w-full h-[2px] bg-[#14C6C9] transform scale-x-0 origin-left transition-transform duration-200 ease-out group-hover:scale-x-100" />
+                </a>
+              ) : (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="group relative whitespace-nowrap flex-shrink-0 overflow-visible"
+                >
+                  <span className={`font-['Montserrat'] text-[15px] xl:text-[18px] 2xl:text-[22px] font-medium uppercase tracking-[0.04em] transition-colors duration-200 ease-out ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white group-hover:text-[#14C6C9]"}`}>
+                    {item.label}
+                  </span>
+                  {item.active && <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9] transform scale-x-100 origin-center animate-underline-grow" />}
+                  {!item.active && <span className="absolute -bottom-2 left-0 w-full h-[2px] bg-[#14C6C9] transform scale-x-0 origin-left transition-transform duration-200 ease-out group-hover:scale-x-100" />}
+                </Link>
+              )
+            ))}
         </nav>
 
         {/* Column 3: Action Icons - flush right */}
