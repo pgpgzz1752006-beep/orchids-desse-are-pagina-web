@@ -184,8 +184,8 @@ function ProductsContent() {
               >
                 <div className="flex items-center justify-center h-[140px] mb-3">
                   <Image
-                    src={product.image_url || "/placeholder-product.png"}
-                    alt={product.name}
+                      src={parseImageUrl(product.image_url) || "/placeholder-product.png"}
+                      alt={product.name}
                     width={140}
                     height={140}
                     className="max-h-[130px] w-auto object-contain"
