@@ -58,16 +58,12 @@ export default function CategoriesSection() {
   return (
 <section className="w-full bg-white dark:bg-[#0E0F12] py-12 md:py-16 lg:py-[72px] transition-colors duration-300 ease-in-out">
         {/* Title */}
-          <div className="w-full max-w-[1440px] mx-auto px-3 md:px-4 lg:px-6 mb-8 md:mb-10 lg:mb-12">
-<h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
-              <span className="font-normal">CATEGORÍAS </span>
-              <span className="font-extrabold">DESTACADAS</span>
-            </h2>
-        </div>
+          <div className="w-full max-w-[1440px] mx-auto px-4 mb-8 md:mb-10 lg:mb-12">
 
-        {/* Categories Grid */}
-        <div className="w-full max-w-[1440px] mx-auto px-3 md:px-4 lg:px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
+  ...
+
+          <div className="w-full px-2 md:px-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
               {categories.map((category, index) => (
                 <Link
                   key={category.label}
