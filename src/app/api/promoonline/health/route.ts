@@ -88,7 +88,7 @@ async function probeExcel(
   rawText?: string
   excelResponseKeys: string[]
 }> {
-  const body = { query: 'query GenerateProductsExcel { generateProductsExcel }', variables: {} }
+  const body = { query: 'query GenerateProductsExcel { generateProductsExcel { file message } }', variables: {} }
 
   let r = await tryPost(url, body, headers, false)
 
