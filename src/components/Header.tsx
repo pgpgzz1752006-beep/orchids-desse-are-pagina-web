@@ -169,37 +169,38 @@ export default function Header() {
         <div className="lg:hidden fixed inset-0 top-[132px] bg-white dark:bg-[#0E0F12] z-40 transition-colors duration-300">
           <nav className="flex flex-col items-center pt-12 gap-8">
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="group relative"
-                onClick={(e) => {
-                  setMobileMenuOpen(false);
-                  if (item.href.startsWith("#")) {
-                    e.preventDefault();
-                    setTimeout(() => {
-                      const target = document.getElementById(item.href.slice(1));
-                      if (target) {
-                        target.scrollIntoView({ behavior: "smooth", block: "start" });
-                      }
-                    }, 100);
-                  }
-                }}
-              >
-                <span
-                  className={`
-                    font-['Montserrat'] text-[20px] font-medium uppercase tracking-[0.04em]
-                    transition-colors duration-200 ease-out
-                    ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white hover:text-[#14C6C9]"}
-                  `}
-                >
-                  {item.label}
-                </span>
-                {item.active && (
-                  <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9]" />
-                )}
-              </a>
-            ))}
+                item.href.startsWith("#") ? (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="group relative"
+                    onClick={(e) => {
+                      setMobileMenuOpen(false);
+                      e.preventDefault();
+                      setTimeout(() => {
+                        const target = document.getElementById(item.href.slice(1));
+                        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }, 100);
+                    }}
+                  >
+                    <span className={`font-['Montserrat'] text-[20px] font-medium uppercase tracking-[0.04em] transition-colors duration-200 ease-out ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white hover:text-[#14C6C9]"}`}>
+                      {item.label}
+                    </span>
+                  </a>
+                ) : (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="group relative"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className={`font-['Montserrat'] text-[20px] font-medium uppercase tracking-[0.04em] transition-colors duration-200 ease-out ${item.active ? "text-[#14C6C9]" : "text-[#111111] dark:text-white hover:text-[#14C6C9]"}`}>
+                      {item.label}
+                    </span>
+                    {item.active && <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-[#14C6C9]" />}
+                  </Link>
+                )
+              ))}
           </nav>
         </div>
       )}
