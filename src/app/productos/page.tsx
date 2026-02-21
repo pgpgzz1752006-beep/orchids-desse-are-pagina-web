@@ -179,40 +179,41 @@ function ProductsContent() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {/* Safety net: deduplicate by SKU before rendering */}
-              {Array.from(
-                products.reduce((map, p) => {
-                  if (!map.has(p.sku)) map.set(p.sku, p);
-                  return map;
-                }, new Map<string, Product>()).values()
-              ).map((product) => (
-                <div
-                  key={product.id}
-                  className="bg-white dark:bg-white border border-[#D9D9D9] rounded-[11px] p-4 flex flex-col transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] cursor-pointer"
-                >
-                  <div className="flex items-center justify-center h-[140px] mb-3">
-                    <Image
-                      src={parseImageUrl(product.image_url) || "/placeholder-product.png"}
-                      alt={product.name}
-                      width={140}
-                      height={140}
-                      className="max-h-[130px] w-auto object-contain"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/placeholder-product.png";
-                      }}
-                    />
-                  </div>
-                  <p className="font-['Montserrat'] text-[10px] md:text-[11px] font-semibold text-[#333] text-center uppercase leading-[1.4] min-h-[28px] flex-1">
-                    {product.name}
-                  </p>
-                  <p className="text-[10px] text-[#999] text-center mt-1">{product.sku}</p>
-                  <p className="text-[13px] font-bold text-[#14C6C9] text-center mt-1">
-                    {product.price
-                      ? `$${product.price.toLocaleString("es-MX", { minimumFractionDigits: 2 })}`
-                      : <span className="text-[#AAAAAA] font-medium">Consultar</span>
-                    }
-                  </p>
-                </div>
-              ))}
+                {Array.from(
+                  products.reduce((map, p) => {
+                    if (!map.has(p.sku)) map.set(p.sku, p);
+                    return map;
+                  }, new Map<string, Product>()).values()
+                ).map((product) => (
+                  <Link
+                    key={product.id}
+                    href={product.slug ? `/producto/${product.slug}` : `/productos?category=${product.category_slug}`}
+                    className="bg-white dark:bg-white border border-[#D9D9D9] rounded-[11px] p-4 flex flex-col transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] cursor-pointer"
+                  >
+                    <div className="flex items-center justify-center h-[140px] mb-3">
+                      <Image
+                        src={parseImageUrl(product.image_url) || "/placeholder-product.png"}
+                        alt={product.name}
+                        width={140}
+                        height={140}
+                        className="max-h-[130px] w-auto object-contain"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "/placeholder-product.png";
+                        }}
+                      />
+                    </div>
+                    <p className="font-['Montserrat'] text-[10px] md:text-[11px] font-semibold text-[#333] text-center uppercase leading-[1.4] min-h-[28px] flex-1">
+                      {product.name}
+                    </p>
+                    <p className="text-[10px] text-[#999] text-center mt-1">{product.sku}</p>
+                    <p className="text-[13px] font-bold text-[#14C6C9] text-center mt-1">
+                      {product.price
+                        ? `$${product.price.toLocaleString("es-MX", { minimumFractionDigits: 2 })}`
+                        : <span className="text-[#AAAAAA] font-medium">Consultar</span>
+                      }
+                    </p>
+                  </Link>
+                ))}
             </div>
           )}
 
