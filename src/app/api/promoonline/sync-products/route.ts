@@ -144,31 +144,44 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No se parsearon productos válidos del Excel' }, { status: 422 })
     }
 
-    // ── Upsert to Supabase ───────────────────────────────────────
-    const BATCH_SIZE = 500
-    let imported = 0
+      // ── Upsert to Supabase ───────────────────────────────────────
+      const BATCH_SIZE = 500
+      const allSkus = products.map((p) => p.sku)
 
-    for (let i = 0; i < products.length; i += BATCH_SIZE) {
-      const batch = products.slice(i, i + BATCH_SIZE)
-      const { data, error } = await supabaseAdmin
+      // Pre-fetch existing SKUs to diff new vs updated
+      const { data: existingRows } = await supabaseAdmin
         .from('products')
-        .upsert(batch, { onConflict: 'sku', ignoreDuplicates: false })
-        .select('id')
+        .select('sku')
+        .in('sku', allSkus)
+      const existingSkus = new Set((existingRows ?? []).map((r: { sku: string }) => r.sku))
 
-      if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+      let upserted = 0
+      for (let i = 0; i < products.length; i += BATCH_SIZE) {
+        const batch = products.slice(i, i + BATCH_SIZE)
+        const { data, error } = await supabaseAdmin
+          .from('products')
+          .upsert(batch, { onConflict: 'sku', ignoreDuplicates: false })
+          .select('id')
+
+        if (error) {
+          return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+        upserted += data?.length ?? 0
       }
-      imported += data?.length ?? 0
-    }
 
-    console.log(`[sync] Done. total=${products.length} imported=${imported}`)
+      const imported = products.filter((p) => !existingSkus.has(p.sku)).length
+      const updated  = products.filter((p) =>  existingSkus.has(p.sku)).length
+      const skipped  = products.length - upserted
 
-    return NextResponse.json({
-      success: true,
-      total: products.length,
-      imported,
-      skipped: products.length - imported,
-    })
+      console.log(`[sync] Done. total=${products.length} imported=${imported} updated=${updated} skipped=${skipped}`)
+
+      return NextResponse.json({
+        ok: true,
+        total: products.length,
+        imported,
+        updated,
+        skipped,
+      })
   } catch (error: unknown) {
     const e = error as NodeJS.ErrnoException & { cause?: unknown }
     console.error(`[sync] unhandled error name=${e.name} msg=${e.message} cause=${JSON.stringify(e.cause)}`)
