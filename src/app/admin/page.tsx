@@ -455,22 +455,55 @@ function AuthTestCard() {
 }
 
 /* ─── Excel test card ────────────────────────────────────────────── */
+interface ExcelResult {
+  ok: boolean;
+  file?: string;
+  message?: string;
+  error?: string;
+  step?: string;
+  detail?: Record<string, unknown>;
+  downloadProbe?: { ok: boolean; status?: number; contentType?: string; error?: string };
+}
+
 function ExcelTestCard() {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ ok: boolean; file?: string; message?: string; error?: string } | null>(null);
+  const [result, setResult] = useState<ExcelResult | null>(null);
+  const [copied, setCopied] = useState(false);
 
   async function generateExcel() {
     setLoading(true);
     setResult(null);
+    setCopied(false);
     try {
       const res = await fetch("/api/promoonline/excel", { method: "POST" });
-      const data = await res.json();
+      const data = await res.json() as ExcelResult;
       setResult(data);
     } catch (e) {
       setResult({ ok: false, error: "NETWORK_ERROR", message: e instanceof Error ? e.message : "Error de red" });
     } finally {
       setLoading(false);
     }
+  }
+
+  function copyDetail() {
+    if (!result) return;
+    const text = JSON.stringify(result, null, 2);
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  function richErrorMsg(r: ExcelResult): string {
+    if (r.detail) {
+      const d = r.detail as { step?: string; code?: string; message?: string };
+      const parts: string[] = [];
+      if (d.step) parts.push(`Falló en: ${d.step}`);
+      if (d.code) parts.push(d.code);
+      if (d.message) parts.push(d.message);
+      return parts.length ? parts.join(" — ") : r.message ?? r.error ?? "Error desconocido";
+    }
+    return r.message ?? r.error ?? "Error desconocido";
   }
 
   return (
@@ -499,7 +532,7 @@ function ExcelTestCard() {
       </button>
 
       {result && (
-        <div className={`mt-3 rounded-xl px-4 py-3 text-xs space-y-1 ${result.ok ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-red-500/10 border border-red-500/30"}`}>
+        <div className={`mt-3 rounded-xl px-4 py-3 text-xs space-y-2 ${result.ok ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-red-500/10 border border-red-500/30"}`}>
           {result.ok ? (
             <>
               <p className="text-emerald-300 font-semibold">✅ {result.message}</p>
@@ -508,14 +541,32 @@ function ExcelTestCard() {
                   href={result.file}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#14C6C9] underline break-all"
+                  className="text-[#14C6C9] underline break-all block"
                 >
                   {result.file}
                 </a>
               )}
+              {result.downloadProbe && !result.downloadProbe.ok && (
+                <p className="text-yellow-400">
+                  ⚠ Probe de descarga falló: {result.downloadProbe.error ?? `status ${result.downloadProbe.status}`}
+                </p>
+              )}
+              {result.downloadProbe?.ok && (
+                <p className="text-emerald-400 text-[10px]">
+                  Probe descarga: ✅ status {result.downloadProbe.status} — {result.downloadProbe.contentType}
+                </p>
+              )}
             </>
           ) : (
-            <p className="text-red-300">❌ {result.message ?? result.error}</p>
+            <>
+              <p className="text-red-300 font-semibold break-words">❌ {richErrorMsg(result)}</p>
+              <button
+                onClick={copyDetail}
+                className="mt-1 text-[10px] border border-red-400/40 text-red-300 hover:text-white hover:border-red-300 px-3 py-1 rounded-lg transition-colors uppercase tracking-wider"
+              >
+                {copied ? "✅ Copiado" : "Copiar detalle"}
+              </button>
+            </>
           )}
         </div>
       )}
