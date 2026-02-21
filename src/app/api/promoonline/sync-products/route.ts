@@ -115,72 +115,88 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // ── Normalize ────────────────────────────────────────────────
-    const products: ProductRow[] = []
-    for (const row of rows) {
-      const sku  = String(row[skuCol]  ?? '').trim()
-      const name = String(row[nameCol] ?? '').trim()
-      if (!sku || !name) continue
+      // ── Normalize + deduplicate ──────────────────────────────────
+      const CHUNK_SIZE = 500
+      const now = new Date().toISOString()
+      let skipped_missing_sku = 0
 
-      const rawCategory = catCol   ? String(row[catCol]   ?? '').trim() : ''
-      const imageUrl    = imgCol   ? String(row[imgCol]   ?? '').trim() || null : null
-      const price       = priceCol ? parseFloat(String(row[priceCol]).replace(/[^0-9.]/g, '')) || null : null
-      const stock       = stockCol ? parseInt(String(row[stockCol]).replace(/[^0-9]/g, ''), 10) || null : null
-      const categorySlug = mapToSlug(name, rawCategory)
+      const dedupeMap = new Map<string, ProductRow>()
+      for (const row of rows) {
+        // Normalize SKU: trim, collapse spaces, uppercase
+        const rawSku = String(row[skuCol] ?? '').trim().replace(/\s+/g, ' ').toUpperCase()
+        const name   = String(row[nameCol] ?? '').trim()
 
-      products.push({
-        sku, name,
-        image_url: imageUrl,
-        raw_category: rawCategory,
-        category_slug: categorySlug,
-        price, stock,
-        is_best_seller: false,
-        is_recommended: false,
-        updated_at: new Date().toISOString(),
-      })
-    }
+        if (!rawSku) { skipped_missing_sku++; continue }
+        if (!name)   { skipped_missing_sku++; continue }
 
-    if (!products.length) {
-      return NextResponse.json({ error: 'No se parsearon productos válidos del Excel' }, { status: 422 })
-    }
+        const rawCategory  = catCol   ? String(row[catCol]   ?? '').trim() : ''
 
-      // ── Upsert to Supabase ───────────────────────────────────────
-      const BATCH_SIZE = 500
-      const allSkus = products.map((p) => p.sku)
+        // Parse image_url: may be stored as JSON array string; take first URL
+        let imageUrl: string | null = null
+        if (imgCol) {
+          const raw = String(row[imgCol] ?? '').trim()
+          if (raw.startsWith('[')) {
+            try {
+              const arr = JSON.parse(raw) as unknown[]
+              const first = arr[0]
+              if (typeof first === 'string' && first.startsWith('http')) imageUrl = first
+            } catch { /* ignore */ }
+          } else if (raw.startsWith('http')) {
+            imageUrl = raw
+          }
+        }
 
-      // Pre-fetch existing SKUs to diff new vs updated
-      const { data: existingRows } = await supabaseAdmin
-        .from('products')
-        .select('sku')
-        .in('sku', allSkus)
-      const existingSkus = new Set((existingRows ?? []).map((r: { sku: string }) => r.sku))
+        const price        = priceCol ? parseFloat(String(row[priceCol]).replace(/[^0-9.]/g, '')) || null : null
+        const stock        = stockCol ? parseInt(String(row[stockCol]).replace(/[^0-9]/g, ''), 10) || null : null
+        const categorySlug = mapToSlug(name, rawCategory)
 
-      let upserted = 0
-      for (let i = 0; i < products.length; i += BATCH_SIZE) {
-        const batch = products.slice(i, i + BATCH_SIZE)
+        // Last occurrence wins (consistent dedup)
+        dedupeMap.set(rawSku, {
+          sku: rawSku, name,
+          image_url: imageUrl,
+          raw_category: rawCategory,
+          category_slug: categorySlug,
+          price, stock,
+          is_best_seller: false,
+          is_recommended: false,
+          updated_at: now,
+        })
+      }
+
+      const total_rows_excel   = rows.length
+      const duplicates_removed = total_rows_excel - skipped_missing_sku - dedupeMap.size
+      const valid_rows         = dedupeMap.size
+      const products           = Array.from(dedupeMap.values())
+
+      if (!products.length) {
+        return NextResponse.json({ error: 'No se parsearon productos válidos del Excel' }, { status: 422 })
+      }
+
+      // ── Upsert to Supabase in chunks ─────────────────────────────
+      let inserted_or_updated = 0
+      for (let i = 0; i < products.length; i += CHUNK_SIZE) {
+        const chunk = products.slice(i, i + CHUNK_SIZE)
         const { data, error } = await supabaseAdmin
           .from('products')
-          .upsert(batch, { onConflict: 'sku', ignoreDuplicates: false })
+          .upsert(chunk, { onConflict: 'sku', ignoreDuplicates: false })
           .select('id')
 
         if (error) {
+          console.error(`[sync] upsert error chunk ${i}:`, error.message)
           return NextResponse.json({ error: error.message }, { status: 500 })
         }
-        upserted += data?.length ?? 0
+        inserted_or_updated += data?.length ?? 0
       }
 
-      const imported = products.filter((p) => !existingSkus.has(p.sku)).length
-      const updated  = products.filter((p) =>  existingSkus.has(p.sku)).length
-      const skipped  = products.length - upserted
-
-      console.log(`[sync] Done. total=${products.length} imported=${imported} updated=${updated} skipped=${skipped}`)
+      console.log(`[sync] Done. total_rows_excel=${total_rows_excel} valid_rows=${valid_rows} duplicates_removed=${duplicates_removed} skipped_missing_sku=${skipped_missing_sku} inserted_or_updated=${inserted_or_updated}`)
 
       return NextResponse.json({
         ok: true,
-        total: products.length,
-        imported,
-        updated,
-        skipped,
+        total_rows_excel,
+        valid_rows,
+        duplicates_removed,
+        skipped_missing_sku,
+        inserted_or_updated,
       })
   } catch (error: unknown) {
     const e = error as NodeJS.ErrnoException & { cause?: unknown }
