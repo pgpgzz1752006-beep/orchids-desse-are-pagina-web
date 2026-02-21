@@ -37,14 +37,14 @@ function parseImageUrl(raw: string | null): string | null {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  termos: "Termos y cilindros",
-  bolsas: "Bolsas y maletas",
-  libretas: "Libretas y carpetas",
+  termos: "Bebidas y Termos",
+  bolsas: "Bolsas, Mochilas y Maletas",
+  libretas: "Libretas, Escritura y Oficina",
   bar: "Bar",
-  regalos: "Sets de regalo",
+  regalos: "Sets de Regalo y Accesorios",
   deportes: "Deportes",
-  hogar: "Artículos del hogar",
-  gorras: "Gorras y playeras",
+  hogar: "Hogar y Herramientas",
+  gorras: "Textiles y Gorras",
 };
 
 function SkeletonCard() {
