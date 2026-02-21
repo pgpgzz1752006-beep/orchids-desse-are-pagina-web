@@ -20,6 +20,17 @@ export function mapToSlug(name: string, rawCategory: string): string {
   return 'regalos' // fallback
 }
 
+/** Generate a URL-safe slug from name + sku */
+export function makeProductSlug(name: string, sku: string): string {
+  const raw = `${name}-${sku}`
+  return raw
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // strip diacritics
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')         // trim leading/trailing dashes
+}
+
 export function detectColumn(headers: string[], candidates: string[]): string | null {
   const lower = headers.map(h => h?.toString().toLowerCase().trim())
   for (const c of candidates) {
