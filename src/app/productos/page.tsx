@@ -12,6 +12,7 @@ interface Product {
   id: string;
   sku: string;
   name: string;
+  slug: string | null;
   image_url: string | null;
   category_slug: string;
   price: number | null;
