@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Trash2, Plus, Minus, ShoppingCart, ArrowLeft, Tag } from "lucide-react";
@@ -18,34 +19,19 @@ const colorBarSegments = [
   { color: "#3E2A84", width: "6%" },
 ];
 
+const formatPrice = (n: number) =>
+  n.toLocaleString("es-MX", { style: "currency", currency: "MXN" });
+
 export default function CarritoPage() {
   const { items, removeItem, updateQuantity } = useCartStore();
-  const [coupon, setCoupon] = [
-    "",
-    (_: string) => {},
-  ];
+  const [coupon, setCoupon] = useState("");
+  const [couponApplied, setCouponApplied] = useState(false);
+  const [couponError, setCouponError] = useState("");
 
-  // coupon state kept local
-  const [couponState, setCouponState] = [
-    { value: "", applied: false, error: "" },
-    (_: { value: string; applied: boolean; error: string }) => {},
-  ];
-
-  return <CarritoContent />;
-}
-
-function CarritoContent() {
-  const { items, removeItem, updateQuantity } = useCartStore();
-  const [coupon, setCoupon] = require("react").useState("");
-  const [couponApplied, setCouponApplied] = require("react").useState(false);
-  const [couponError, setCouponError] = require("react").useState("");
-
-  const subtotal = items.reduce(
-    (acc, item) => acc + (item.price ?? 0) * item.quantity,
-    0
-  );
+  const subtotal = items.reduce((acc, item) => acc + (item.price ?? 0) * item.quantity, 0);
   const discount = couponApplied ? Math.round(subtotal * 0.1) : 0;
   const total = subtotal - discount;
+  const totalItems = items.reduce((a, i) => a + i.quantity, 0);
 
   const handleCoupon = () => {
     if (coupon.trim().toUpperCase() === "DISEÑARE10") {
@@ -56,11 +42,6 @@ function CarritoContent() {
       setCouponError("Cupón no válido.");
     }
   };
-
-  const formatPrice = (n: number) =>
-    n.toLocaleString("es-MX", { style: "currency", currency: "MXN" });
-
-  const totalItems = items.reduce((a, i) => a + i.quantity, 0);
 
   return (
     <div className="min-h-screen bg-[#F5F6FA] dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300 flex flex-col">
@@ -116,7 +97,8 @@ function CarritoContent() {
             <div className="flex-1 flex flex-col gap-4">
               {items.map((item) => (
                 <div key={item.id} className="bg-white dark:bg-[#12141A] rounded-2xl border border-[#EFEFEF] dark:border-[#1E2028] shadow-sm p-4 md:p-5 flex gap-4 items-start transition-all duration-200 hover:shadow-md">
-                  <Link href={`/producto/${item.slug}`} className="w-[90px] h-[90px] md:w-[110px] md:h-[110px] flex-shrink-0 rounded-xl overflow-hidden bg-[#F8F8F8] dark:bg-[#1A1C24] border border-[#EFEFEF] dark:border-[#2A2D36]">
+
+                  <Link href={`/producto/${item.slug}`} className="w-[90px] h-[90px] md:w-[110px] md:h-[110px] flex-shrink-0 rounded-xl overflow-hidden bg-[#F8F8F8] dark:bg-[#1A1C24] border border-[#EFEFEF] dark:border-[#2A2D36] flex items-center justify-center">
                     <Image src={item.image || "/placeholder-product.png"} alt={item.name} width={110} height={110} className="w-full h-full object-contain p-2" />
                   </Link>
 
@@ -129,7 +111,7 @@ function CarritoContent() {
                     </Link>
 
                     <div className="flex items-center justify-between flex-wrap gap-3">
-                      <div className="flex items-center gap-0 border border-[#E0E0E0] dark:border-[#2A2D36] rounded-lg overflow-hidden">
+                      <div className="flex items-center border border-[#E0E0E0] dark:border-[#2A2D36] rounded-lg overflow-hidden">
                         <button onClick={() => updateQuantity(item.id, -1)} className="w-8 h-8 flex items-center justify-center text-[#555] dark:text-[#aaa] hover:bg-[#F0F0F0] dark:hover:bg-[#1E2028] transition-colors duration-150" aria-label="Disminuir">
                           <Minus className="w-3.5 h-3.5" />
                         </button>
@@ -141,9 +123,9 @@ function CarritoContent() {
 
                       <div className="flex items-center gap-4">
                         <span className="text-[15px] md:text-[16px] font-bold text-[#111] dark:text-white">
-                          {item.price
+                          {item.price != null
                             ? formatPrice(item.price * item.quantity)
-                            : <span className="text-[#AAA] text-[13px]">Consultar</span>}
+                            : <span className="text-[#AAA] text-[13px] font-medium">Consultar</span>}
                         </span>
                         <button onClick={() => removeItem(item.id)} className="text-[#CCCCCC] hover:text-[#E0007A] transition-colors duration-200" aria-label="Eliminar">
                           <Trash2 className="w-[18px] h-[18px]" />
