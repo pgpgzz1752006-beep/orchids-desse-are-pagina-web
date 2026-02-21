@@ -319,7 +319,7 @@ function AutoSyncCard({
     if (!healthChecked) return "Comprueba la conexión antes de sincronizar.";
     if (tokenOk === false) return "Falta configurar el token de la API.";
     if (dnsOk === false) return "No se pudo conectar al endpoint GraphQL (network/TLS/DNS).";
-    if (excelOk === false) return "La API responde, pero generateProductsExcel no está disponible o falta permiso.";
+      if (excelOk === false) return "generateProductsExcel no está disponible. Comprueba la conexión.";
     return null;
   }
 
