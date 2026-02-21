@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2, Plus, Minus, ShoppingCart, ArrowLeft, Tag } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingCart, Tag } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 import { useCartStore } from "@/lib/cartStore";
