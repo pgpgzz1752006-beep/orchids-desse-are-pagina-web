@@ -29,6 +29,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const cartCount = useCartStore((s) => s.items.reduce((a, i) => a + i.quantity, 0));
 
   useEffect(() => {
     setMounted(true);
