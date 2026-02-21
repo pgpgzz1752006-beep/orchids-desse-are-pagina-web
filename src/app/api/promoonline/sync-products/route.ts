@@ -190,6 +190,7 @@ export async function POST(req: NextRequest) {
 
       const candidate: ProductRow = {
         sku: rawSku, name,
+        slug: makeProductSlug(name, rawSku),
         image_url: imageUrl,
         raw_category: rawCategory,
         category_slug: categorySlug,
