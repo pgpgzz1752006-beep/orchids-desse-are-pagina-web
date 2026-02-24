@@ -407,13 +407,156 @@ function AutoSyncCard({
 
           {error && (
             <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-sm">
-              <p className="text-red-400 font-bold mb-1 uppercase tracking-wider text-xs">Error</p>
-              <p className="text-red-300 break-words">{error}</p>
-            </div>
+          <p className="text-red-400 font-bold mb-1 uppercase tracking-wider text-xs">Error</p>
+            <p className="text-red-300 break-words">{error}</p>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+/* ─── Price audit card ───────────────────────────────────────────── */
+interface AuditResult {
+  sku: string
+  found_in_db: boolean
+  found_in_api: boolean
+  db: {
+    price_mx: number | null
+    currency_mx: string
+    price_raw: string | null
+    price_source: string | null
+    price_updated_at: string | null
+    is_stale: boolean
+  }
+  api: {
+    price_mx: number | null
+    currency: string
+    price_raw: string | null
+    field_used: string
+    variants: Array<{ sku: string; amount: string; parsed: number | null; sentinel: boolean }>
+  }
+  difference: number | null
+  match: boolean
+}
+
+function PriceAuditCard() {
+  const [sku, setSku] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<AuditResult | null>(null)
+  const [auditError, setAuditError] = useState<string | null>(null)
+
+  async function handleAudit() {
+    if (!sku.trim()) return
+    setLoading(true)
+    setResult(null)
+    setAuditError(null)
+    try {
+      const res = await fetch(`/api/admin/price-audit?sku=${encodeURIComponent(sku.trim().toUpperCase())}`)
+      const data = await res.json()
+      if (!res.ok) setAuditError(data.error ?? 'Error desconocido')
+      else setResult(data as AuditResult)
+    } catch (e) {
+      setAuditError(e instanceof Error ? e.message : 'Error de red')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function fmtPrice(p: number | null, currency = 'MXN') {
+    if (p === null) return <span className="text-[#555] italic">Consultar / sin precio</span>
+    return <span className="text-emerald-300 font-mono">{`$${p.toLocaleString('es-MX', { minimumFractionDigits: 2 })} ${currency}`}</span>
+  }
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <p className="text-[#888] text-xs uppercase tracking-widest mb-2">Auditar precio por SKU</p>
+      <p className="text-[#555] text-xs mb-4">
+        Compara el precio almacenado en BD con el precio en vivo del API (<code className="text-[#AAA]">priceMx.amount</code>).
+      </p>
+
+      <div className="flex gap-2 mb-4">
+        <input
+          type="text"
+          value={sku}
+          onChange={(e) => setSku(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleAudit()}
+          placeholder="Ej: ABA 001"
+          className="flex-1 bg-[#0E0F12] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9] uppercase"
+        />
+        <button
+          onClick={handleAudit}
+          disabled={loading || !sku.trim()}
+          className="bg-[#14C6C9]/20 hover:bg-[#14C6C9]/30 border border-[#14C6C9]/40 text-[#14C6C9] text-xs font-bold px-4 py-2 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed uppercase tracking-wider"
+        >
+          {loading ? 'Auditando...' : 'Auditar precio'}
+        </button>
+      </div>
+
+      {auditError && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 mb-3">
+          <p className="text-red-300 text-xs">{auditError}</p>
+        </div>
+      )}
+
+      {result && (
+        <div className="space-y-4">
+          {/* Status banner */}
+          <div className={`rounded-xl p-3 flex items-center gap-2 text-xs font-semibold ${result.match ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300' : result.difference !== null ? 'bg-yellow-500/10 border border-yellow-500/30 text-yellow-300' : 'bg-[#333]/50 border border-[#444] text-[#888]'}`}>
+            {result.match
+              ? '✅ Precio en BD coincide con API'
+              : result.difference !== null
+              ? `⚠ Diferencia: $${result.difference.toLocaleString('es-MX', { minimumFractionDigits: 2 })} MXN`
+              : 'ℹ No se puede comparar (precio null en uno de los lados)'}
+          </div>
+
+          {/* DB values */}
+          <div className="bg-[#0E0F12] rounded-xl p-4 space-y-2">
+            <p className="text-[#888] text-[10px] uppercase tracking-widest mb-2">
+              Base de datos {result.db.is_stale && <span className="text-yellow-400 ml-1">⚠ STALE (&gt;24h)</span>}
+            </p>
+            <Row label="price_mx (BD)" value={fmtPrice(result.db.price_mx, result.db.currency_mx)} />
+            <Row label="price_raw" value={<span className="text-[#AAA] font-mono">{result.db.price_raw ?? '—'}</span>} />
+            <Row label="price_source" value={<span className="text-[#AAA]">{result.db.price_source ?? '—'}</span>} />
+            <Row label="price_updated_at" value={<span className="text-[#AAA] text-[10px]">{result.db.price_updated_at ? new Date(result.db.price_updated_at).toLocaleString('es-MX') : '—'}</span>} />
+          </div>
+
+          {/* API live values */}
+          <div className="bg-[#0E0F12] rounded-xl p-4 space-y-2">
+            <p className="text-[#888] text-[10px] uppercase tracking-widest mb-2">API en vivo</p>
+            <Row label={result.api.field_used} value={fmtPrice(result.api.price_mx, result.api.currency)} />
+            <Row label="price_raw (API)" value={<span className="text-[#AAA] font-mono">{result.api.price_raw ?? '—'}</span>} />
+            {result.api.variants.length > 0 && (
+              <div className="mt-2">
+                <p className="text-[#555] text-[10px] uppercase tracking-wider mb-1">Variantes ({result.api.variants.length})</p>
+                <div className="max-h-40 overflow-y-auto space-y-1">
+                  {result.api.variants.map((v) => (
+                    <div key={v.sku} className="flex justify-between text-[10px]">
+                      <span className="text-[#AAA] font-mono truncate max-w-[140px]">{v.sku}</span>
+                      <span className={v.sentinel ? 'text-red-400' : v.parsed !== null ? 'text-emerald-400' : 'text-[#555]'}>
+                        {v.sentinel
+                          ? `${v.amount} ⚠ sentinel`
+                          : v.parsed !== null
+                          ? `$${v.parsed.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`
+                          : 'null'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {!result.found_in_db && (
+            <p className="text-yellow-400 text-xs">⚠ SKU no encontrado en BD. Ejecuta la sincronización primero.</p>
+          )}
+          {!result.found_in_api && (
+            <p className="text-red-400 text-xs">⚠ SKU no encontrado en el API. El producto puede no estar disponible para este distribuidor.</p>
           )}
         </div>
-      );
-    }
+      )}
+    </div>
+  )
+}
 
 /* ─── Auth test card ─────────────────────────────────────────────── */
 function AuthTestCard() {
