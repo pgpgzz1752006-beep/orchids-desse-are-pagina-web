@@ -14,7 +14,10 @@ export async function GET(req: NextRequest) {
 
   let query = supabaseAdmin
     .from('products')
-    .select('id, sku, name, slug, image_url, category_slug, price, stock', { count: 'exact' })
+    .select(
+      'id, sku, name, slug, image_url, category_slug, price, price_mx, currency_mx, price_source, price_updated_at, stock',
+      { count: 'exact' }
+    )
 
   if (category) {
     query = query.eq('category_slug', category)
@@ -32,9 +35,19 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
+  // Normalize: always expose price_mx as the canonical price field
+  const products = (data ?? []).map((row) => ({
+    ...row,
+    // price_mx is the source of truth; fall back to legacy price column
+    price: (row.price_mx ?? row.price) as number | null,
+    price_mx: (row.price_mx ?? row.price) as number | null,
+    currency_mx: (row.currency_mx as string | null) ?? 'MXN',
+    price_source: (row.price_source as string | null) ?? 'api',
+  }))
+
   const total = count ?? 0
   return NextResponse.json({
-    products: data ?? [],
+    products,
     total,
     page,
     totalPages: Math.ceil(total / limit),
