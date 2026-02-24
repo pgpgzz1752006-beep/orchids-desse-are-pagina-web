@@ -159,8 +159,9 @@ async function fetchRelated(categorySlug: string, excludeId: string) {
 }
 
 function normalizeRow(row: Record<string, unknown>) {
-  // Prefer price_mx (new canonical column); fall back to legacy price
-  const priceMx = (row.price_mx ?? row.price) as number | null
+  // base_price = raw value from DB (never modified)
+  // price = base_price * markup (shown to users)
+  const base = (row.price_mx ?? row.price) as number | null
   return {
     id: row.id,
     sku: row.sku,
@@ -168,8 +169,9 @@ function normalizeRow(row: Record<string, unknown>) {
     slug: row.slug,
     image_url: row.image_url,
     category_slug: row.category_slug,
-    price: priceMx,
-    price_mx: priceMx,
+    base_price: base,
+    price: applyMarkup(base),
+    price_mx: applyMarkup(base),
     currency_mx: (row.currency_mx as string | null) ?? 'MXN',
     price_raw: row.price_raw ?? null,
     price_source: (row.price_source as string | null) ?? 'api',
