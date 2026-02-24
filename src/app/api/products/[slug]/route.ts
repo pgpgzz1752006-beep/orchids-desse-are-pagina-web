@@ -154,7 +154,8 @@ async function fetchRelated(categorySlug: string, excludeId: string) {
 
   return (data ?? []).map((r) => ({
     ...r,
-    price: (r.price_mx ?? r.price) as number | null,
+    base_price: (r.price_mx ?? r.price) as number | null,
+    price: applyMarkup((r.price_mx ?? r.price) as number | null),
   }))
 }
 
