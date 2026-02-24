@@ -5,21 +5,10 @@
  */
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { promoGQL, CATALOG_QUERY, STOCK_QUERY, CatalogPage, StockItem, PromoProduct } from '@/lib/promoClient'
+import { promoGQL, CATALOG_QUERY, STOCK_QUERY, CatalogPage, StockItem, PromoProduct, bestVariantPrice } from '@/lib/promoClient'
 import { mapToSlug, makeProductSlug } from '@/lib/categoryMapper'
 
 const CHUNK = 200
-
-function firstPrice(product: PromoProduct): number | null {
-  for (const v of product.variants ?? []) {
-    const prices = v.pricing?.priceMx
-    if (prices?.length) {
-      const n = parseFloat(prices[0].amount)
-      if (!isNaN(n) && n > 0) return n
-    }
-  }
-  return null
-}
 
 export async function POST() {
   try {
