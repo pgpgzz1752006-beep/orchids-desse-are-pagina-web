@@ -76,6 +76,66 @@ export async function promoGQL<T = unknown>(
   return json.data as T
 }
 
+// ─── Price parsing ──────────────────────────────────────────────────────────
+
+/** Sentinel values the API uses to mean "no price" */
+const PRICE_SENTINELS = new Set([99999999, 99999998, 99999997, 0])
+const PRICE_SENTINEL_THRESHOLD = 90000000 // anything >= this is treated as no-price
+
+/**
+ * Parse a raw price amount string from the API into a clean numeric value.
+ * Returns { price, raw, currency } where price is null when the value is
+ * unavailable / a sentinel.
+ *
+ * Rules:
+ *  1. Strip commas, currency symbols, and spaces.
+ *  2. Parse as float.
+ *  3. If value >= PRICE_SENTINEL_THRESHOLD → null (sentinel).
+ *  4. If value <= 0 → null.
+ *  5. Otherwise return the value as-is (API already sends MXN amounts,
+ *     NOT in centavos — confirmed by inspection: e.g. "412.89").
+ */
+export function parseApiPrice(
+  priceMxArray: Array<{ amount: string; currency: string }> | null | undefined
+): { price: number | null; raw: string | null; currency: string } {
+  if (!priceMxArray || priceMxArray.length === 0) {
+    return { price: null, raw: null, currency: 'MXN' }
+  }
+
+  const entry = priceMxArray[0]
+  const raw = String(entry.amount ?? '').trim()
+  const currency = entry.currency || 'MXN'
+
+  // Clean: remove commas, currency symbols, spaces
+  const cleaned = raw.replace(/[,\s$€£¥]/g, '')
+  const num = parseFloat(cleaned)
+
+  if (isNaN(num) || num <= 0) {
+    return { price: null, raw, currency }
+  }
+
+  if (num >= PRICE_SENTINEL_THRESHOLD || PRICE_SENTINELS.has(Math.round(num))) {
+    return { price: null, raw, currency }
+  }
+
+  return { price: num, raw, currency }
+}
+
+/**
+ * Extract the best price from a product's variants array.
+ * Picks the first variant that has a valid priceMx value.
+ * If no variant has a valid price, returns { price: null, raw: null, currency: 'MXN' }.
+ */
+export function bestVariantPrice(
+  variants: PromoVariant[] | null | undefined
+): { price: number | null; raw: string | null; currency: string } {
+  for (const v of variants ?? []) {
+    const result = parseApiPrice(v.pricing?.priceMx)
+    if (result.price !== null) return result
+  }
+  return { price: null, raw: null, currency: 'MXN' }
+}
+
 // ─── Queries ────────────────────────────────────────────────────────────────
 
 export const CATALOG_QUERY = `
