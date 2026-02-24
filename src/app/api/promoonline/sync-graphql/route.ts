@@ -50,21 +50,30 @@ export async function POST() {
           totalStock += stockMap.get(v.sku) ?? 0
         }
 
-        return {
-          sku,
-          name,
-          slug: makeProductSlug(name, sku),
-          image_url: mainImage,
-          category_slug: categorySlug,
-          raw_category: '',
-          // price (legacy column) = price_mx for backward compat
-          price,
-          price_mx: price,
-          currency_mx: currency,
-          price_raw: priceRaw,
-          price_source: 'api' as const,
-          price_updated_at: now,
-          stock: totalStock || null,
+          // Classify stock status
+          const stockStatus =
+            totalStock > 10 ? 'IN_STOCK'
+            : totalStock > 0 ? 'LOW_STOCK'
+            : totalStock === 0 ? 'OUT_OF_STOCK'
+            : 'UNKNOWN'
+
+          return {
+            sku,
+            name,
+            slug: makeProductSlug(name, sku),
+            image_url: mainImage,
+            category_slug: categorySlug,
+            raw_category: '',
+            // price (legacy column) = price_mx for backward compat
+            price,
+            price_mx: price,
+            currency_mx: currency,
+            price_raw: priceRaw,
+            price_source: 'api' as const,
+            price_updated_at: now,
+            stock: totalStock,
+            stock_status: stockStatus,
+            stock_updated_at: now,
           description_mx: pm.descriptionMx ?? null,
           brand: pm.brand ?? null,
           capacity: pm.capacity ?? null,
