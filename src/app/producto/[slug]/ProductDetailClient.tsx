@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { ShoppingCart, ChevronLeft, Check, MessageCircle, ZoomIn } from 'lucide-react'
+import { ShoppingCart, ChevronLeft, Check, MessageCircle, ZoomIn, Minus, Plus } from 'lucide-react'
 import { useCartStore } from '@/lib/cartStore'
 
 interface Dimensions {
@@ -68,6 +68,11 @@ export default function ProductDetailClient({ product }: Props) {
   const [activeImg, setActiveImg] = useState(0)
   const [related, setRelated] = useState<RelatedProduct[]>([])
 
+  // Quantity stepper state
+  const [qty, setQty] = useState(1)
+  const [stockError, setStockError] = useState<string | null>(null)
+  const [ctaBlocked, setCtaBlocked] = useState(false)
+
   const name = product.name as string
   const sku = product.sku as string
   const slug = product.slug as string
@@ -84,7 +89,7 @@ export default function ProductDetailClient({ product }: Props) {
   const variantsJson = product.variants_json as Variant[] | null
   const categorySlug = product.category_slug as string
 
-  // Build gallery: mainImages + vectorImages
+  // Build gallery
   const mainImages: string[] = imagesJson?.mainImages?.filter(Boolean) ?? []
   if (!mainImages.length && product.image_url) {
     mainImages.push(product.image_url as string)
@@ -92,12 +97,90 @@ export default function ProductDetailClient({ product }: Props) {
   const vectorImages: string[] = imagesJson?.vectorImages?.filter(Boolean) ?? []
   const allImages = [...mainImages, ...vectorImages]
 
-  const waText = encodeURIComponent(`Hola, me interesa cotizar: ${name} (SKU: ${sku})`)
-  const waLink = `https://wa.me/529512424333?text=${waText}`
-
   const stockInfo = stockLabel(stock)
 
+  // Validate quantity against stock (frontend, instant)
+  const validateQty = useCallback((value: number) => {
+    if (stock === null) {
+      // Unknown stock — allow but warn
+      setStockError(null)
+      setCtaBlocked(false)
+      return
+    }
+    if (stock <= 0) {
+      setStockError('Este producto no tiene stock disponible.')
+      setCtaBlocked(true)
+      return
+    }
+    if (value > stock) {
+      setStockError(`No hay suficientes unidades para tu pedido. Disponible: ${stock}.`)
+      setCtaBlocked(true)
+      return
+    }
+    setStockError(null)
+    setCtaBlocked(false)
+  }, [stock])
+
+  // Re-validate whenever qty changes
+  useEffect(() => {
+    validateQty(qty)
+  }, [qty, validateQty])
+
+  function changeQty(delta: number) {
+    setQty((prev) => {
+      const next = prev + delta
+      const min = 1
+      const max = stock != null && stock > 0 ? stock : 9999
+      return Math.min(Math.max(next, min), max)
+    })
+  }
+
+  function handleInputQty(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = parseInt(e.target.value, 10)
+    if (isNaN(val)) return
+    const min = 1
+    const max = stock != null && stock > 0 ? stock : 9999
+    setQty(Math.min(Math.max(val, min), max))
+  }
+
+  // WhatsApp — validate backend before opening
+  async function handleWhatsApp() {
+    if (ctaBlocked) return
+
+    // Backend validation
+    try {
+      const res = await fetch('/api/validate-quantity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sku, requestedQty: qty }),
+      })
+      const data = await res.json() as { ok: boolean; reason?: string; available?: number | null }
+
+      if (!data.ok) {
+        if (data.reason === 'INSUFFICIENT_STOCK' && data.available != null) {
+          setStockError(`No hay suficientes unidades para tu pedido. Disponible: ${data.available}.`)
+          setQty(data.available)
+        } else if (data.reason === 'OUT_OF_STOCK') {
+          setStockError('Este producto no tiene stock disponible.')
+        } else if (data.reason === 'UNKNOWN_STOCK') {
+          // Unknown stock — still allow WA
+        } else {
+          setStockError('No se pudo validar la disponibilidad.')
+        }
+        if (data.reason !== 'UNKNOWN_STOCK') return
+      }
+    } catch {
+      // If validation fails (network), still allow WA
+    }
+
+    const waText = encodeURIComponent(
+      `Hola, quiero cotizar ${qty} unidad${qty !== 1 ? 'es' : ''} de ${name} (SKU: ${sku}).`
+    )
+    window.open(`https://wa.me/529512424333?text=${waText}`, '_blank', 'noopener,noreferrer')
+  }
+
   function handleAddToCart() {
+    if (ctaBlocked) return
     addItem({
       id: product.id as string,
       name,
@@ -253,9 +336,66 @@ export default function ProductDetailClient({ product }: Props) {
               )}
             </div>
 
-            {/* Stock */}
+            {/* Stock label */}
             <div className={`text-sm font-medium ${stockInfo.color}`}>
               {stockInfo.text}
+            </div>
+
+            {/* ── Quantity stepper ─────────────────────────────────── */}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                Cantidad
+              </label>
+              <div className="flex items-center gap-0 w-fit rounded-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden">
+                <button
+                  onClick={() => changeQty(-1)}
+                  disabled={qty <= 1}
+                  aria-label="Reducir cantidad"
+                  className="flex items-center justify-center w-11 h-11 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-30 transition-colors"
+                >
+                  <Minus size={15} />
+                </button>
+                <input
+                  type="number"
+                  value={qty}
+                  min={1}
+                  max={stock != null && stock > 0 ? stock : undefined}
+                  onChange={handleInputQty}
+                  aria-label="Cantidad"
+                  className="w-14 h-11 text-center text-sm font-semibold text-zinc-900 dark:text-white bg-white dark:bg-zinc-900 border-x border-zinc-200 dark:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#14C6C9]/50 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                />
+                <button
+                  onClick={() => changeQty(1)}
+                  disabled={stock != null && stock > 0 ? qty >= stock : false}
+                  aria-label="Aumentar cantidad"
+                  className="flex items-center justify-center w-11 h-11 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-30 transition-colors"
+                >
+                  <Plus size={15} />
+                </button>
+              </div>
+
+              {/* Stock error / warning message */}
+              <div
+                aria-live="polite"
+                className={`overflow-hidden transition-all duration-200 ease-out ${
+                  stockError
+                    ? 'max-h-20 opacity-100 translate-y-0'
+                    : 'max-h-0 opacity-0 -translate-y-1'
+                }`}
+              >
+                {stockError && (
+                  <p className="text-sm font-medium text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg px-3 py-2">
+                    {stockError}
+                  </p>
+                )}
+              </div>
+
+              {/* Unknown stock notice */}
+              {stock === null && (
+                <p className="text-xs text-yellow-600 dark:text-yellow-400">
+                  Stock no confirmado. Te confirmamos disponibilidad por WhatsApp.
+                </p>
+              )}
             </div>
 
             {/* Colors */}
@@ -308,8 +448,11 @@ export default function ProductDetailClient({ product }: Props) {
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <button
                 onClick={handleAddToCart}
+                disabled={ctaBlocked}
                 className={`flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
-                  added
+                  ctaBlocked
+                    ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 cursor-not-allowed'
+                    : added
                     ? 'bg-green-600 text-white'
                     : 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-200'
                 }`}
@@ -319,16 +462,19 @@ export default function ProductDetailClient({ product }: Props) {
                 {added ? '¡Agregado!' : 'Agregar al carrito'}
               </button>
 
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm bg-green-500 hover:bg-green-600 text-white transition-all duration-200"
+              <button
+                onClick={handleWhatsApp}
+                disabled={ctaBlocked}
+                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+                  ctaBlocked
+                    ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 cursor-not-allowed'
+                    : 'bg-green-500 hover:bg-green-600 text-white'
+                }`}
                 aria-label="Cotizar por WhatsApp"
               >
                 <MessageCircle size={18} />
                 Cotizar por WhatsApp
-              </a>
+              </button>
             </div>
           </div>
         </div>
