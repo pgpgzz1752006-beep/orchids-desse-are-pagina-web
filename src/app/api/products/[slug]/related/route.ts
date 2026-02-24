@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { applyMarkup } from '@/lib/pricing'
 
 export async function GET(
   _req: NextRequest,
