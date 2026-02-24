@@ -20,12 +20,18 @@ export async function GET(
 
   const { data } = await supabaseAdmin
     .from('products')
-    .select('id, sku, name, slug, image_url, category_slug, price')
+    .select('id, sku, name, slug, image_url, category_slug, price, price_mx')
     .eq('category_slug', current.category_slug)
     .neq('id', current.id)
+    .gt('stock', 0)          // only products with confirmed stock
     .not('image_url', 'is', null)
     .order('name', { ascending: true })
     .limit(8)
 
-  return NextResponse.json({ products: data ?? [] })
+  const products = (data ?? []).map((r) => ({
+    ...r,
+    price: (r.price_mx ?? r.price) as number | null,
+  }))
+
+  return NextResponse.json({ products })
 }
