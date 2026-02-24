@@ -103,7 +103,7 @@ export default function ProductDetailClient({ product }: Props) {
       name,
       sku,
       price,
-      image_url: mainImages[0] ?? null,
+      image: mainImages[0] ?? '',
       slug,
     })
     setAdded(true)
