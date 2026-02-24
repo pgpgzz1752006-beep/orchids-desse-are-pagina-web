@@ -107,7 +107,13 @@ export async function GET(
       fetchAndCacheFromGraphQL(dbRow.sku as string).catch(() => {})
     }
 
-    return NextResponse.json(normalizeRow(dbRow))
+    // Fetch related products with stock filter
+    const related = await fetchRelated(
+      dbRow.category_slug as string,
+      dbRow.id as string
+    )
+
+    return NextResponse.json({ ...normalizeRow(dbRow), related })
   }
 
   // 2. Not in DB — fetch from GraphQL
@@ -127,7 +133,28 @@ export async function GET(
     return NextResponse.json({ error: 'Product not found' }, { status: 404 })
   }
 
-  return NextResponse.json(normalizeRow(fresh))
+  const related = await fetchRelated(
+    fresh.category_slug as string,
+    fresh.id as string
+  )
+
+  return NextResponse.json({ ...normalizeRow(fresh), related })
+}
+
+/** Fetch related products — only those with stock > 0 */
+async function fetchRelated(categorySlug: string, excludeId: string) {
+  const { data } = await supabaseAdmin
+    .from('products')
+    .select('id, sku, name, slug, image_url, price, price_mx, category_slug')
+    .eq('category_slug', categorySlug)
+    .neq('id', excludeId)
+    .gt('stock', 0)        // only products with confirmed stock
+    .limit(8)
+
+  return (data ?? []).map((r) => ({
+    ...r,
+    price: (r.price_mx ?? r.price) as number | null,
+  }))
 }
 
 function normalizeRow(row: Record<string, unknown>) {
@@ -146,7 +173,9 @@ function normalizeRow(row: Record<string, unknown>) {
     price_raw: row.price_raw ?? null,
     price_source: (row.price_source as string | null) ?? 'api',
     price_updated_at: row.price_updated_at ?? null,
-    stock: row.stock,
+    stock: row.stock ?? null,
+    stock_status: row.stock_status ?? null,
+    stock_updated_at: row.stock_updated_at ?? null,
     description_mx: row.description_mx ?? null,
     brand: row.brand ?? null,
     capacity: row.capacity ?? null,
