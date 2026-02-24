@@ -344,17 +344,17 @@ export default function ProductDetailClient({ product }: Props) {
                   href={`/producto/${r.slug}`}
                   className="group rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-md transition-shadow bg-white dark:bg-zinc-900"
                 >
-                  <div className="aspect-square bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center">
-                    {r.image_url ? (
-                      <img
-                        src={r.image_url}
-                        alt={r.name}
-                        className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-200"
-                      />
-                    ) : (
-                      <div className="text-zinc-300 dark:text-zinc-600 text-3xl font-bold">?</div>
-                    )}
-                  </div>
+                    <div className="flex items-center justify-center bg-[#F2F2F2] dark:bg-zinc-800 rounded-none h-[140px] p-4">
+                      {r.image_url ? (
+                        <img
+                          src={r.image_url}
+                          alt={r.name}
+                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
+                        />
+                      ) : (
+                        <div className="text-zinc-300 dark:text-zinc-600 text-3xl font-bold">?</div>
+                      )}
+                    </div>
                   <div className="p-3">
                     <p className="text-xs font-medium text-zinc-800 dark:text-zinc-200 line-clamp-2 leading-tight">{r.name}</p>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
