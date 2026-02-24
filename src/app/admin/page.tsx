@@ -418,6 +418,123 @@ function AutoSyncCard({
     );
   }
 
+/* ─── Stock management card ──────────────────────────────────────── */
+interface StockStats {
+  total: number
+  with_stock: number
+  out_of_stock: number
+  unknown: number
+}
+
+function StockCard() {
+  const [stats, setStats] = useState<StockStats | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [syncing, setSyncing] = useState(false)
+  const [syncResult, setSyncResult] = useState<{ ok: boolean; message: string } | null>(null)
+  const [statsError, setStatsError] = useState<string | null>(null)
+
+  async function loadStats() {
+    setLoading(true)
+    setStatsError(null)
+    try {
+      const res = await fetch('/api/admin/stock-stats')
+      const data = await res.json()
+      if (!res.ok) setStatsError(data.error ?? 'Error')
+      else setStats(data as StockStats)
+    } catch {
+      setStatsError('Error de red')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleSync() {
+    setSyncing(true)
+    setSyncResult(null)
+    try {
+      const res = await fetch('/api/promoonline/sync-graphql', { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) {
+        setSyncResult({ ok: false, message: data.error ?? 'Error desconocido' })
+      } else {
+        setSyncResult({
+          ok: true,
+          message: `Stock actualizado: ${data.in_stock ?? 0} con stock, ${data.out_of_stock ?? 0} sin stock (${data.total ?? 0} total)`,
+        })
+        // Refresh stats
+        loadStats()
+      }
+    } catch {
+      setSyncResult({ ok: false, message: 'Error de red' })
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    loadStats()
+  }, [])
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <p className="text-[#888] text-xs uppercase tracking-widest mb-2">Stock de productos</p>
+      <p className="text-[#555] text-xs mb-4">
+        Solo productos con stock &gt; 0 aparecen en el catálogo. Productos sin stock se ocultan automáticamente.
+      </p>
+
+      {/* Stats grid */}
+      {loading && <p className="text-[#555] text-xs mb-4">Cargando estadísticas...</p>}
+      {statsError && <p className="text-red-400 text-xs mb-4">{statsError}</p>}
+      {stats && (
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="bg-[#0E0F12] rounded-xl p-3 text-center">
+            <p className="text-2xl font-bold text-white">{stats.total}</p>
+            <p className="text-[#555] text-[10px] uppercase tracking-wider mt-0.5">Total productos</p>
+          </div>
+          <div className="bg-[#0E0F12] rounded-xl p-3 text-center">
+            <p className="text-2xl font-bold text-emerald-400">{stats.with_stock}</p>
+            <p className="text-[#555] text-[10px] uppercase tracking-wider mt-0.5">Con stock</p>
+          </div>
+          <div className="bg-[#0E0F12] rounded-xl p-3 text-center">
+            <p className="text-2xl font-bold text-red-400">{stats.out_of_stock}</p>
+            <p className="text-[#555] text-[10px] uppercase tracking-wider mt-0.5">Sin stock</p>
+          </div>
+          <div className="bg-[#0E0F12] rounded-xl p-3 text-center">
+            <p className="text-2xl font-bold text-yellow-400">{stats.unknown}</p>
+            <p className="text-[#555] text-[10px] uppercase tracking-wider mt-0.5">Sin datos</p>
+          </div>
+        </div>
+      )}
+
+      <button
+        onClick={handleSync}
+        disabled={syncing}
+        className="w-full border border-[#333] hover:border-emerald-500 text-[#888] hover:text-emerald-400 text-xs py-2.5 rounded-xl transition-colors uppercase tracking-wider disabled:opacity-40 flex items-center justify-center gap-2"
+      >
+        {syncing ? (
+          <>
+            <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Actualizando stock...
+          </>
+        ) : (
+          'Actualizar stock ahora'
+        )}
+      </button>
+
+      {syncResult && (
+        <div className={`mt-3 rounded-xl px-4 py-3 text-xs ${syncResult.ok ? 'bg-emerald-500/10 border border-emerald-500/30' : 'bg-red-500/10 border border-red-500/30'}`}>
+          <span className={syncResult.ok ? 'text-emerald-300' : 'text-red-300'}>
+            {syncResult.ok ? '✅ ' : '❌ '}{syncResult.message}
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
+
 /* ─── Price audit card ───────────────────────────────────────────── */
 interface AuditResult {
   sku: string
