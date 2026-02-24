@@ -48,9 +48,9 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 function SkeletonCard() {
-  return (
-    <div className="bg-white dark:bg-[#1A1D24] border border-[#E0E0E0] dark:border-[#2A2D34] rounded-[11px] p-4 animate-pulse">
-      <div className="h-[140px] bg-gray-200 dark:bg-gray-700 rounded mb-3" />
+    return (
+      <div className="bg-white dark:bg-[#1A1D24] border border-[#E0E0E0] dark:border-[#2A2D34] rounded-[11px] p-3 animate-pulse">
+        <div className="h-[140px] sm:h-[160px] lg:h-[180px] bg-[#F2F2F2] dark:bg-gray-700 rounded-[10px] mb-3" />
       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mx-auto mb-2" />
       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mx-auto" />
     </div>
