@@ -358,17 +358,17 @@ className="w-full bg-white dark:bg-[#0E0F12] py-6 md:py-16 lg:py-[72px] transiti
                     onClick={(e) => isDragging && e.preventDefault()}
                     draggable={false}
                   >
-                    {/* Image Container */}
-                    <div className="flex items-center justify-center h-[100px] md:h-[110px] lg:h-[120px] mb-3">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        width={120}
-                        height={120}
-                        className="max-h-[90px] md:max-h-[100px] lg:max-h-[110px] w-auto object-contain pointer-events-none"
-                        draggable={false}
-                      />
-                    </div>
+                      {/* Image Container - uniform gray background */}
+                      <div className="flex items-center justify-center rounded-[8px] overflow-hidden bg-[#F2F2F2] h-[100px] md:h-[110px] lg:h-[120px] mb-3 p-3 flex-shrink-0">
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          width={120}
+                          height={120}
+                          className="w-full h-full object-contain pointer-events-none"
+                          draggable={false}
+                        />
+                      </div>
 
                     {/* Product Name */}
                       <p className="font-['Montserrat'] text-[10px] md:text-[11px] lg:text-[11px] font-medium text-[#333333] dark:text-[#333333] text-center uppercase leading-[1.4] min-h-[28px]">
