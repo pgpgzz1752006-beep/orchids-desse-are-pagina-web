@@ -87,6 +87,9 @@ export default function AdminPage() {
           {/* DB cleanup */}
           <CleanupCard />
 
+          {/* Price audit */}
+          <PriceAuditCard />
+
           <div className="text-center pt-2">
           <Link href="/" className="text-[#14C6C9] text-xs hover:underline">
             ← Volver al sitio
