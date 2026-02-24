@@ -63,14 +63,18 @@ export async function GET(req: NextRequest) {
   // Background stale-stock refresh (non-blocking)
   triggerStaleStockRefresh(data ?? []).catch(() => {})
 
-  // Normalize: always expose price_mx as the canonical price field
-  const products = (data ?? []).map((row) => ({
-    ...row,
-    price: (row.price_mx ?? row.price) as number | null,
-    price_mx: (row.price_mx ?? row.price) as number | null,
-    currency_mx: (row.currency_mx as string | null) ?? 'MXN',
-    price_source: (row.price_source as string | null) ?? 'api',
-  }))
+  // Normalize: expose base_price (raw from DB) and price (with 35% markup)
+  const products = (data ?? []).map((row) => {
+    const base = (row.price_mx ?? row.price) as number | null
+    return {
+      ...row,
+      base_price: base,
+      price: applyMarkup(base),
+      price_mx: applyMarkup(base),
+      currency_mx: (row.currency_mx as string | null) ?? 'MXN',
+      price_source: (row.price_source as string | null) ?? 'api',
+    }
+  })
 
   const total = count ?? 0
   return NextResponse.json({
