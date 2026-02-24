@@ -84,17 +84,29 @@ export async function POST() {
       }
     })
 
-    // 4. Upsert in chunks
-    let upserted = 0
-    for (let i = 0; i < rows.length; i += CHUNK) {
-      const chunk = rows.slice(i, i + CHUNK)
-      const { data, error } = await supabaseAdmin
-        .from('products')
-        .upsert(chunk, { onConflict: 'sku', ignoreDuplicates: false })
-        .select('id')
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-      upserted += data?.length ?? 0
-    }
+      // 4. Deduplicate slugs within this batch to avoid constraint conflicts
+      const slugSeen = new Set<string>()
+      for (const row of rows) {
+        let slug = row.slug
+        let counter = 2
+        while (slugSeen.has(slug)) {
+          slug = `${row.slug}-${counter++}`
+        }
+        slugSeen.add(slug)
+        row.slug = slug
+      }
+
+      // 5. Upsert in chunks (onConflict sku — slug conflicts handled by dedup above)
+      let upserted = 0
+      for (let i = 0; i < rows.length; i += CHUNK) {
+        const chunk = rows.slice(i, i + CHUNK)
+        const { data, error } = await supabaseAdmin
+          .from('products')
+          .upsert(chunk, { onConflict: 'sku', ignoreDuplicates: false })
+          .select('id')
+        if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+        upserted += data?.length ?? 0
+      }
 
     return NextResponse.json({
       ok: true,
