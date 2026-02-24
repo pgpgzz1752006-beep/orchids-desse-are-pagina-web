@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { applyMarkup } from '@/lib/pricing'
 
 const DEFAULT_LIMIT = 12
 const MAX_LIMIT = 100
