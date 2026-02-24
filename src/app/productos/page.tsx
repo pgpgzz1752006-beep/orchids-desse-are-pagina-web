@@ -170,23 +170,24 @@ function ProductsContent() {
                     return map;
                   }, new Map<string, Product>()).values()
                 ).map((product) => (
-                  <Link
-                    key={product.id}
-                    href={product.slug ? `/producto/${product.slug}` : `/productos?category=${product.category_slug}`}
-                    className="bg-white dark:bg-white border border-[#D9D9D9] rounded-[11px] p-4 flex flex-col transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] cursor-pointer"
-                  >
-                    <div className="flex items-center justify-center h-[140px] mb-3">
-                      <Image
-                        src={parseImageUrl(product.image_url) || "/placeholder-product.png"}
-                        alt={product.name}
-                        width={140}
-                        height={140}
-                        className="max-h-[130px] w-auto object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/placeholder-product.png";
-                        }}
-                      />
-                    </div>
+                    <Link
+                      key={product.id}
+                      href={product.slug ? `/producto/${product.slug}` : `/productos?category=${product.category_slug}`}
+                      className="bg-white dark:bg-white border border-[#D9D9D9] rounded-[11px] p-3 flex flex-col transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] cursor-pointer"
+                    >
+                      {/* Image area with uniform gray background */}
+                      <div className="flex items-center justify-center rounded-[10px] overflow-hidden bg-[#F2F2F2] h-[140px] sm:h-[160px] lg:h-[180px] mb-3 p-4 flex-shrink-0">
+                        <Image
+                          src={parseImageUrl(product.image_url) || "/placeholder-product.png"}
+                          alt={product.name}
+                          width={160}
+                          height={160}
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "/placeholder-product.png";
+                          }}
+                        />
+                      </div>
                     <p className="font-['Montserrat'] text-[10px] md:text-[11px] font-semibold text-[#333] text-center uppercase leading-[1.4] min-h-[28px] flex-1">
                       {product.name}
                     </p>
