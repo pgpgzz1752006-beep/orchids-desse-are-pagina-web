@@ -32,12 +32,10 @@ export async function GET(req: NextRequest) {
     const result = { sku, stock: stock ?? 0, status: classifyStock(stock) }
 
     // Persist in background
-    supabaseAdmin
+    void supabaseAdmin
       .from('products')
       .update({ stock: result.stock, stock_status: result.status, stock_updated_at: new Date().toISOString() })
       .eq('sku', sku)
-      .then(() => {})
-      .catch(() => {})
 
     return NextResponse.json(result)
   } catch (e: unknown) {
