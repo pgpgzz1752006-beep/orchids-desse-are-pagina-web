@@ -7,7 +7,7 @@ export async function GET(
 ) {
   const { slug } = params
 
-  // First get the current product's category
+  // Get the product's category to find related items
   const { data: current } = await supabaseAdmin
     .from('products')
     .select('id, category_slug')
@@ -23,7 +23,7 @@ export async function GET(
     .select('id, sku, name, slug, image_url, category_slug, price')
     .eq('category_slug', current.category_slug)
     .neq('id', current.id)
-    .not('slug', 'is', null)
+    .not('image_url', 'is', null)
     .order('name', { ascending: true })
     .limit(8)
 
