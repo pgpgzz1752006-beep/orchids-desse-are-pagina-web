@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-import { promoGQL, CATALOG_QUERY, CatalogPage, PromoProduct } from '@/lib/promoClient'
+import { promoGQL, CATALOG_QUERY, CatalogPage, PromoProduct, bestVariantPrice } from '@/lib/promoClient'
 import { makeProductSlug, mapToSlug } from '@/lib/categoryMapper'
 
+const PRICE_STALE_MS = 24 * 60 * 60 * 1000  // 24 hours
 const DETAIL_STALE_DAYS = 7
 
 async function fetchAndCacheFromGraphQL(sku: string): Promise<Record<string, unknown> | null> {
@@ -31,14 +32,8 @@ async function fetchAndCacheFromGraphQL(sku: string): Promise<Record<string, unk
     const mainImage = pm.media?.mainImages?.[0] ?? null
     const now = new Date().toISOString()
 
-    let price: number | null = null
-    for (const v of found.variants ?? []) {
-      const prices = v.pricing?.priceMx
-      if (prices?.length) {
-        const n = parseFloat(prices[0].amount)
-        if (!isNaN(n) && n > 0) { price = n; break }
-      }
-    }
+    // Use robust price parsing with sentinel detection
+    const { price, raw: priceRaw, currency } = bestVariantPrice(found.variants)
 
     const row = {
       sku: pm.sku,
@@ -47,7 +42,13 @@ async function fetchAndCacheFromGraphQL(sku: string): Promise<Record<string, unk
       image_url: mainImage,
       category_slug: mapToSlug(name, ''),
       raw_category: '',
+      // Both legacy and new price columns
       price,
+      price_mx: price,
+      currency_mx: currency,
+      price_raw: priceRaw,
+      price_source: 'api',
+      price_updated_at: now,
       description_mx: pm.descriptionMx ?? null,
       brand: pm.brand ?? null,
       capacity: pm.capacity ?? null,
@@ -92,12 +93,16 @@ export async function GET(
     .single()
 
   if (dbRow) {
-    // Check if detail fields are fresh enough
+    const priceUpdatedAt = dbRow.price_updated_at as string | null
     const syncedAt = dbRow.details_synced_at as string | null
-    const stale = !syncedAt ||
+
+    const priceStale = !priceUpdatedAt ||
+      (Date.now() - new Date(priceUpdatedAt).getTime()) > PRICE_STALE_MS
+
+    const detailStale = !syncedAt ||
       (Date.now() - new Date(syncedAt).getTime()) > DETAIL_STALE_DAYS * 86400_000
 
-    if (stale || !dbRow.description_mx) {
+    if (priceStale || detailStale || !dbRow.description_mx) {
       // Refresh from GraphQL in background (don't block response)
       fetchAndCacheFromGraphQL(dbRow.sku as string).catch(() => {})
     }
@@ -106,12 +111,10 @@ export async function GET(
   }
 
   // 2. Not in DB — fetch from GraphQL
-  // The slug might encode the sku: try to extract it
   const skuGuess = slug.split('-').pop()?.toUpperCase() ?? ''
   let fresh = skuGuess ? await fetchAndCacheFromGraphQL(skuGuess) : null
 
   if (!fresh) {
-    // Last resort: scan by slug match after syncing
     const { data: refetched } = await supabaseAdmin
       .from('products')
       .select('*')
@@ -128,6 +131,8 @@ export async function GET(
 }
 
 function normalizeRow(row: Record<string, unknown>) {
+  // Prefer price_mx (new canonical column); fall back to legacy price
+  const priceMx = (row.price_mx ?? row.price) as number | null
   return {
     id: row.id,
     sku: row.sku,
@@ -135,7 +140,12 @@ function normalizeRow(row: Record<string, unknown>) {
     slug: row.slug,
     image_url: row.image_url,
     category_slug: row.category_slug,
-    price: row.price,
+    price: priceMx,
+    price_mx: priceMx,
+    currency_mx: (row.currency_mx as string | null) ?? 'MXN',
+    price_raw: row.price_raw ?? null,
+    price_source: (row.price_source as string | null) ?? 'api',
+    price_updated_at: row.price_updated_at ?? null,
     stock: row.stock,
     description_mx: row.description_mx ?? null,
     brand: row.brand ?? null,
