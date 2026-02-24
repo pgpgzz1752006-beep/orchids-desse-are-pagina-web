@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { promoGQL, CATALOG_QUERY, CatalogPage, PromoProduct, bestVariantPrice } from '@/lib/promoClient'
 import { makeProductSlug, mapToSlug } from '@/lib/categoryMapper'
+import { applyMarkup } from '@/lib/pricing'
 
 const PRICE_STALE_MS = 24 * 60 * 60 * 1000  // 24 hours
 const DETAIL_STALE_DAYS = 7
