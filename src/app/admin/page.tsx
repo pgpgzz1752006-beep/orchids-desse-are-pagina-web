@@ -87,6 +87,9 @@ export default function AdminPage() {
           {/* DB cleanup */}
           <CleanupCard />
 
+          {/* Stock management */}
+          <StockCard />
+
           {/* Price audit */}
           <PriceAuditCard />
 
