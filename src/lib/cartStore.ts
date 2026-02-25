@@ -24,18 +24,18 @@ export const useCartStore = create<CartStore>()(
     (set) => ({
       items: [],
 
-      addItem: (incoming) =>
-        set((state) => {
-          const existing = state.items.find((i) => i.id === incoming.id)
-          if (existing) {
-            return {
-              items: state.items.map((i) =>
-                i.id === incoming.id ? { ...i, quantity: i.quantity + 1 } : i
-              ),
+        addItem: (incoming, qty = 1) =>
+          set((state) => {
+            const existing = state.items.find((i) => i.id === incoming.id)
+            if (existing) {
+              return {
+                items: state.items.map((i) =>
+                  i.id === incoming.id ? { ...i, quantity: i.quantity + qty } : i
+                ),
+              }
             }
-          }
-          return { items: [...state.items, { ...incoming, quantity: 1 }] }
-        }),
+            return { items: [...state.items, { ...incoming, quantity: qty }] }
+          }),
 
       removeItem: (id) =>
         set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
