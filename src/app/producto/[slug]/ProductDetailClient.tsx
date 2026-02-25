@@ -3,8 +3,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ShoppingCart, ChevronLeft, ExternalLink, Minus, Plus } from 'lucide-react'
+import { ShoppingCart, ChevronLeft, Minus, Plus } from 'lucide-react'
 import { useCartStore } from '@/lib/cartStore'
+import ProductGallery from '@/components/ProductGallery'
 
 interface Dimensions {
   heightInCentimeters?: number | null
