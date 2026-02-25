@@ -586,36 +586,20 @@ export default function ProductDetailClient({ product }: Props) {
               </div>
             )}
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            {/* CTA */}
+            <div className="pt-2">
               <button
-                onClick={handleAddToCart}
+                onClick={handleGoToCart}
                 disabled={ctaBlocked}
-                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+                aria-label="Ir al carrito"
+                className={`w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
                   ctaBlocked
                     ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 cursor-not-allowed'
-                    : added
-                    ? 'bg-green-600 text-white'
-                    : 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-200'
+                    : 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-200 active:scale-[0.98]'
                 }`}
-                aria-label="Agregar al carrito"
               >
-                {added ? <Check size={18} /> : <ShoppingCart size={18} />}
-                {added ? '¡Agregado!' : 'Agregar al carrito'}
-              </button>
-
-              <button
-                onClick={handleWhatsApp}
-                disabled={ctaBlocked}
-                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
-                  ctaBlocked
-                    ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 cursor-not-allowed'
-                    : 'bg-green-500 hover:bg-green-600 text-white'
-                }`}
-                aria-label="Cotizar por WhatsApp"
-              >
-                <MessageCircle size={18} />
-                Cotizar por WhatsApp
+                <ShoppingCart size={18} />
+                Ir al Carrito
               </button>
             </div>
           </div>
