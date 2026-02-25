@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { ShoppingCart, ChevronLeft, Check, MessageCircle, ZoomIn, Minus, Plus } from 'lucide-react'
+import { ShoppingCart, ChevronLeft, Check, MessageCircle, ExternalLink, Minus, Plus } from 'lucide-react'
 import { useCartStore } from '@/lib/cartStore'
 
 interface Dimensions {
@@ -62,13 +62,119 @@ function stockLabel(stock: number | null | undefined): { text: string; color: st
   return { text: `En stock (${stock} piezas)`, color: 'text-green-600' }
 }
 
+/** Normalise image list: remove falsy / whitespace-only, deduplicate, trim */
+function cleanImages(arr: string[] | undefined | null): string[] {
+  if (!arr) return []
+  const seen = new Set<string>()
+  return arr
+    .map((s) => s?.trim())
+    .filter((s): s is string => !!s && !seen.has(s) && (seen.add(s), true))
+}
+
+// ── Thumbnail component with broken-image fallback ──────────────────────────
+function ThumbImg({
+  src,
+  alt,
+  active,
+  onClick,
+}: {
+  src: string
+  alt: string
+  active: boolean
+  onClick: () => void
+}) {
+  const [broken, setBroken] = useState(false)
+  if (broken) return null
+  return (
+    <button
+      onClick={onClick}
+      className={`flex-shrink-0 w-[72px] h-[72px] rounded-xl overflow-hidden border-2 transition-all duration-150 ${
+        active
+          ? 'border-[#14C6C9] shadow-sm'
+          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 hover:scale-[1.03]'
+      }`}
+      aria-label={alt}
+      aria-pressed={active}
+    >
+      <img
+        src={src}
+        alt={alt}
+        className="w-full h-full object-contain p-1.5 bg-[#F2F2F2] dark:bg-zinc-800"
+        onError={() => setBroken(true)}
+        loading="lazy"
+      />
+    </button>
+  )
+}
+
+// ── Main image with fade on change ───────────────────────────────────────────
+function MainImage({ src, alt }: { src: string; alt: string }) {
+  const [visible, setVisible] = useState(true)
+  const [currentSrc, setCurrentSrc] = useState(src)
+  const [broken, setBroken] = useState(false)
+  const prevSrc = useRef(src)
+
+  useEffect(() => {
+    if (src === prevSrc.current) return
+    prevSrc.current = src
+    setBroken(false)
+    // Fade out → swap → fade in
+    setVisible(false)
+    const t = setTimeout(() => {
+      setCurrentSrc(src)
+      setVisible(true)
+    }, 120)
+    return () => clearTimeout(t)
+  }, [src])
+
+  if (broken) {
+    return (
+      <div className="w-full h-full flex items-center justify-center text-zinc-300 dark:text-zinc-600 text-5xl font-bold select-none">
+        ?
+      </div>
+    )
+  }
+
+  return (
+    <img
+      src={currentSrc}
+      alt={alt}
+      className="w-full h-full object-contain p-6 select-none"
+      style={{
+        opacity: visible ? 1 : 0,
+        transition: 'opacity 180ms ease',
+        maxHeight: 520,
+      }}
+      onError={() => setBroken(true)}
+      draggable={false}
+    />
+  )
+}
+
+// ── Gallery skeleton ─────────────────────────────────────────────────────────
+function GallerySkeleton() {
+  return (
+    <div className="flex flex-col gap-4 animate-pulse">
+      <div className="bg-zinc-100 dark:bg-zinc-800 rounded-2xl aspect-square" />
+      <div className="flex gap-2 overflow-hidden">
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="flex-shrink-0 w-[72px] h-[72px] bg-zinc-100 dark:bg-zinc-800 rounded-xl" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Main export ──────────────────────────────────────────────────────────────
 export default function ProductDetailClient({ product }: Props) {
   const addItem = useCartStore((s) => s.addItem)
   const [added, setAdded] = useState(false)
   const [activeImg, setActiveImg] = useState(0)
+  const [galleryReady, setGalleryReady] = useState(false)
+  const [showVectors, setShowVectors] = useState(false)
   const [related, setRelated] = useState<RelatedProduct[]>([])
 
-  // Quantity stepper state
+  // Quantity stepper
   const [qty, setQty] = useState(1)
   const [stockError, setStockError] = useState<string | null>(null)
   const [ctaBlocked, setCtaBlocked] = useState(false)
@@ -89,90 +195,98 @@ export default function ProductDetailClient({ product }: Props) {
   const variantsJson = product.variants_json as Variant[] | null
   const categorySlug = product.category_slug as string
 
-  // Build gallery
-  const mainImages: string[] = imagesJson?.mainImages?.filter(Boolean) ?? []
+  // ── Build gallery arrays ──────────────────────────────────────────────────
+  const mainImages: string[] = cleanImages(imagesJson?.mainImages)
   if (!mainImages.length && product.image_url) {
     mainImages.push(product.image_url as string)
   }
-  const vectorImages: string[] = imagesJson?.vectorImages?.filter(Boolean) ?? []
-  const allImages = [...mainImages, ...vectorImages]
+  const vectorImages: string[] = cleanImages(imagesJson?.vectorImages)
+
+  // Active display set: main or vectors
+  const displayImages = showVectors && vectorImages.length > 0 ? vectorImages : mainImages
 
   const stockInfo = stockLabel(stock)
 
-  // Validate quantity against stock (frontend, instant)
-  const validateQty = useCallback((value: number) => {
-    if (stock === null) {
-      // Unknown stock — allow but warn
+  // Mark gallery as ready on mount (prevents flicker on SSR hydration)
+  useEffect(() => {
+    setGalleryReady(true)
+  }, [])
+
+  // Reset activeImg when switching tabs
+  useEffect(() => {
+    setActiveImg(0)
+  }, [showVectors])
+
+  // ── Quantity validation ───────────────────────────────────────────────────
+  const validateQty = useCallback(
+    (value: number) => {
+      if (stock === null) {
+        setStockError(null)
+        setCtaBlocked(false)
+        return
+      }
+      if (stock <= 0) {
+        setStockError('Este producto no tiene stock disponible.')
+        setCtaBlocked(true)
+        return
+      }
+      if (value > stock) {
+        setStockError(`No hay suficientes unidades para tu pedido. Disponible: ${stock}.`)
+        setCtaBlocked(true)
+        return
+      }
       setStockError(null)
       setCtaBlocked(false)
-      return
-    }
-    if (stock <= 0) {
-      setStockError('Este producto no tiene stock disponible.')
-      setCtaBlocked(true)
-      return
-    }
-    if (value > stock) {
-      setStockError(`No hay suficientes unidades para tu pedido. Disponible: ${stock}.`)
-      setCtaBlocked(true)
-      return
-    }
-    setStockError(null)
-    setCtaBlocked(false)
-  }, [stock])
+    },
+    [stock]
+  )
 
-  // Re-validate whenever qty changes
   useEffect(() => {
     validateQty(qty)
   }, [qty, validateQty])
 
   function changeQty(delta: number) {
     setQty((prev) => {
-      const next = prev + delta
-      const min = 1
       const max = stock != null && stock > 0 ? stock : 9999
-      return Math.min(Math.max(next, min), max)
+      return Math.min(Math.max(prev + delta, 1), max)
     })
   }
 
   function handleInputQty(e: React.ChangeEvent<HTMLInputElement>) {
     const val = parseInt(e.target.value, 10)
     if (isNaN(val)) return
-    const min = 1
     const max = stock != null && stock > 0 ? stock : 9999
-    setQty(Math.min(Math.max(val, min), max))
+    setQty(Math.min(Math.max(val, 1), max))
   }
 
-  // WhatsApp — validate backend before opening
+  // ── WhatsApp CTA ─────────────────────────────────────────────────────────
   async function handleWhatsApp() {
     if (ctaBlocked) return
-
-    // Backend validation
     try {
       const res = await fetch('/api/validate-quantity', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sku, requestedQty: qty }),
       })
-      const data = await res.json() as { ok: boolean; reason?: string; available?: number | null }
-
+      const data = (await res.json()) as {
+        ok: boolean
+        reason?: string
+        available?: number | null
+      }
       if (!data.ok) {
         if (data.reason === 'INSUFFICIENT_STOCK' && data.available != null) {
-          setStockError(`No hay suficientes unidades para tu pedido. Disponible: ${data.available}.`)
+          setStockError(
+            `No hay suficientes unidades para tu pedido. Disponible: ${data.available}.`
+          )
           setQty(data.available)
         } else if (data.reason === 'OUT_OF_STOCK') {
           setStockError('Este producto no tiene stock disponible.')
-        } else if (data.reason === 'UNKNOWN_STOCK') {
-          // Unknown stock — still allow WA
-        } else {
-          setStockError('No se pudo validar la disponibilidad.')
         }
         if (data.reason !== 'UNKNOWN_STOCK') return
       }
     } catch {
-      // If validation fails (network), still allow WA
+      // network error — still allow WA
     }
-
     const waText = encodeURIComponent(
       `Hola, quiero cotizar ${qty} unidad${qty !== 1 ? 'es' : ''} de ${name} (SKU: ${sku}).`
     )
@@ -200,7 +314,7 @@ export default function ProductDetailClient({ product }: Props) {
       .catch(() => {})
   }, [slug])
 
-  // Build specs table
+  // ── Specs ─────────────────────────────────────────────────────────────────
   const specs: Array<{ label: string; value: string }> = []
   if (brand) specs.push({ label: 'Marca', value: brand })
   if (capacity) specs.push({ label: 'Capacidad', value: capacity })
@@ -213,9 +327,8 @@ export default function ProductDetailClient({ product }: Props) {
   if (weights?.grossWeight) specs.push({ label: 'Peso bruto', value: `${weights.grossWeight} ${weights.unitWeight ?? 'kg'}` })
   if (weights?.netWeight) specs.push({ label: 'Peso neto', value: `${weights.netWeight} ${weights.unitWeight ?? 'kg'}` })
 
-  // Collect variant colors
   const colors = variantsJson
-    ? [...new Set(variantsJson.map((v) => v.color).filter(Boolean) as string[])]
+    ? ([...new Set(variantsJson.map((v) => v.color).filter(Boolean))] as string[])
     : []
 
   return (
@@ -243,7 +356,7 @@ export default function ProductDetailClient({ product }: Props) {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Back button */}
+        {/* Back */}
         <Link
           href="/productos"
           className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 mb-6 transition-colors"
@@ -252,76 +365,107 @@ export default function ProductDetailClient({ product }: Props) {
           Volver a productos
         </Link>
 
-        {/* Main 2-col layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16">
 
-          {/* ── Left: Gallery ─────────────────────────────────────── */}
-          <div className="flex flex-col gap-4">
-            {/* Main image */}
-            <div className="relative bg-zinc-50 dark:bg-zinc-900 rounded-2xl overflow-hidden aspect-square flex items-center justify-center group border border-zinc-100 dark:border-zinc-800">
-              {allImages[activeImg] ? (
-                <img
-                  src={allImages[activeImg]}
-                  alt={name}
-                  className="w-full h-full object-contain p-4 transition-opacity duration-200"
-                  style={{ maxHeight: 480 }}
-                />
-              ) : (
-                <div className="text-zinc-300 dark:text-zinc-600 text-5xl font-bold select-none">?</div>
-              )}
-              {allImages.length > 0 && (
-                <a
-                  href={allImages[activeImg]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="absolute top-3 right-3 bg-white/80 dark:bg-zinc-800/80 rounded-lg p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                  aria-label="Ver imagen completa"
-                >
-                  <ZoomIn size={16} className="text-zinc-600 dark:text-zinc-300" />
-                </a>
-              )}
-            </div>
+          {/* ── LEFT: Gallery ────────────────────────────────────────── */}
+          <div className="flex flex-col gap-3">
+            {!galleryReady ? (
+              <GallerySkeleton />
+            ) : (
+              <>
+                {/* Tab bar: Fotos / Vectores */}
+                {vectorImages.length > 0 && (
+                  <div className="flex gap-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl p-1 w-fit">
+                    <button
+                      onClick={() => setShowVectors(false)}
+                      className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 ${
+                        !showVectors
+                          ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
+                          : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+                      }`}
+                    >
+                      Fotos
+                    </button>
+                    <button
+                      onClick={() => setShowVectors(true)}
+                      className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 ${
+                        showVectors
+                          ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
+                          : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+                      }`}
+                    >
+                      Vector
+                    </button>
+                  </div>
+                )}
 
-            {/* Thumbnails */}
-            {allImages.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
-                {allImages.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveImg(i)}
-                    className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                      i === activeImg
-                        ? 'border-zinc-800 dark:border-zinc-200'
-                        : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500'
-                    }`}
-                    aria-label={`Imagen ${i + 1}`}
+                {/* Main image */}
+                <div className="relative bg-[#F2F2F2] dark:bg-zinc-900 rounded-2xl overflow-hidden aspect-square flex items-center justify-center border border-zinc-100 dark:border-zinc-800">
+                  {displayImages[activeImg] ? (
+                    <>
+                      <MainImage src={displayImages[activeImg]} alt={`${name} — imagen ${activeImg + 1}`} />
+                      <a
+                        href={displayImages[activeImg]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="absolute top-3 right-3 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm rounded-lg p-1.5 opacity-0 hover:opacity-100 focus:opacity-100 transition-opacity shadow"
+                        aria-label="Ver imagen completa"
+                        tabIndex={0}
+                      >
+                        <ExternalLink size={15} className="text-zinc-600 dark:text-zinc-300" />
+                      </a>
+                    </>
+                  ) : (
+                    <div className="text-zinc-300 dark:text-zinc-600 text-5xl font-bold select-none">?</div>
+                  )}
+                </div>
+
+                {/* Thumbnails strip */}
+                {displayImages.length > 1 && (
+                  <div
+                    role="list"
+                    aria-label="Miniaturas del producto"
+                    className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700"
                   >
-                    <img src={img} alt="" className="w-full h-full object-contain p-1 bg-zinc-50 dark:bg-zinc-900" />
-                  </button>
-                ))}
-              </div>
-            )}
+                    {displayImages.map((img, i) => (
+                      <ThumbImg
+                        key={img}
+                        src={img}
+                        alt={`Imagen ${i + 1}`}
+                        active={i === activeImg}
+                        onClick={() => setActiveImg(i)}
+                      />
+                    ))}
+                  </div>
+                )}
 
-            {/* Vector download hint */}
-            {vectorImages.length > 0 && (
-              <a
-                href={vectorImages[0]}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-center text-zinc-500 dark:text-zinc-400 hover:underline"
-              >
-                Ver imagen vectorial →
-              </a>
+                {/* Vector open-in-new hint */}
+                {showVectors && vectorImages[activeImg] && (
+                  <a
+                    href={vectorImages[activeImg]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:underline self-start"
+                  >
+                    <ExternalLink size={12} />
+                    Abrir imagen vectorial
+                  </a>
+                )}
+              </>
             )}
           </div>
 
-          {/* ── Right: Product info ────────────────────────────────── */}
+          {/* ── RIGHT: Product info ───────────────────────────────────── */}
           <div className="flex flex-col gap-5">
             {/* Title + SKU */}
             <div>
               <h1 className="text-2xl font-bold text-zinc-900 dark:text-white leading-tight">{name}</h1>
               <p className="mt-1 text-sm text-zinc-400 dark:text-zinc-500">SKU: {sku}</p>
-              {brand && <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">Marca: <span className="font-medium">{brand}</span></p>}
+              {brand && (
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  Marca: <span className="font-medium">{brand}</span>
+                </p>
+              )}
             </div>
 
             {/* Price */}
@@ -337,16 +481,14 @@ export default function ProductDetailClient({ product }: Props) {
             </div>
 
             {/* Stock label */}
-            <div className={`text-sm font-medium ${stockInfo.color}`}>
-              {stockInfo.text}
-            </div>
+            <div className={`text-sm font-medium ${stockInfo.color}`}>{stockInfo.text}</div>
 
-            {/* ── Quantity stepper ─────────────────────────────────── */}
+            {/* ── Quantity stepper ──────────────────────────────────── */}
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Cantidad
               </label>
-              <div className="flex items-center gap-0 w-fit rounded-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden">
+              <div className="flex items-center w-fit rounded-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden">
                 <button
                   onClick={() => changeQty(-1)}
                   disabled={qty <= 1}
@@ -374,13 +516,11 @@ export default function ProductDetailClient({ product }: Props) {
                 </button>
               </div>
 
-              {/* Stock error / warning message */}
+              {/* Stock error banner */}
               <div
                 aria-live="polite"
                 className={`overflow-hidden transition-all duration-200 ease-out ${
-                  stockError
-                    ? 'max-h-20 opacity-100 translate-y-0'
-                    : 'max-h-0 opacity-0 -translate-y-1'
+                  stockError ? 'max-h-20 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-1'
                 }`}
               >
                 {stockError && (
@@ -425,7 +565,7 @@ export default function ProductDetailClient({ product }: Props) {
               </div>
             )}
 
-            {/* Specs table */}
+            {/* Specs */}
             {specs.length > 0 && (
               <div>
                 <h2 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">Especificaciones</h2>
@@ -433,8 +573,13 @@ export default function ProductDetailClient({ product }: Props) {
                   <table className="w-full text-sm">
                     <tbody>
                       {specs.map((s, i) => (
-                        <tr key={i} className={i % 2 === 0 ? 'bg-zinc-50 dark:bg-zinc-900' : 'bg-white dark:bg-zinc-950'}>
-                          <td className="px-4 py-2.5 font-medium text-zinc-600 dark:text-zinc-400 w-40">{s.label}</td>
+                        <tr
+                          key={i}
+                          className={i % 2 === 0 ? 'bg-zinc-50 dark:bg-zinc-900' : 'bg-white dark:bg-zinc-950'}
+                        >
+                          <td className="px-4 py-2.5 font-medium text-zinc-600 dark:text-zinc-400 w-40">
+                            {s.label}
+                          </td>
                           <td className="px-4 py-2.5 text-zinc-800 dark:text-zinc-200">{s.value}</td>
                         </tr>
                       ))}
@@ -479,7 +624,7 @@ export default function ProductDetailClient({ product }: Props) {
           </div>
         </div>
 
-        {/* ── Related products ──────────────────────────────────────── */}
+        {/* ── Related products ─────────────────────────────────────────────── */}
         {related.length > 0 && (
           <div className="mt-16">
             <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6">Productos relacionados</h2>
@@ -490,19 +635,22 @@ export default function ProductDetailClient({ product }: Props) {
                   href={`/producto/${r.slug}`}
                   className="group rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-md transition-shadow bg-white dark:bg-zinc-900"
                 >
-                    <div className="flex items-center justify-center bg-[#F2F2F2] dark:bg-zinc-800 rounded-none h-[140px] p-4">
-                      {r.image_url ? (
-                        <img
-                          src={r.image_url}
-                          alt={r.name}
-                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
-                        />
-                      ) : (
-                        <div className="text-zinc-300 dark:text-zinc-600 text-3xl font-bold">?</div>
-                      )}
-                    </div>
+                  <div className="flex items-center justify-center bg-[#F2F2F2] dark:bg-zinc-800 h-[140px] p-4">
+                    {r.image_url ? (
+                      <img
+                        src={r.image_url}
+                        alt={r.name}
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="text-zinc-300 dark:text-zinc-600 text-3xl font-bold">?</div>
+                    )}
+                  </div>
                   <div className="p-3">
-                    <p className="text-xs font-medium text-zinc-800 dark:text-zinc-200 line-clamp-2 leading-tight">{r.name}</p>
+                    <p className="text-xs font-medium text-zinc-800 dark:text-zinc-200 line-clamp-2 leading-tight">
+                      {r.name}
+                    </p>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                       {r.price ? formatPrice(r.price) : 'Consultar'}
                     </p>
