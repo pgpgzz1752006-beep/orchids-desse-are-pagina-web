@@ -400,6 +400,12 @@ export default function ProductDetailClient({ product }: Props) {
                   {displayImages[activeImg] ? (
                     <>
                       <MainImage src={displayImages[activeImg]} alt={`${name} — imagen ${activeImg + 1}`} />
+                      {/* Image counter badge */}
+                      {displayImages.length > 1 && (
+                        <span className="absolute bottom-3 left-3 bg-black/40 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full pointer-events-none">
+                          {activeImg + 1} / {displayImages.length}
+                        </span>
+                      )}
                       <a
                         href={displayImages[activeImg]}
                         target="_blank"
