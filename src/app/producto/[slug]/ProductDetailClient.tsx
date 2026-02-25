@@ -170,7 +170,6 @@ function GallerySkeleton() {
 export default function ProductDetailClient({ product }: Props) {
   const router = useRouter()
   const addItem = useCartStore((s) => s.addItem)
-  const [added, setAdded] = useState(false)
   const [activeImg, setActiveImg] = useState(0)
   const [galleryReady, setGalleryReady] = useState(false)
   const [showVectors, setShowVectors] = useState(false)
