@@ -159,16 +159,42 @@ async function fetchRelated(categorySlug: string, excludeId: string) {
   }))
 }
 
+/** Deduplicate, trim, and remove empty strings from an image URL array */
+function cleanImageList(arr: unknown): string[] {
+  if (!Array.isArray(arr)) return []
+  const seen = new Set<string>()
+  return arr
+    .map((s) => (typeof s === 'string' ? s.trim() : ''))
+    .filter((s) => s.length > 0 && !seen.has(s) && (seen.add(s), true))
+}
+
 function normalizeRow(row: Record<string, unknown>) {
   // base_price = raw value from DB (never modified)
   // price = base_price * markup (shown to users)
   const base = (row.price_mx ?? row.price) as number | null
+
+  // Normalise images from images_json
+  const mediaRaw = row.images_json as { mainImages?: unknown; vectorImages?: unknown } | null
+  const mainImages = cleanImageList(mediaRaw?.mainImages)
+  const vectorImages = cleanImageList(mediaRaw?.vectorImages)
+
+  // Ensure primary image_url is first in mainImages list
+  const primaryUrl = (row.image_url as string | null)?.trim() ?? ''
+  if (primaryUrl && !mainImages.includes(primaryUrl)) {
+    mainImages.unshift(primaryUrl)
+  }
+
+  const normalizedImagesJson = {
+    mainImages,
+    vectorImages,
+  }
+
   return {
     id: row.id,
     sku: row.sku,
     name: row.name,
     slug: row.slug,
-    image_url: row.image_url,
+    image_url: mainImages[0] ?? row.image_url ?? null,
     category_slug: row.category_slug,
     base_price: base,
     price: applyMarkup(base),
@@ -187,7 +213,10 @@ function normalizeRow(row: Record<string, unknown>) {
     measure: row.measure ?? null,
     dimensions_json: row.dimensions_json ?? null,
     weights_json: row.weights_json ?? null,
-    images_json: row.images_json ?? null,
+    images_json: normalizedImagesJson,
+    // Convenience flat arrays for frontend
+    images: mainImages,
+    vector_images: vectorImages,
     variants_json: row.variants_json ?? null,
   }
 }
