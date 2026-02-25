@@ -13,7 +13,7 @@ export type CartItem = {
 
 interface CartStore {
   items: CartItem[]
-  addItem: (item: Omit<CartItem, 'quantity'>) => void
+  addItem: (item: Omit<CartItem, 'quantity'>, qty?: number) => void
   removeItem: (id: string) => void
   updateQuantity: (id: string, delta: number) => void
   clearCart: () => void
