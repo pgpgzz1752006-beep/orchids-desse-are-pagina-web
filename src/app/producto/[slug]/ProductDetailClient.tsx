@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ShoppingCart, ChevronLeft, Check, ExternalLink, Minus, Plus } from 'lucide-react'
+import { ShoppingCart, ChevronLeft, ExternalLink, Minus, Plus } from 'lucide-react'
 import { useCartStore } from '@/lib/cartStore'
 
 interface Dimensions {
