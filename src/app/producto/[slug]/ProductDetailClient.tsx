@@ -77,9 +77,6 @@ function cleanImages(arr: string[] | undefined | null): string[] {
 export default function ProductDetailClient({ product }: Props) {
   const router = useRouter()
   const addItem = useCartStore((s) => s.addItem)
-  const [activeImg, setActiveImg] = useState(0)
-  const [galleryReady, setGalleryReady] = useState(false)
-  const [showVectors, setShowVectors] = useState(false)
   const [related, setRelated] = useState<RelatedProduct[]>([])
 
   // Quantity stepper
@@ -110,20 +107,7 @@ export default function ProductDetailClient({ product }: Props) {
   }
   const vectorImages: string[] = cleanImages(imagesJson?.vectorImages)
 
-  // Active display set: main or vectors
-  const displayImages = showVectors && vectorImages.length > 0 ? vectorImages : mainImages
-
   const stockInfo = stockLabel(stock)
-
-  // Mark gallery as ready on mount (prevents flicker on SSR hydration)
-  useEffect(() => {
-    setGalleryReady(true)
-  }, [])
-
-  // Reset activeImg when switching tabs
-  useEffect(() => {
-    setActiveImg(0)
-  }, [showVectors])
 
   // ── Quantity validation ───────────────────────────────────────────────────
   const validateQty = useCallback(
