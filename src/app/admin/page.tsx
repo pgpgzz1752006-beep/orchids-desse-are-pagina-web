@@ -412,14 +412,229 @@ function AutoSyncCard({
           )}
 
           {error && (
-            <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-sm">
-          <p className="text-red-400 font-bold mb-1 uppercase tracking-wider text-xs">Error</p>
+          <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-xl p-4 text-sm">
+            <p className="text-red-400 font-bold mb-1 uppercase tracking-wider text-xs">Error</p>
             <p className="text-red-300 break-words">{error}</p>
           </div>
         )}
       </div>
     );
   }
+
+/* ─── Image diagnosis card ───────────────────────────────────────── */
+interface ImageDiagResult {
+  sku: string
+  slug: string | null
+  found_in_db: boolean
+  found_in_api: boolean
+  api_pages_scanned: number
+  api_error: string | null
+  db: {
+    main_images_count: number
+    vector_images_count: number
+    main_images: string[]
+    vector_images: string[]
+    synced_at: string | null
+  }
+  api: {
+    main_images_count: number
+    vector_images_count: number
+    main_images: string[]
+    vector_images: string[]
+  }
+}
+
+function ImageDiagnosisCard() {
+  const [sku, setSku] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<ImageDiagResult | null>(null)
+  const [diagError, setDiagError] = useState<string | null>(null)
+
+  async function handleDiag() {
+    if (!sku.trim()) return
+    setLoading(true)
+    setResult(null)
+    setDiagError(null)
+    try {
+      const res = await fetch(`/api/admin/image-diagnosis?sku=${encodeURIComponent(sku.trim().toUpperCase())}`)
+      const data = await res.json()
+      if (!res.ok) setDiagError(data.error ?? 'Error desconocido')
+      else setResult(data as ImageDiagResult)
+    } catch (e) {
+      setDiagError(e instanceof Error ? e.message : 'Error de red')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <p className="text-[#888] text-xs uppercase tracking-widest mb-2">Diagnóstico de imágenes</p>
+      <p className="text-[#555] text-xs mb-4">
+        Compara las imágenes almacenadas en BD con las que devuelve el API en vivo para un SKU.
+      </p>
+
+      <div className="flex gap-2 mb-4">
+        <input
+          type="text"
+          value={sku}
+          onChange={(e) => setSku(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleDiag()}
+          placeholder="Ej: TMPS 62"
+          className="flex-1 bg-[#0E0F12] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9] uppercase"
+        />
+        <button
+          onClick={handleDiag}
+          disabled={loading || !sku.trim()}
+          className="bg-[#14C6C9]/20 hover:bg-[#14C6C9]/30 border border-[#14C6C9]/40 text-[#14C6C9] text-xs font-bold px-4 py-2 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed uppercase tracking-wider"
+        >
+          {loading ? 'Consultando...' : 'Diagnóstico'}
+        </button>
+      </div>
+
+      {diagError && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 mb-3">
+          <p className="text-red-300 text-xs">{diagError}</p>
+        </div>
+      )}
+
+      {result && (
+        <div className="space-y-4">
+          {/* Status */}
+          <div className="flex flex-wrap gap-2 text-[10px] font-semibold">
+            <span className={`px-2.5 py-1 rounded-full ${result.found_in_db ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-red-500/15 text-red-300 border border-red-500/30'}`}>
+              {result.found_in_db ? '✅ En BD' : '❌ No en BD'}
+            </span>
+            <span className={`px-2.5 py-1 rounded-full ${result.found_in_api ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-red-500/15 text-red-300 border border-red-500/30'}`}>
+              {result.found_in_api ? '✅ En API' : '❌ No en API'}
+            </span>
+            {result.slug && (
+              <a
+                href={`/producto/${result.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded-full bg-[#14C6C9]/15 text-[#14C6C9] border border-[#14C6C9]/30 hover:bg-[#14C6C9]/25 transition-colors"
+              >
+                Ver producto →
+              </a>
+            )}
+          </div>
+
+          {result.api_error && (
+            <p className="text-yellow-400 text-xs">⚠ API: {result.api_error}</p>
+          )}
+
+          {/* Side-by-side comparison */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* DB */}
+            <div className="bg-[#0E0F12] rounded-xl p-4 space-y-3">
+              <p className="text-[#888] text-[10px] uppercase tracking-widest">
+                Base de datos
+                {result.db.synced_at && (
+                  <span className="text-[#555] ml-2 normal-case">
+                    {new Date(result.db.synced_at).toLocaleDateString('es-MX')}
+                  </span>
+                )}
+              </p>
+              <Row
+                label="Fotos (mainImages)"
+                value={
+                  <span className={`font-mono font-bold ${result.db.main_images_count > 1 ? 'text-emerald-300' : 'text-[#AAA]'}`}>
+                    {result.db.main_images_count}
+                  </span>
+                }
+              />
+              <Row
+                label="Vectores"
+                value={<span className="font-mono text-[#AAA] font-bold">{result.db.vector_images_count}</span>}
+              />
+              {result.db.main_images.length > 0 && (
+                <div>
+                  <p className="text-[#555] text-[10px] uppercase tracking-wider mb-1.5">URLs (Fotos)</p>
+                  <div className="flex gap-1.5 flex-wrap">
+                    {result.db.main_images.slice(0, 4).map((url, i) => (
+                      <a key={i} href={url} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={url}
+                          alt={`main-${i}`}
+                          className="w-12 h-12 object-contain rounded-lg bg-[#1A1D24] border border-[#2A2D34] hover:border-[#14C6C9] transition-colors"
+                          onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0.2' }}
+                        />
+                      </a>
+                    ))}
+                    {result.db.main_images.length > 4 && (
+                      <div className="w-12 h-12 rounded-lg bg-[#1A1D24] border border-[#2A2D34] flex items-center justify-center text-[10px] text-[#555] font-bold">
+                        +{result.db.main_images.length - 4}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* API live */}
+            <div className="bg-[#0E0F12] rounded-xl p-4 space-y-3">
+              <p className="text-[#888] text-[10px] uppercase tracking-widest">
+                API en vivo
+                <span className="text-[#555] ml-2 normal-case">(pág. escaneadas: {result.api_pages_scanned})</span>
+              </p>
+              <Row
+                label="Fotos (mainImages)"
+                value={
+                  <span className={`font-mono font-bold ${result.api.main_images_count > 1 ? 'text-emerald-300' : 'text-[#AAA]'}`}>
+                    {result.api.main_images_count}
+                  </span>
+                }
+              />
+              <Row
+                label="Vectores"
+                value={<span className="font-mono text-[#AAA] font-bold">{result.api.vector_images_count}</span>}
+              />
+              {result.api.main_images.length > 0 && (
+                <div>
+                  <p className="text-[#555] text-[10px] uppercase tracking-wider mb-1.5">URLs (Fotos)</p>
+                  <div className="flex gap-1.5 flex-wrap">
+                    {result.api.main_images.slice(0, 4).map((url, i) => (
+                      <a key={i} href={url} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={url}
+                          alt={`api-main-${i}`}
+                          className="w-12 h-12 object-contain rounded-lg bg-[#1A1D24] border border-[#2A2D34] hover:border-[#14C6C9] transition-colors"
+                          onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0.2' }}
+                        />
+                      </a>
+                    ))}
+                    {result.api.main_images.length > 4 && (
+                      <div className="w-12 h-12 rounded-lg bg-[#1A1D24] border border-[#2A2D34] flex items-center justify-center text-[10px] text-[#555] font-bold">
+                        +{result.api.main_images.length - 4}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              {result.api.main_images_count === 1 && (
+                <p className="text-yellow-400 text-[10px]">
+                  ℹ Este producto solo tiene 1 imagen en el API.
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Mismatch warning */}
+          {result.found_in_db && result.found_in_api &&
+            result.db.main_images_count !== result.api.main_images_count && (
+            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3">
+              <p className="text-yellow-300 text-xs">
+                ⚠ Desincronización: BD tiene {result.db.main_images_count} fotos, API tiene {result.api.main_images_count}.
+                Ejecuta una sincronización completa para actualizar.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
 
 /* ─── Stock management card ──────────────────────────────────────── */
 interface StockStats {
