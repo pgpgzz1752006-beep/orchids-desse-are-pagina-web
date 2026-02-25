@@ -93,6 +93,9 @@ export default function AdminPage() {
           {/* Price audit */}
           <PriceAuditCard />
 
+          {/* Image diagnosis */}
+          <ImageDiagnosisCard />
+
           <div className="text-center pt-2">
           <Link href="/" className="text-[#14C6C9] text-xs hover:underline">
             ← Volver al sitio
