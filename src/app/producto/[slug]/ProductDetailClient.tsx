@@ -261,9 +261,10 @@ export default function ProductDetailClient({ product }: Props) {
     setQty(Math.min(Math.max(val, 1), max))
   }
 
-  // ── WhatsApp CTA ─────────────────────────────────────────────────────────
-  async function handleWhatsApp() {
+    // ── Add to cart + navigate ────────────────────────────────────────────────
+  async function handleGoToCart() {
     if (ctaBlocked) return
+    // Backend validation before adding
     try {
       const res = await fetch('/api/validate-quantity', {
         method: 'POST',
@@ -287,26 +288,20 @@ export default function ProductDetailClient({ product }: Props) {
         if (data.reason !== 'UNKNOWN_STOCK') return
       }
     } catch {
-      // network error — still allow WA
+      // network error — still allow
     }
-    const waText = encodeURIComponent(
-      `Hola, quiero cotizar ${qty} unidad${qty !== 1 ? 'es' : ''} de ${name} (SKU: ${sku}).`
+    addItem(
+      {
+        id: product.id as string,
+        name,
+        sku,
+        price,
+        image: mainImages[0] ?? '',
+        slug,
+      },
+      qty
     )
-    window.open(`https://wa.me/529512424333?text=${waText}`, '_blank', 'noopener,noreferrer')
-  }
-
-  function handleAddToCart() {
-    if (ctaBlocked) return
-    addItem({
-      id: product.id as string,
-      name,
-      sku,
-      price,
-      image: mainImages[0] ?? '',
-      slug,
-    })
-    setAdded(true)
-    setTimeout(() => setAdded(false), 2000)
+    router.push('/carrito')
   }
 
   useEffect(() => {
