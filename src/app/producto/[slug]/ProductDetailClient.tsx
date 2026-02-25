@@ -255,97 +255,12 @@ export default function ProductDetailClient({ product }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16">
 
           {/* ── LEFT: Gallery ────────────────────────────────────────── */}
-          <div className="flex flex-col gap-3">
-            {!galleryReady ? (
-              <GallerySkeleton />
-            ) : (
-              <>
-                {/* Tab bar: Fotos / Vectores */}
-                {vectorImages.length > 0 && (
-                  <div className="flex gap-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl p-1 w-fit">
-                    <button
-                      onClick={() => setShowVectors(false)}
-                      className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 ${
-                        !showVectors
-                          ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
-                          : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
-                      }`}
-                    >
-                      Fotos
-                    </button>
-                    <button
-                      onClick={() => setShowVectors(true)}
-                      className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 ${
-                        showVectors
-                          ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
-                          : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
-                      }`}
-                    >
-                      Vector
-                    </button>
-                  </div>
-                )}
-
-                {/* Main image */}
-                <div className="relative bg-[#F2F2F2] dark:bg-zinc-900 rounded-2xl overflow-hidden aspect-square flex items-center justify-center border border-zinc-100 dark:border-zinc-800">
-                  {displayImages[activeImg] ? (
-                    <>
-                      <MainImage src={displayImages[activeImg]} alt={`${name} — imagen ${activeImg + 1}`} />
-                      {/* Image counter badge */}
-                      {displayImages.length > 1 && (
-                        <span className="absolute bottom-3 left-3 bg-black/40 backdrop-blur-sm text-white text-[11px] font-semibold px-2 py-0.5 rounded-full pointer-events-none">
-                          {activeImg + 1} / {displayImages.length}
-                        </span>
-                      )}
-                      <a
-                        href={displayImages[activeImg]}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="absolute top-3 right-3 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm rounded-lg p-1.5 opacity-0 hover:opacity-100 focus:opacity-100 transition-opacity shadow"
-                        aria-label="Ver imagen completa"
-                        tabIndex={0}
-                      >
-                        <ExternalLink size={15} className="text-zinc-600 dark:text-zinc-300" />
-                      </a>
-                    </>
-                  ) : (
-                    <div className="text-zinc-300 dark:text-zinc-600 text-5xl font-bold select-none">?</div>
-                  )}
-                </div>
-
-                {/* Thumbnails strip */}
-                {displayImages.length > 1 && (
-                  <div
-                    role="list"
-                    aria-label="Miniaturas del producto"
-                    className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700"
-                  >
-                    {displayImages.map((img, i) => (
-                      <ThumbImg
-                        key={img}
-                        src={img}
-                        alt={`Imagen ${i + 1}`}
-                        active={i === activeImg}
-                        onClick={() => setActiveImg(i)}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {/* Vector open-in-new hint */}
-                {showVectors && vectorImages[activeImg] && (
-                  <a
-                    href={vectorImages[activeImg]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:underline self-start"
-                  >
-                    <ExternalLink size={12} />
-                    Abrir imagen vectorial
-                  </a>
-                )}
-              </>
-            )}
+          <div>
+            <ProductGallery
+              name={name}
+              mainImages={mainImages}
+              vectorImages={vectorImages}
+            />
           </div>
 
           {/* ── RIGHT: Product info ───────────────────────────────────── */}
