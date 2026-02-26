@@ -104,7 +104,20 @@ export async function GET(req: NextRequest) {
     // Let's actually use a simpler approach for all if RPC is not ready
     
     const facets = {
-      color: colorsData || [], // RPC should return { value, count }
+      color: (() => {
+        const counts: Record<string, number> = {}
+        colorsData?.forEach(item => {
+          if (Array.isArray(item.colors)) {
+            item.colors.forEach((c: string) => {
+              const val = c.trim().toUpperCase()
+              counts[val] = (counts[val] || 0) + 1
+            })
+          }
+        })
+        return Object.entries(counts)
+          .map(([value, count]) => ({ value, count }))
+          .sort((a, b) => b.count - a.count)
+      })(),
       brand: countOccurrences(brandsData || [], 'brand'),
       productType: countOccurrences(typesData || [], 'product_type'),
       categories: (() => {
