@@ -21,16 +21,38 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(MAX_LIMIT, Math.max(1, parseInt(searchParams.get('limit') || String(DEFAULT_LIMIT), 10)))
   const offset = (page - 1) * limit
 
-  let query = supabaseAdmin
-    .from('products')
-    .select(
-      'id, sku, name, slug, image_url, category_slug, price, price_mx, currency_mx, price_source, price_updated_at, stock, stock_status, stock_updated_at',
-      { count: 'exact' }
-    )
+    let query = supabaseAdmin
+      .from('products')
+      .select(
+        'id, sku, name, slug, image_url, category_slug, api_category_id, price, price_mx, currency_mx, price_source, price_updated_at, stock, stock_status, stock_updated_at',
+        { count: 'exact' }
+      )
+  
+    if (category) {
+      // 1. Fetch mapping for this site slug
+      const { data: mapping } = await supabaseAdmin
+        .from('category_mapping')
+        .select('api_category_ids')
+        .eq('site_slug', category)
+        .single()
 
-  if (category) {
-    query = query.eq('category_slug', category)
-  }
+      if (mapping?.api_category_ids && Array.isArray(mapping.api_category_ids) && mapping.api_category_ids.length > 0) {
+        // Filter by real API IDs
+        query = query.in('api_category_id', mapping.api_category_ids)
+      } else {
+        // Fallback or explicit empty result if mapping missing
+        // According to requirements: "Si no hay mapeo configurado... devolver lista vacía"
+        console.warn(`[products] No mapping found for category: ${category}`)
+        return NextResponse.json({
+          products: [],
+          total: 0,
+          page,
+          totalPages: 0,
+          error: `Falta mapear categoría: ${category}`
+        })
+      }
+    }
+
 
   if (q) {
     query = query.ilike('name', `%${q}%`)
