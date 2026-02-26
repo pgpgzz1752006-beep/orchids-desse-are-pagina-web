@@ -217,6 +217,16 @@ export const STOCK_QUERY = `
   }
 `
 
+export const CATEGORIES_QUERY = `
+  {
+    distribuitorCategoryCatalog {
+      id
+      name
+      parentId
+    }
+  }
+`
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface PromoVariant {
