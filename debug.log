@@ -91,3 +91,38 @@ It can also happen if the client has a browser extension installed which messes 
                        ...
 2026-02-11T23:06:10.456Z [console][warn] Image with src "/brand/logo-light.webp" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
 2026-02-11T23:06:10.456Z [console][warn] Image with src "/antiestres.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.352Z [console][warn] Image with src "/cat-herramientas.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.361Z [console][warn] Image with src "/cat-hieleras.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.365Z [console][warn] Image with src "/cat-hogar.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.371Z [console][warn] Image with src "/cat-libretas.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.376Z [console][warn] Image with src "/cat-llaveros.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.382Z [console][warn] Image with src "/cat-maletas.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.391Z [console][warn] Image with src "/cat-mochilas.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.398Z [console][warn] Image with src "/cat-ninos.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.401Z [console][warn] Image with src "/cat-oficina.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.408Z [console][warn] Image with src "/cat-paraguas.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.417Z [console][warn] Image with src "/cat-portafolios.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.423Z [console][warn] Image with src "/cat-salud.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.432Z [console][warn] Image with src "/cat-sets-regalo.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.435Z [console][warn] Image with src "/cat-tecnologia.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:42.437Z [console][warn] Image with src "/cat-textiles.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+2026-02-26T18:59:17.576Z [network][GET 0] /api/products?category=regalos&page=1&limit=12
+  response: Request failed: Failed to fetch
+2026-02-26T18:59:17.576Z [network][GET 0] /api/products?category=regalos&page=1&limit=12
+  response: Request failed: Failed to fetch
+2026-02-26T18:59:18.693Z [network][GET 200] /api/products?category=regalos&page=1&limit=12
+  response: {"products":[],"total":0,"page":1,"totalPages":0,"error":"Falta mapear categoría: regalos"}
+2026-02-26T18:59:25.999Z [network][GET 200] /api/products?category=gorras&page=1&limit=12
+  response: {"products":[],"total":0,"page":1,"totalPages":0,"error":"Falta mapear categoría: gorras"}
+2026-02-26T18:59:30.128Z [network][GET 0] /api/products?category=bolsas&page=1&limit=12
+  response: Request failed: Failed to fetch
+2026-02-26T18:59:30.129Z [network][GET 0] /api/products?category=bolsas&page=1&limit=12
+  response: Request failed: Failed to fetch
+2026-02-26T18:59:31.007Z [network][GET 200] /api/products?category=bolsas&page=1&limit=12
+  response: {"products":[],"total":0,"page":1,"totalPages":0,"error":"Falta mapear categoría: bolsas"}
+2026-02-26T18:59:37.175Z [network][GET 200] /api/products?category=bar&page=1&limit=12
+  response: {"products":[],"total":0,"page":1,"totalPages":0,"error":"Falta mapear categoría: bar"}
+2026-02-26T18:59:37.228Z [network][GET 0] /api/products?category=bar&page=1&limit=12
+  response: Request failed: Failed to fetch
+2026-02-26T18:59:38.106Z [network][GET 200] /api/products?category=bar&page=1&limit=12
+  response: {"products":[],"total":0,"page":1,"totalPages":0,"error":"Falta mapear categoría: bar"}
