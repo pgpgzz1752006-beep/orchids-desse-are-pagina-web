@@ -30,9 +30,13 @@ export async function GET(req: NextRequest) {
     }
 
     // 1. Colors Facets
-    const colorsPromise = supabaseAdmin.rpc('get_product_colors_facets', { 
-      category_ids: apiCategoryIds.length > 0 ? apiCategoryIds : null 
-    })
+    let colorsQuery = supabaseAdmin
+      .from('products')
+      .select('colors')
+      .gt('stock', 0)
+      .not('colors', 'is', null)
+    if (apiCategoryIds.length > 0) colorsQuery = colorsQuery.in('api_category_id', apiCategoryIds)
+    const colorsPromise = colorsQuery
 
     // 2. Brands Facets
     let brandsQuery = supabaseAdmin
