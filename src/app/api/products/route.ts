@@ -17,6 +17,14 @@ export async function GET(req: NextRequest) {
   const category = searchParams.get('category') || ''
   const q = searchParams.get('q') || ''
   const tag = searchParams.get('tag') || ''
+  
+  // New filters
+  const colors = searchParams.get('color')?.split(',').filter(Boolean) || []
+  const brands = searchParams.get('brand')?.split(',').filter(Boolean) || []
+  const productTypes = searchParams.get('type')?.split(',').filter(Boolean) || []
+  const capacities = searchParams.get('cap')?.split(',').filter(Boolean) || []
+  const categoryIds = searchParams.get('cat')?.split(',').filter(Boolean) || []
+
   const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
   const limit = Math.min(MAX_LIMIT, Math.max(1, parseInt(searchParams.get('limit') || String(DEFAULT_LIMIT), 10)))
   const offset = (page - 1) * limit
@@ -24,7 +32,7 @@ export async function GET(req: NextRequest) {
     let query = supabaseAdmin
       .from('products')
       .select(
-        'id, sku, name, slug, image_url, category_slug, api_category_id, price, price_mx, currency_mx, price_source, price_updated_at, stock, stock_status, stock_updated_at',
+        'id, sku, name, slug, image_url, category_slug, api_category_id, price, price_mx, currency_mx, price_source, price_updated_at, stock, stock_status, stock_updated_at, colors, brand, product_type, capacity',
         { count: 'exact' }
       )
   
@@ -52,6 +60,27 @@ export async function GET(req: NextRequest) {
         })
       }
     }
+
+  if (categoryIds.length > 0) {
+    query = query.in('api_category_id', categoryIds)
+  }
+
+  if (colors.length > 0) {
+    // colors is text[], we check if any of the requested colors are in the array
+    query = query.overlaps('colors', colors.map(c => c.toUpperCase()))
+  }
+
+  if (brands.length > 0) {
+    query = query.in('brand', brands)
+  }
+
+  if (productTypes.length > 0) {
+    query = query.in('product_type', productTypes)
+  }
+
+  if (capacities.length > 0) {
+    query = query.in('capacity', capacities)
+  }
 
 
   if (q) {
