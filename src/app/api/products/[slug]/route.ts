@@ -33,6 +33,30 @@ async function fetchAndCacheFromGraphQL(sku: string): Promise<Record<string, unk
     const mainImage = pm.media?.mainImages?.[0] ?? null
     const now = new Date().toISOString()
 
+    // Extract colors
+    const colors = Array.from(new Set(
+      found.variants
+        .map(v => v.color?.trim().toUpperCase())
+        .filter((c): c is string => !!c)
+    ))
+
+    // Extract categories
+    const primaryCat = pm.categories?.[0]
+    const api_category_id = primaryCat?.id ?? null
+    const api_category_name = primaryCat?.name ?? null
+    const api_category_path = pm.categories?.map(c => c.name).join(' > ') ?? null
+
+    // Extract capacity value/unit
+    let capacity_value: number | null = null
+    let capacity_unit: string | null = null
+    if (pm.capacity) {
+      const match = pm.capacity.match(/([\d.,]+)\s*(.*)/)
+      if (match) {
+        capacity_value = parseFloat(match[1].replace(',', ''))
+        capacity_unit = match[2].trim()
+      }
+    }
+
     // Use robust price parsing with sentinel detection
     const { price, raw: priceRaw, currency } = bestVariantPrice(found.variants)
 
@@ -52,7 +76,14 @@ async function fetchAndCacheFromGraphQL(sku: string): Promise<Record<string, unk
       price_updated_at: now,
       description_mx: pm.descriptionMx ?? null,
       brand: pm.brand ?? null,
+      product_type: api_category_name, // Using category as product type
       capacity: pm.capacity ?? null,
+      capacity_value,
+      capacity_unit,
+      colors,
+      api_category_id,
+      api_category_name,
+      api_category_path,
       material: pm.features?.material ?? null,
       measure: pm.features?.measure ?? null,
       dimensions_json: pm.package?.dimensions ?? null,
