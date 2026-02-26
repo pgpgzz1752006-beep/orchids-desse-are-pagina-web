@@ -117,6 +117,8 @@ function ProductsContent() {
   const handleFilterChange = (filters: any) => {
     setSelectedFilters(filters);
     setPage(1);
+    // Instant update for URL to keep UI in sync, 
+    // but the actual fetch is already triggered by the useEffect on selectedFilters
     updateUrl(filters, 1, activeSearch);
   };
 
