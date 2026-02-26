@@ -90,11 +90,15 @@ export default function AdminPage() {
           {/* Stock management */}
           <StockCard />
 
-          {/* Price audit */}
-          <PriceAuditCard />
+            {/* Price audit */}
+            <PriceAuditCard />
+  
+            {/* Category mapping */}
+            <CategoryMappingCard />
+  
+            {/* Image diagnosis */}
+            <ImageDiagnosisCard />
 
-          {/* Image diagnosis */}
-          <ImageDiagnosisCard />
 
           <div className="text-center pt-2">
           <Link href="/" className="text-[#14C6C9] text-xs hover:underline">
