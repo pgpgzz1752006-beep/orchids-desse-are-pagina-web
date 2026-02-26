@@ -425,6 +425,137 @@ function AutoSyncCard({
     );
   }
 
+/* ─── Category mapping card ───────────────────────────────────────── */
+interface ApiCategory {
+  id: string
+  name: string
+  slug: string
+  parent_id: string | null
+}
+
+interface CategoryMapping {
+  site_slug: string
+  api_category_ids: string[]
+  label: string
+}
+
+function CategoryMappingCard() {
+  const [categories, setCategories] = useState<ApiCategory[]>([])
+  const [mappings, setMappings] = useState<CategoryMapping[]>([])
+  const [loading, setLoading] = useState(false)
+  const [syncing, setSyncing] = useState(false)
+  const [saving, setSaving] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  async function loadConfig() {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await fetch('/api/admin/categories-config')
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Error al cargar configuración')
+      setCategories(data.categories)
+      setMappings(data.mappings)
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function syncCategories() {
+    setSyncing(true)
+    setError(null)
+    try {
+      const res = await fetch('/api/api-categories')
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Error al sincronizar categorías')
+      loadConfig()
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  async function updateMapping(siteSlug: string, ids: string[]) {
+    setSaving(siteSlug)
+    try {
+      const res = await fetch('/api/admin/categories-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ site_slug: siteSlug, api_category_ids: ids })
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || 'Error al guardar')
+      }
+      setMappings(prev => prev.map(m => m.site_slug === siteSlug ? { ...m, api_category_ids: ids } : m))
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setSaving(null)
+    }
+  }
+
+  useEffect(() => {
+    loadConfig()
+  }, [])
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <p className="text-[#888] text-xs uppercase tracking-widest mb-1">Mapeo de Categorías</p>
+          <p className="text-[#555] text-xs">Asigna categorías reales del API a las secciones del sitio.</p>
+        </div>
+        <button
+          onClick={syncCategories}
+          disabled={syncing}
+          className="text-[10px] bg-[#14C6C9]/10 border border-[#14C6C9]/30 text-[#14C6C9] px-2 py-1 rounded-lg uppercase tracking-wider hover:bg-[#14C6C9]/20 transition-colors disabled:opacity-40"
+        >
+          {syncing ? 'Sincronizando...' : 'Sync Categorías'}
+        </button>
+      </div>
+
+      {loading && <p className="text-[#555] text-xs">Cargando categorías...</p>}
+      {error && <p className="text-red-400 text-xs mb-4">{error}</p>}
+
+      <div className="space-y-4">
+        {mappings.map(m => (
+          <div key={m.site_slug} className="bg-[#0E0F12] rounded-xl p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-white text-xs font-bold uppercase tracking-wider">{m.label}</span>
+              <span className="text-[#555] text-[10px] font-mono">{m.site_slug}</span>
+            </div>
+            
+            <div className="space-y-2">
+              <select
+                multiple
+                value={m.api_category_ids}
+                onChange={(e) => {
+                  const options = Array.from(e.target.selectedOptions).map(o => o.value)
+                  updateMapping(m.site_slug, options)
+                }}
+                disabled={saving === m.site_slug}
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-[#14C6C9] h-32"
+              >
+                {categories.map(cat => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name} ({cat.id})
+                  </option>
+                ))}
+              </select>
+              <p className="text-[#555] text-[10px]">Mantén pulsado Ctrl (o Cmd) para seleccionar múltiples categorías.</p>
+              {saving === m.site_slug && <p className="text-emerald-400 text-[10px] animate-pulse">Guardando...</p>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 /* ─── Image diagnosis card ───────────────────────────────────────── */
 interface ImageDiagResult {
   sku: string
