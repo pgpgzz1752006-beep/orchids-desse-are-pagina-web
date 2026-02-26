@@ -181,6 +181,11 @@ export const CATALOG_QUERY = `
             isWaterproof
             hasBluetooth
           }
+          categories {
+            id
+            name
+            parentId
+          }
         }
         variants {
           sku
