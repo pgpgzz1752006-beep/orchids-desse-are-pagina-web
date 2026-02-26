@@ -44,7 +44,13 @@ export async function POST() {
       const name = pm.nameProductModel
       const sku = pm.sku
       const mainImage = pm.media?.mainImages?.[0] ?? null
-      const categorySlug = mapToSlug(name, '')
+      
+      const primaryCategory = pm.categories?.[0] || null
+      const apiCategoryId = primaryCategory?.id || null
+      const apiCategoryName = primaryCategory?.name || null
+      const apiCategoryPath = pm.categories?.map(c => c.name).join(' > ') || null
+
+      const categorySlug = mapToSlug(name, apiCategoryName || '')
 
       // Robust price parsing: sentinel detection + normalization
       const { price, raw: priceRaw, currency } = bestVariantPrice(product.variants)
