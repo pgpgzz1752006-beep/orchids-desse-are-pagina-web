@@ -96,9 +96,11 @@ export default function AdminPage() {
             {/* Category mapping */}
             <CategoryMappingCard />
   
-            {/* Image diagnosis */}
-            <ImageDiagnosisCard />
+          {/* Image diagnosis */}
+          <ImageDiagnosisCard />
 
+          {/* Banner management */}
+          <BannerManagerCard />
 
           <div className="text-center pt-2">
           <Link href="/" className="text-[#14C6C9] text-xs hover:underline">
