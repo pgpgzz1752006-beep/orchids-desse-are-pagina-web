@@ -1659,13 +1659,21 @@ function BannerManagerCard() {
                 )}
               </div>
 
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <p className="text-white text-xs font-semibold truncate">{banner.title || <span className="text-[#555] italic">Sin título</span>}</p>
-                <p className="text-[#555] text-[10px] truncate mt-0.5">{banner.image_url}</p>
-                {banner.link_url && (
-                  <p className="text-[#14C6C9] text-[10px] truncate mt-0.5">{banner.link_url}</p>
-                )}
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-white text-xs font-semibold truncate">{banner.title || <span className="text-[#555] italic">Sin título</span>}</p>
+                  {banner.subtitle && (
+                    <p className="text-[#888] text-[10px] truncate mt-0.5 italic">{banner.subtitle}</p>
+                  )}
+                  <p className="text-[#555] text-[10px] truncate mt-0.5">{banner.image_url}</p>
+                  {(banner.cta_label || banner.cta_href) && (
+                    <p className="text-[#14C6C9] text-[10px] truncate mt-0.5">
+                      CTA: {banner.cta_label || 'Ver catálogo'} → {banner.cta_href || '/productos'}
+                    </p>
+                  )}
+                  {banner.link_url && (
+                    <p className="text-[#9B59B6] text-[10px] truncate mt-0.5">Enlace: {banner.link_url}</p>
+                  )}
                 <div className="flex gap-2 mt-2 flex-wrap">
                   {/* Toggle active */}
                   <button
