@@ -1594,7 +1594,7 @@ function BannerManagerCard() {
               {adding ? 'Guardando...' : 'Guardar banner'}
             </button>
             <button
-              onClick={() => { setShowForm(false); setForm({ title: '', image_url: '', alt_text: '', link_url: '' }) }}
+              onClick={() => { setShowForm(false); setForm({ title: '', subtitle: '', cta_label: 'Ver catálogo', cta_href: '/productos', image_url: '', alt_text: '', link_url: '' }) }}
               className="border border-[#333] text-[#555] hover:text-[#888] hover:border-[#555] text-xs px-4 py-2 rounded-xl transition-colors"
             >
               Cancelar
