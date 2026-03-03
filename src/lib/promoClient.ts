@@ -266,7 +266,7 @@ export interface PromoProductModel {
     isWaterproof: boolean | null
     hasBluetooth: boolean | null
   } | null
-  categories: Array<{ id: string; name: string; parentId: string | null }> | null
+  categories?: Array<{ id: string; name: string; parentId: string | null }> | null
 }
 
 export interface PromoProduct {
