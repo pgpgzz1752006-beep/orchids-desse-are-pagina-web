@@ -1551,39 +1551,68 @@ function BannerManagerCard() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Título (interno)</label>
-              <input
-                type="text"
-                value={form.title}
-                onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-                placeholder="Ej: Banner Navidad 2026"
-                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Título (visible en banner)</label>
+                <input
+                  type="text"
+                  value={form.title}
+                  onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                  placeholder="Ej: Nuevos Productos 2026"
+                  className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+                />
+              </div>
+              <div>
+                <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Subtítulo</label>
+                <input
+                  type="text"
+                  value={form.subtitle}
+                  onChange={e => setForm(f => ({ ...f, subtitle: e.target.value }))}
+                  placeholder="Ej: Diseña tu marca con nosotros"
+                  className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+                />
+              </div>
+              <div>
+                <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Botón CTA (texto)</label>
+                <input
+                  type="text"
+                  value={form.cta_label}
+                  onChange={e => setForm(f => ({ ...f, cta_label: e.target.value }))}
+                  placeholder="Ver catálogo"
+                  className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+                />
+              </div>
+              <div>
+                <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Botón CTA (enlace)</label>
+                <input
+                  type="text"
+                  value={form.cta_href}
+                  onChange={e => setForm(f => ({ ...f, cta_href: e.target.value }))}
+                  placeholder="/productos"
+                  className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+                />
+              </div>
+              <div>
+                <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Texto alternativo (SEO)</label>
+                <input
+                  type="text"
+                  value={form.alt_text}
+                  onChange={e => setForm(f => ({ ...f, alt_text: e.target.value }))}
+                  placeholder="Descripción de la imagen"
+                  className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+                />
+              </div>
+              <div>
+                <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Enlace del banner (todo)</label>
+                <input
+                  type="url"
+                  value={form.link_url}
+                  onChange={e => setForm(f => ({ ...f, link_url: e.target.value }))}
+                  placeholder="https://... (opcional)"
+                  className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+                />
+              </div>
             </div>
-            <div>
-              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Texto alternativo (SEO)</label>
-              <input
-                type="text"
-                value={form.alt_text}
-                onChange={e => setForm(f => ({ ...f, alt_text: e.target.value }))}
-                placeholder="Descripción de la imagen"
-                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Enlace (opcional)</label>
-            <input
-              type="url"
-              value={form.link_url}
-              onChange={e => setForm(f => ({ ...f, link_url: e.target.value }))}
-              placeholder="https://... (deja vacío si no aplica)"
-              className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
-            />
-          </div>
 
           <div className="flex gap-2 pt-1">
             <button
