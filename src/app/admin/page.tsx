@@ -1470,7 +1470,7 @@ function BannerManagerCard() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       setBanners(prev => [...prev, data.banner])
-      setForm({ title: '', image_url: '', alt_text: '', link_url: '' })
+      setForm({ title: '', subtitle: '', cta_label: 'Ver catálogo', cta_href: '/productos', image_url: '', alt_text: '', link_url: '' })
       setShowForm(false)
       flash('Banner agregado correctamente')
     } catch (e: any) {
