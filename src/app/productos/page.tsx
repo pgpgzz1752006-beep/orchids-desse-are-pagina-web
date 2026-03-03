@@ -57,12 +57,123 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 function SkeletonCard() {
-    return (
-      <div className="bg-white dark:bg-[#1A1D24] border border-[#E0E0E0] dark:border-[#2A2D34] rounded-[11px] p-3 animate-pulse">
-        <div className="h-[140px] sm:h-[160px] lg:h-[180px] bg-[#F2F2F2] dark:bg-gray-700 rounded-[10px] mb-3" />
+  return (
+    <div className="bg-white dark:bg-[#1A1D24] border border-[#E0E0E0] dark:border-[#2A2D34] rounded-[11px] p-3 animate-pulse">
+      <div className="h-[140px] sm:h-[160px] lg:h-[180px] bg-[#F2F2F2] dark:bg-gray-700 rounded-[10px] mb-3" />
       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mx-auto mb-2" />
       <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mx-auto" />
     </div>
+  );
+}
+
+/** Extract all image URLs from a product (mainImages + fallback to image_url) */
+function getProductImages(product: Product): string[] {
+  const main = product.images_json?.mainImages ?? [];
+  const valid = main.filter((u) => typeof u === "string" && u.startsWith("http"));
+  if (valid.length > 0) return valid;
+  const fallback = parseImageUrl(product.image_url);
+  return fallback ? [fallback] : [];
+}
+
+function ProductCard({ product }: { product: Product }) {
+  const images = getProductImages(product);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [fading, setFading] = useState(false);
+  const hoverRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const href = product.slug
+    ? `/producto/${product.slug}`
+    : `/productos?category=${product.category_slug}`;
+
+  const switchTo = (idx: number) => {
+    if (idx === activeIdx) return;
+    setFading(true);
+    setTimeout(() => {
+      setActiveIdx(idx);
+      setFading(false);
+    }, 120);
+  };
+
+  const handleMouseEnter = () => {
+    if (images.length <= 1) return;
+    let i = 1;
+    hoverRef.current = setInterval(() => {
+      switchTo(i % images.length);
+      i++;
+    }, 900);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverRef.current) clearInterval(hoverRef.current);
+    hoverRef.current = null;
+    switchTo(0);
+  };
+
+  return (
+    <Link
+      href={href}
+      className="group bg-white dark:bg-white border border-[#D9D9D9] rounded-[11px] p-3 flex flex-col transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] cursor-pointer"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Main image */}
+      <div className="relative flex items-center justify-center rounded-[10px] overflow-hidden bg-[#F2F2F2] h-[140px] sm:h-[160px] lg:h-[180px] mb-2 p-3 flex-shrink-0">
+        <Image
+          src={images[activeIdx] ?? "/placeholder-product.png"}
+          alt={product.name}
+          width={180}
+          height={180}
+          className={`w-full h-full object-contain transition-opacity duration-[120ms] ${fading ? "opacity-0" : "opacity-100"}`}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/placeholder-product.png";
+          }}
+        />
+        {/* Image count badge */}
+        {images.length > 1 && (
+          <span className="absolute bottom-1.5 right-1.5 text-[9px] font-semibold bg-black/50 text-white rounded-full px-1.5 py-0.5 leading-none">
+            {activeIdx + 1}/{images.length}
+          </span>
+        )}
+      </div>
+
+      {/* Thumbnail strip — only if 2+ images */}
+      {images.length > 1 && (
+        <div className="flex gap-1 justify-center mb-2 overflow-x-auto scrollbar-hide px-1">
+          {images.map((url, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={(e) => { e.preventDefault(); switchTo(i); }}
+              onMouseEnter={(e) => { e.preventDefault(); switchTo(i); }}
+              className={`flex-shrink-0 w-7 h-7 rounded-[5px] overflow-hidden border-[1.5px] transition-all duration-150 ${
+                i === activeIdx
+                  ? "border-[#14C6C9] scale-105 shadow-sm"
+                  : "border-[#E0E0E0] hover:border-[#14C6C9]/60"
+              }`}
+            >
+              <Image
+                src={url}
+                alt={`${product.name} vista ${i + 1}`}
+                width={28}
+                height={28}
+                className="w-full h-full object-contain bg-[#F7F7F7]"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+              />
+            </button>
+          ))}
+        </div>
+      )}
+
+      <p className="font-['Montserrat'] text-[10px] md:text-[11px] font-semibold text-[#333] text-center uppercase leading-[1.4] min-h-[28px] flex-1">
+        {product.name}
+      </p>
+      <p className="text-[10px] text-[#999] text-center mt-1">{product.sku}</p>
+      <p className="text-[13px] font-bold text-[#14C6C9] text-center mt-1">
+        {product.price
+          ? `$${product.price.toLocaleString("es-MX", { minimumFractionDigits: 2 })}`
+          : <span className="text-[#AAAAAA] font-medium">Consultar</span>
+        }
+      </p>
+    </Link>
   );
 }
 
