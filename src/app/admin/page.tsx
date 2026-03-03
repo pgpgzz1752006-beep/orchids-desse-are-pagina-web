@@ -1452,18 +1452,21 @@ function BannerManagerCard() {
     setError(null)
     try {
       const maxOrder = banners.length ? Math.max(...banners.map(b => b.sort_order)) : 0
-      const res = await fetch('/api/admin/banners', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: form.title,
-          image_url: form.image_url.trim(),
-          alt_text: form.alt_text,
-          link_url: form.link_url.trim() || null,
-          sort_order: maxOrder + 1,
-          is_active: true,
-        }),
-      })
+        const res = await fetch('/api/admin/banners', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: form.title,
+            subtitle: form.subtitle || null,
+            cta_label: form.cta_label || null,
+            cta_href: form.cta_href || '/productos',
+            image_url: form.image_url.trim(),
+            alt_text: form.alt_text,
+            link_url: form.link_url.trim() || null,
+            sort_order: maxOrder + 1,
+            is_active: true,
+          }),
+        })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       setBanners(prev => [...prev, data.banner])
