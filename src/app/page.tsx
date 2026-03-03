@@ -46,14 +46,26 @@ async function getRecommended() {
   return dbProductsToStrip(data);
 }
 
+async function getNewProducts() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("sku, name, image_url, category_slug, slug, created_at")
+    .order("created_at", { ascending: false })
+    .limit(24);
+  if (error || !data?.length) return null;
+  return dbProductsToStrip(data);
+}
+
 export default async function Home() {
-  const [bestSellers, recommended] = await Promise.all([
+  const [bestSellers, recommended, newProducts] = await Promise.all([
     getBestSellers(),
     getRecommended(),
+    getNewProducts(),
   ]);
 
   const featuredProducts = bestSellers ?? staticFeatured;
   const recommendedProducts = recommended ?? staticFeatured;
+  const newProductsList = newProducts ?? staticFeatured;
 
   return (
     <div id="top" className="min-h-screen bg-white dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300">
@@ -70,6 +82,12 @@ export default async function Home() {
           titleRegular="PRODUCTOS"
           titleBold="RECOMENDADOS"
           products={recommendedProducts}
+          autoplay
+        />
+        <ProductStrip
+          titleRegular=""
+          titleBold="NUEVOS"
+          products={newProductsList}
           autoplay
         />
         <SolutionsSection />
