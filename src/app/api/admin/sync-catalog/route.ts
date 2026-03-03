@@ -100,26 +100,41 @@ export async function POST(_req: NextRequest) {
     // Build rows
     const rows = allProducts.map((item) => buildRow(item, now))
 
-    // Upsert in batches of 100 — preserve is_best_seller / is_recommended
-    const UPSERT_BATCH = 100
-    let upserted = 0
-    let errors = 0
-
-    for (let i = 0; i < rows.length; i += UPSERT_BATCH) {
-      const batch = rows.slice(i, i + UPSERT_BATCH)
-      const { error } = await supabaseAdmin
+    // Get existing SKUs so we can preserve created_at for existing products
+      const { data: existingSkus } = await supabaseAdmin
         .from('products')
-        .upsert(batch, {
-          onConflict: 'sku',
-          ignoreDuplicates: false,
-        })
-      if (error) {
-        errors++
-        console.error('Upsert batch error:', error.message)
-      } else {
-        upserted += batch.length
+        .select('sku')
+      const existingSkuSet = new Set((existingSkus ?? []).map((r: { sku: string }) => r.sku))
+
+      // New products get created_at = now; existing products keep their created_at
+      const rowsWithCreatedAt = rows.map((r) => ({
+        ...r,
+        ...(existingSkuSet.has(r.sku) ? {} : { created_at: now }),
+      }))
+
+      // Upsert in batches of 100 — preserve is_best_seller / is_recommended / created_at
+      const UPSERT_BATCH = 100
+      let upserted = 0
+      let newProducts = 0
+      let errors = 0
+
+      for (let i = 0; i < rowsWithCreatedAt.length; i += UPSERT_BATCH) {
+        const batch = rowsWithCreatedAt.slice(i, i + UPSERT_BATCH)
+        const newInBatch = batch.filter((r) => !existingSkuSet.has(r.sku)).length
+        const { error } = await supabaseAdmin
+          .from('products')
+          .upsert(batch, {
+            onConflict: 'sku',
+            ignoreDuplicates: false,
+          })
+        if (error) {
+          errors++
+          console.error('Upsert batch error:', error.message)
+        } else {
+          upserted += batch.length
+          newProducts += newInBatch
+        }
       }
-    }
 
     // Count new products (those whose updated_at equals now, meaning they were just inserted)
     const { count: totalInDb } = await supabaseAdmin
@@ -128,8 +143,9 @@ export async function POST(_req: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      synced: upserted,
-      errors,
+        synced: upserted,
+        newProducts,
+        errors,
       totalFromApi: allProducts.length,
       totalInDb: totalInDb ?? 0,
       syncedAt: now,
