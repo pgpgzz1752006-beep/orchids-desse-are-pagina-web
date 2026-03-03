@@ -1839,3 +1839,118 @@ function ManualUploadCard() {
     </div>
   );
 }
+
+/* ─── Catalog Sync Card (GraphQL direct sync) ────────────────────── */
+function CatalogSyncCard() {
+  const [status, setStatus] = useState<{ totalInDb: number; lastSyncAt: string | null } | null>(null);
+  const [syncing, setSyncing] = useState(false);
+  const [result, setResult] = useState<Record<string, unknown> | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/admin/sync-catalog")
+      .then((r) => r.json())
+      .then((d) => setStatus(d))
+      .catch(() => {});
+  }, []);
+
+  async function handleSync() {
+    setSyncing(true);
+    setResult(null);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/sync-catalog", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        setError(data.error ?? "Error al sincronizar");
+      } else {
+        setResult(data);
+        setStatus({ totalInDb: data.totalInDb, lastSyncAt: data.syncedAt });
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error de red");
+    } finally {
+      setSyncing(false);
+    }
+  }
+
+  function formatDate(iso: string | null) {
+    if (!iso) return "Nunca";
+    const d = new Date(iso);
+    return d.toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" });
+  }
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <p className="text-[#888] text-xs uppercase tracking-widest mb-1">Sincronizar catálogo (GraphQL)</p>
+      <p className="text-[#555] text-xs mb-4">
+        Jala <strong className="text-[#888]">todos los productos</strong> del proveedor directo desde la API y los guarda en tu base de datos. Los productos nuevos que ellos agreguen aparecerán automáticamente en tu sitio.
+      </p>
+
+      {/* Status row */}
+      {status && (
+        <div className="flex justify-between items-center bg-[#14141A] border border-[#2A2D34] rounded-xl px-4 py-3 mb-4 text-xs">
+          <div>
+            <span className="text-[#888]">Productos en BD: </span>
+            <span className="text-white font-bold">{status.totalInDb.toLocaleString("es-MX")}</span>
+          </div>
+          <div className="text-right">
+            <span className="text-[#888]">Última sync: </span>
+            <span className="text-[#14C6C9]">{formatDate(status.lastSyncAt)}</span>
+          </div>
+        </div>
+      )}
+
+      <button
+        onClick={handleSync}
+        disabled={syncing}
+        className="w-full bg-gradient-to-r from-[#14C6C9] to-[#9B59B6] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-opacity duration-200 uppercase tracking-widest text-sm"
+      >
+        {syncing ? (
+          <span className="flex items-center justify-center gap-2">
+            <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Sincronizando productos... (puede tardar unos minutos)
+          </span>
+        ) : (
+          "Sincronizar ahora con el proveedor"
+        )}
+      </button>
+
+      {result && (
+        <div className="mt-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 text-sm">
+          <p className="text-emerald-400 font-bold mb-3 uppercase tracking-wider text-xs">Sincronización completada</p>
+          <div className="grid grid-cols-2 gap-y-2 text-[#CCC] text-xs">
+            <span className="text-[#888]">Productos del proveedor</span>
+            <span className="font-semibold text-white">{String(result.totalFromApi ?? 0)}</span>
+            <span className="text-[#888]">Guardados / actualizados</span>
+            <span className="font-semibold text-emerald-300">{String(result.synced ?? 0)}</span>
+            <span className="text-[#888]">Total en tu BD</span>
+            <span className="font-semibold text-[#14C6C9]">{String(result.totalInDb ?? 0)}</span>
+            {(result.errors as number) > 0 && (
+              <>
+                <span className="text-[#888]">Errores</span>
+                <span className="font-semibold text-red-400">{String(result.errors)}</span>
+              </>
+            )}
+          </div>
+          <Link
+            href="/productos"
+            className="mt-4 block text-center text-[#14C6C9] text-xs underline hover:text-white transition-colors"
+          >
+            Ver catálogo actualizado →
+          </Link>
+        </div>
+      )}
+
+      {error && (
+        <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+          <p className="text-red-400 font-bold mb-1 uppercase tracking-wider text-xs">Error</p>
+          <p className="text-red-300 text-xs break-words">{error}</p>
+        </div>
+      )}
+    </div>
+  );
+}
