@@ -27,6 +27,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+function cleanImageList(arr: unknown): string[] {
+  if (!Array.isArray(arr)) return []
+  const seen = new Set<string>()
+  return arr
+    .map((s) => (typeof s === 'string' ? s.trim() : ''))
+    .filter((s) => s.length > 0 && !seen.has(s) && (seen.add(s), true))
+}
+
 export default async function ProductPage({ params }: PageProps) {
   const { data } = await supabaseAdmin
     .from('products')
@@ -46,7 +54,24 @@ export default async function ProductPage({ params }: PageProps) {
     return <UnavailablePage productName={data.name as string} />
   }
 
-  return <ProductDetailClient product={data as Record<string, unknown>} />
+  // Normalize images_json so lateral images always appear
+  const mediaRaw = data.images_json as { mainImages?: unknown; vectorImages?: unknown } | null
+  const mainImages = cleanImageList(mediaRaw?.mainImages)
+  const vectorImages = cleanImageList(mediaRaw?.vectorImages)
+
+  // Make sure image_url is always first
+  const primaryUrl = (data.image_url as string | null)?.trim() ?? ''
+  if (primaryUrl && !mainImages.includes(primaryUrl)) {
+    mainImages.unshift(primaryUrl)
+  }
+
+  const normalizedProduct = {
+    ...(data as Record<string, unknown>),
+    images_json: { mainImages, vectorImages },
+    image_url: mainImages[0] ?? data.image_url ?? null,
+  }
+
+  return <ProductDetailClient product={normalizedProduct} />
 }
 
 function UnavailablePage({ productName }: { productName?: string }) {
