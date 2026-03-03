@@ -1321,7 +1321,7 @@ function BannerManagerCard() {
   const [msg, setMsg] = useState<string | null>(null)
 
   // New banner form
-  const [form, setForm] = useState({ title: '', image_url: '', alt_text: '', link_url: '' })
+  const [form, setForm] = useState({ title: '', subtitle: '', cta_label: 'Ver catálogo', cta_href: '/productos', image_url: '', alt_text: '', link_url: '' })
   const [adding, setAdding] = useState(false)
   const [showForm, setShowForm] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
