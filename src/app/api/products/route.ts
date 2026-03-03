@@ -105,7 +105,7 @@ export async function GET(req: NextRequest) {
   // If HIDE_OUT_OF_STOCK=false → no filter (show everything)
 
   const { data, count, error } = await query
-    .order(sort === 'newest' ? 'created_at' : 'name', { ascending: sort !== 'newest' })
+    .order(sort === 'newest' ? 'created_at' : 'name', { ascending: sort !== 'newest', nullsFirst: sort !== 'newest' })
     .range(offset, offset + limit - 1)
 
   if (error) {
