@@ -1299,6 +1299,397 @@ function CleanupCard() {
   )
 }
 
+/* ─── Banner manager card ────────────────────────────────────────── */
+interface Banner {
+  id: string
+  title: string
+  image_url: string
+  alt_text: string
+  link_url: string | null
+  sort_order: number
+  is_active: boolean
+}
+
+function BannerManagerCard() {
+  const [banners, setBanners] = useState<Banner[]>([])
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [msg, setMsg] = useState<string | null>(null)
+
+  // New banner form
+  const [form, setForm] = useState({ title: '', image_url: '', alt_text: '', link_url: '' })
+  const [adding, setAdding] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+
+  async function load() {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/admin/banners')
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setBanners(data.banners)
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { load() }, [])
+
+  function flash(text: string) {
+    setMsg(text)
+    setTimeout(() => setMsg(null), 3000)
+  }
+
+  async function toggleActive(banner: Banner) {
+    setSaving(true)
+    try {
+      const res = await fetch('/api/admin/banners', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: banner.id, is_active: !banner.is_active }),
+      })
+      if (!res.ok) throw new Error((await res.json()).error)
+      setBanners(prev => prev.map(b => b.id === banner.id ? { ...b, is_active: !b.is_active } : b))
+      flash(banner.is_active ? 'Banner desactivado' : 'Banner activado')
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function deleteBanner(id: string) {
+    if (!confirm('¿Eliminar este banner?')) return
+    setSaving(true)
+    try {
+      const res = await fetch(`/api/admin/banners?id=${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error((await res.json()).error)
+      setBanners(prev => prev.filter(b => b.id !== id))
+      flash('Banner eliminado')
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function moveOrder(banner: Banner, direction: 'up' | 'down') {
+    const sorted = [...banners].sort((a, b) => a.sort_order - b.sort_order)
+    const idx = sorted.findIndex(b => b.id === banner.id)
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1
+    if (swapIdx < 0 || swapIdx >= sorted.length) return
+
+    const a = sorted[idx]
+    const b = sorted[swapIdx]
+    const newOrderA = b.sort_order
+    const newOrderB = a.sort_order
+
+    setSaving(true)
+    try {
+      await Promise.all([
+        fetch('/api/admin/banners', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: a.id, sort_order: newOrderA }),
+        }),
+        fetch('/api/admin/banners', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: b.id, sort_order: newOrderB }),
+        }),
+      ])
+      setBanners(prev => prev.map(bn => {
+        if (bn.id === a.id) return { ...bn, sort_order: newOrderA }
+        if (bn.id === b.id) return { ...bn, sort_order: newOrderB }
+        return bn
+      }))
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    try {
+      // Upload to Supabase Storage via the existing project-uploads bucket
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('bucket', 'project-uploads')
+      const res = await fetch('/api/admin/upload-image', { method: 'POST', body: formData })
+      if (!res.ok) {
+        // Fallback: use object URL for preview only (user can paste URL manually)
+        const url = URL.createObjectURL(file)
+        setForm(f => ({ ...f, image_url: url }))
+        flash('No se pudo subir. Usa la URL directa del proveedor.')
+        return
+      }
+      const data = await res.json()
+      setForm(f => ({ ...f, image_url: data.url }))
+      flash('Imagen subida correctamente')
+    } catch {
+      flash('Error al subir imagen. Usa la URL directamente.')
+    } finally {
+      setUploading(false)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+  }
+
+  async function addBanner() {
+    if (!form.image_url.trim()) { setError('La URL de imagen es requerida'); return }
+    setAdding(true)
+    setError(null)
+    try {
+      const maxOrder = banners.length ? Math.max(...banners.map(b => b.sort_order)) : 0
+      const res = await fetch('/api/admin/banners', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: form.title,
+          image_url: form.image_url.trim(),
+          alt_text: form.alt_text,
+          link_url: form.link_url.trim() || null,
+          sort_order: maxOrder + 1,
+          is_active: true,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setBanners(prev => [...prev, data.banner])
+      setForm({ title: '', image_url: '', alt_text: '', link_url: '' })
+      setShowForm(false)
+      flash('Banner agregado correctamente')
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setAdding(false)
+    }
+  }
+
+  const sorted = [...banners].sort((a, b) => a.sort_order - b.sort_order)
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <p className="text-[#888] text-xs uppercase tracking-widest mb-1">Banners de Inicio</p>
+          <p className="text-[#555] text-xs">Administra los banners del hero de la página principal.</p>
+        </div>
+        <button
+          onClick={() => setShowForm(v => !v)}
+          className="text-[10px] bg-[#14C6C9]/10 border border-[#14C6C9]/30 text-[#14C6C9] px-3 py-1.5 rounded-lg uppercase tracking-wider hover:bg-[#14C6C9]/20 transition-colors"
+        >
+          + Nuevo banner
+        </button>
+      </div>
+
+      {/* Feedback messages */}
+      {msg && (
+        <div className="mb-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-4 py-2">
+          <p className="text-emerald-300 text-xs">✅ {msg}</p>
+        </div>
+      )}
+      {error && (
+        <div className="mb-3 bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-2 flex justify-between items-start">
+          <p className="text-red-300 text-xs">{error}</p>
+          <button onClick={() => setError(null)} className="text-red-400 hover:text-red-200 text-xs ml-2">✕</button>
+        </div>
+      )}
+
+      {/* Add banner form */}
+      {showForm && (
+        <div className="mb-4 bg-[#0E0F12] rounded-xl p-4 space-y-3 border border-[#2A2D34]">
+          <p className="text-[#888] text-[10px] uppercase tracking-widest mb-2">Nuevo banner</p>
+
+          {/* Image URL + file upload */}
+          <div className="space-y-2">
+            <label className="text-[#555] text-[10px] uppercase tracking-wider block">Imagen</label>
+            <input
+              type="url"
+              value={form.image_url}
+              onChange={e => setForm(f => ({ ...f, image_url: e.target.value }))}
+              placeholder="https://... (URL de la imagen)"
+              className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+            />
+            <div className="flex items-center gap-2">
+              <span className="text-[#555] text-[10px]">— o —</span>
+              <label className={`text-[10px] border border-[#333] rounded-lg px-3 py-1.5 cursor-pointer transition-colors ${uploading ? 'opacity-50 cursor-not-allowed text-[#555]' : 'text-[#14C6C9] hover:border-[#14C6C9]'}`}>
+                {uploading ? 'Subiendo...' : 'Subir desde PC'}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileUpload}
+                  disabled={uploading}
+                />
+              </label>
+            </div>
+            {form.image_url && (
+              <div className="relative w-full h-24 rounded-xl overflow-hidden border border-[#2A2D34] bg-[#0E0F12]">
+                <img
+                  src={form.image_url}
+                  alt="Preview"
+                  className="w-full h-full object-contain"
+                  onError={e => { (e.target as HTMLImageElement).style.opacity = '0.2' }}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Título (interno)</label>
+              <input
+                type="text"
+                value={form.title}
+                onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                placeholder="Ej: Banner Navidad 2026"
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+              />
+            </div>
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Texto alternativo (SEO)</label>
+              <input
+                type="text"
+                value={form.alt_text}
+                onChange={e => setForm(f => ({ ...f, alt_text: e.target.value }))}
+                placeholder="Descripción de la imagen"
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Enlace (opcional)</label>
+            <input
+              type="url"
+              value={form.link_url}
+              onChange={e => setForm(f => ({ ...f, link_url: e.target.value }))}
+              placeholder="https://... (deja vacío si no aplica)"
+              className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+            />
+          </div>
+
+          <div className="flex gap-2 pt-1">
+            <button
+              onClick={addBanner}
+              disabled={adding || !form.image_url.trim()}
+              className="flex-1 bg-[#14C6C9] hover:bg-[#11b3b6] disabled:bg-[#14C6C9]/30 disabled:cursor-not-allowed text-white font-bold py-2 rounded-xl transition-colors text-xs uppercase tracking-wider"
+            >
+              {adding ? 'Guardando...' : 'Guardar banner'}
+            </button>
+            <button
+              onClick={() => { setShowForm(false); setForm({ title: '', image_url: '', alt_text: '', link_url: '' }) }}
+              className="border border-[#333] text-[#555] hover:text-[#888] hover:border-[#555] text-xs px-4 py-2 rounded-xl transition-colors"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Banner list */}
+      {loading ? (
+        <p className="text-[#555] text-xs">Cargando banners...</p>
+      ) : sorted.length === 0 ? (
+        <p className="text-[#555] text-xs text-center py-4">No hay banners. Agrega uno nuevo.</p>
+      ) : (
+        <div className="space-y-3">
+          {sorted.map((banner, idx) => (
+            <div
+              key={banner.id}
+              className={`flex gap-3 items-start bg-[#0E0F12] rounded-xl p-3 border transition-colors ${banner.is_active ? 'border-[#2A2D34]' : 'border-[#1A1D24] opacity-50'}`}
+            >
+              {/* Preview */}
+              <div className="relative w-24 h-14 rounded-lg overflow-hidden shrink-0 bg-[#1A1D24] border border-[#2A2D34]">
+                <img
+                  src={banner.image_url}
+                  alt={banner.alt_text || banner.title}
+                  className="w-full h-full object-cover"
+                  onError={e => { (e.target as HTMLImageElement).style.opacity = '0.2' }}
+                />
+                {!banner.is_active && (
+                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                    <span className="text-[#888] text-[9px] uppercase tracking-wider">Inactivo</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <p className="text-white text-xs font-semibold truncate">{banner.title || <span className="text-[#555] italic">Sin título</span>}</p>
+                <p className="text-[#555] text-[10px] truncate mt-0.5">{banner.image_url}</p>
+                {banner.link_url && (
+                  <p className="text-[#14C6C9] text-[10px] truncate mt-0.5">{banner.link_url}</p>
+                )}
+                <div className="flex gap-2 mt-2 flex-wrap">
+                  {/* Toggle active */}
+                  <button
+                    onClick={() => toggleActive(banner)}
+                    disabled={saving}
+                    className={`text-[10px] px-2 py-1 rounded-lg border transition-colors disabled:opacity-40 ${
+                      banner.is_active
+                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-300'
+                        : 'bg-[#333]/50 border-[#333] text-[#555] hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-300'
+                    }`}
+                  >
+                    {banner.is_active ? '● Activo' : '○ Inactivo'}
+                  </button>
+                  {/* Delete */}
+                  <button
+                    onClick={() => deleteBanner(banner.id)}
+                    disabled={saving}
+                    className="text-[10px] px-2 py-1 rounded-lg border border-[#333] text-[#555] hover:border-red-500/50 hover:text-red-400 transition-colors disabled:opacity-40"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+
+              {/* Order controls */}
+              <div className="flex flex-col gap-1 shrink-0">
+                <button
+                  onClick={() => moveOrder(banner, 'up')}
+                  disabled={saving || idx === 0}
+                  className="w-7 h-7 rounded-lg border border-[#333] text-[#555] hover:border-[#14C6C9] hover:text-[#14C6C9] transition-colors disabled:opacity-20 flex items-center justify-center"
+                  title="Subir"
+                >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => moveOrder(banner, 'down')}
+                  disabled={saving || idx === sorted.length - 1}
+                  className="w-7 h-7 rounded-lg border border-[#333] text-[#555] hover:border-[#14C6C9] hover:text-[#14C6C9] transition-colors disabled:opacity-20 flex items-center justify-center"
+                  title="Bajar"
+                >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <p className="text-[#555] text-[10px] mt-3 text-center">
+        Los cambios se reflejan en tiempo real en la página de inicio.
+      </p>
+    </div>
+  )
+}
+
 /* ─── Manual Excel upload card ───────────────────────────────────── */
 function ManualUploadCard() {
   const [loading, setLoading] = useState(false);
