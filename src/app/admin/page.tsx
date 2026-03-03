@@ -1303,6 +1303,9 @@ function CleanupCard() {
 interface Banner {
   id: string
   title: string
+  subtitle: string | null
+  cta_label: string | null
+  cta_href: string | null
   image_url: string
   alt_text: string
   link_url: string | null
