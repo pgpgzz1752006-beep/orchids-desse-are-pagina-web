@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     let query = supabaseAdmin
       .from('products')
       .select(
-        'id, sku, name, slug, image_url, category_slug, api_category_id, price, price_mx, currency_mx, price_source, price_updated_at, stock, stock_status, stock_updated_at, colors, brand, product_type, capacity',
+        'id, sku, name, slug, image_url, images_json, category_slug, api_category_id, price, price_mx, currency_mx, price_source, price_updated_at, stock, stock_status, stock_updated_at, colors, brand, product_type, capacity',
         { count: 'exact' }
       )
   
