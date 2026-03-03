@@ -102,6 +102,9 @@ export default function AdminPage() {
           {/* Banner management */}
           <BannerManagerCard />
 
+          {/* Catalog sync from GraphQL API */}
+          <CatalogSyncCard />
+
           <div className="text-center pt-2">
           <Link href="/" className="text-[#14C6C9] text-xs hover:underline">
             ← Volver al sitio
