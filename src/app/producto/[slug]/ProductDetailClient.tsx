@@ -101,11 +101,31 @@ export default function ProductDetailClient({ product }: Props) {
   const categorySlug = product.category_slug as string
 
   // ── Build gallery arrays ──────────────────────────────────────────────────
-  const mainImages: string[] = cleanImages(imagesJson?.mainImages)
-  if (!mainImages.length && product.image_url) {
-    mainImages.push(product.image_url as string)
-  }
-  const vectorImages: string[] = cleanImages(imagesJson?.vectorImages)
+  const [galleryImages, setGalleryImages] = useState<{ main: string[]; vector: string[] }>(() => {
+    const main = cleanImages(imagesJson?.mainImages)
+    if (!main.length && product.image_url) main.push(product.image_url as string)
+    return { main, vector: cleanImages(imagesJson?.vectorImages) }
+  })
+
+  // Fetch fresh images from the API (triggers background GraphQL sync)
+  useEffect(() => {
+    fetch(`/api/products/${slug}`)
+      .then((r) => r.json())
+      .then((d) => {
+        const fresh = d as { images_json?: { mainImages?: string[]; vectorImages?: string[] }; image_url?: string }
+        const freshMain = cleanImages(fresh.images_json?.mainImages)
+        if (!freshMain.length && fresh.image_url) freshMain.push(fresh.image_url)
+        const freshVector = cleanImages(fresh.images_json?.vectorImages)
+        if (freshMain.length > galleryImages.main.length || freshVector.length > galleryImages.vector.length) {
+          setGalleryImages({ main: freshMain, vector: freshVector })
+        }
+      })
+      .catch(() => {})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug])
+
+  const mainImages = galleryImages.main
+  const vectorImages = galleryImages.vector
 
   const stockInfo = stockLabel(stock)
 
