@@ -25,6 +25,7 @@ export async function GET(req: NextRequest) {
   const capacities = searchParams.get('cap')?.split(',').filter(Boolean) || []
   const categoryIds = searchParams.get('cat')?.split(',').filter(Boolean) || []
 
+  const sort = searchParams.get('sort') || ''
   const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
   const limit = Math.min(MAX_LIMIT, Math.max(1, parseInt(searchParams.get('limit') || String(DEFAULT_LIMIT), 10)))
   const offset = (page - 1) * limit
@@ -104,7 +105,7 @@ export async function GET(req: NextRequest) {
   // If HIDE_OUT_OF_STOCK=false → no filter (show everything)
 
   const { data, count, error } = await query
-    .order('name', { ascending: true })
+    .order(sort === 'newest' ? 'created_at' : 'name', { ascending: sort !== 'newest' })
     .range(offset, offset + limit - 1)
 
   if (error) {
