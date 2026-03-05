@@ -114,41 +114,13 @@ export default function CarritoPage() {
             <div className="w-full lg:w-[340px] xl:w-[380px] flex-shrink-0 sticky top-6">
               <div className="bg-white dark:bg-[#12141A] rounded-2xl border border-[#EFEFEF] dark:border-[#1E2028] shadow-sm p-6 flex flex-col gap-5">
 
-                <h2 className="text-[17px] font-bold text-[#111] dark:text-white">Resumen del pedido</h2>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-[12px] font-semibold text-[#555] dark:text-[#aaa] uppercase tracking-wide flex items-center gap-1.5">
-                    <Tag className="w-3.5 h-3.5" /> Cupón de descuento
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={coupon}
-                      onChange={(e) => { setCoupon(e.target.value); setCouponError(""); setCouponApplied(false); }}
-                      placeholder="Ej: DISEÑARE10"
-                      className="flex-1 h-[40px] px-3 rounded-lg border border-[#D8D8D8] dark:border-[#2A2D36] bg-[#FAFAFA] dark:bg-[#1A1C24] text-[13px] text-[#111] dark:text-white placeholder-[#BBB] dark:placeholder-[#555] outline-none focus:border-[#14C6C9] focus:ring-2 focus:ring-[#14C6C9]/20 transition-all duration-200"
-                    />
-                    <button onClick={handleCoupon} className="px-4 h-[40px] rounded-lg bg-[#14C6C9] hover:bg-[#0fa8ab] text-white font-bold text-[12px] uppercase tracking-wider transition-colors duration-200">
-                      Aplicar
-                    </button>
-                  </div>
-                  {couponApplied && <p className="text-[12px] text-[#7BC043] font-semibold">Cupón aplicado: 10% de descuento</p>}
-                  {couponError && <p className="text-[12px] text-[#E0007A] font-semibold">{couponError}</p>}
-                </div>
-
-                <div className="h-px bg-[#F0F0F0] dark:bg-[#1E2028]" />
+                  <h2 className="text-[17px] font-bold text-[#111] dark:text-white">Resumen del pedido</h2>
 
                   <div className="flex flex-col gap-3">
                     <div className="flex justify-between text-[13px] text-[#666] dark:text-[#999]">
                       <span>Subtotal ({totalItems} artículo{totalItems !== 1 ? "s" : ""})</span>
                       <span className="font-semibold text-[#111] dark:text-white">{formatPrice(subtotal)}</span>
                     </div>
-                    {couponApplied && (
-                      <div className="flex justify-between text-[13px] text-[#7BC043]">
-                        <span>Descuento (10%)</span>
-                        <span className="font-semibold">- {formatPrice(discount)}</span>
-                      </div>
-                    )}
                     <div className="flex justify-between text-[13px] text-[#666] dark:text-[#999]">
                       <span>Envío</span>
                       {freeShipping
