@@ -96,9 +96,13 @@ export async function POST(_req: NextRequest) {
 
       // Fetch page 1 to get total pages
       const page1 = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: 1 })
-      if (!page1) {
-        return NextResponse.json({ ok: false, error: 'El proveedor no está disponible en este momento (rate-limited o error de autenticación). Intenta de nuevo en unos minutos.' }, { status: 503 })
-      }
+        if (!page1) {
+          const remainingMin = await getBackoffRemainingMin()
+          const msg = remainingMin > 0
+            ? `El proveedor bloqueó el acceso temporalmente. Intenta de nuevo en ${remainingMin} minuto${remainingMin === 1 ? '' : 's'}.`
+            : 'El proveedor no está disponible en este momento. Intenta de nuevo en unos minutos.'
+          return NextResponse.json({ ok: false, error: msg }, { status: 503 })
+        }
       const { totalPages, data: page1Data } = page1.distribuitorProductCatalog
 
       let allProducts: PromoProduct[] = [...page1Data]
