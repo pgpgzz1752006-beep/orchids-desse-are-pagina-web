@@ -73,7 +73,16 @@ function buildRow(item: PromoProduct, now: string) {
     measure: pm.features?.measure ?? null,
     dimensions_json: pm.package?.dimensions ?? null,
     weights_json: pm.package?.weight ?? null,
-    images_json: pm.media ?? null,
+      images_json: {
+        mainImages: pm.media?.mainImages ?? [],
+        vectorImages: pm.media?.vectorImages ?? [],
+        variantImages: allVariantImages,
+        // All displayable images: mainImages + variantImages deduplicated
+        allImages: Array.from(new Set([
+          ...(pm.media?.mainImages ?? []),
+          ...allVariantImages,
+        ])),
+      },
     variants_json: item.variants ?? null,
     details_synced_at: now,
     updated_at: now,
