@@ -287,10 +287,11 @@ export default function ProductDetailClient({ product }: Props) {
           {/* ── LEFT: Gallery ────────────────────────────────────────── */}
           <div>
             <ProductGallery
-              name={name}
-              mainImages={mainImages}
-              vectorImages={vectorImages}
-            />
+                name={name}
+                mainImages={mainImages}
+                vectorImages={vectorImages}
+                variantImages={variantImages}
+              />
           </div>
 
           {/* ── RIGHT: Product info ───────────────────────────────────── */}
