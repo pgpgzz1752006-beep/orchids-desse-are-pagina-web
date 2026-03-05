@@ -8,6 +8,7 @@ import { useRef, useState, useEffect, useCallback, useId } from "react";
 interface Product {
   name: string;
   image: string;
+  hoverImage?: string | null;
   href: string;
 }
 
