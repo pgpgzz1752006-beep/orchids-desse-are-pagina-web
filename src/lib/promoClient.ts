@@ -183,21 +183,24 @@ export const CATALOG_QUERY = `
           }
 
         }
-        variants {
-          sku
-          name
-          color
-          size
-          pricing {
-            priceMx {
-              amount
-              currency
+          variants {
+            sku
+            name
+            color
+            size
+            pricing {
+              priceMx {
+                amount
+                currency
+              }
+            }
+            availability {
+              isEnabledVariantMx
+            }
+            mediaAssets {
+              variantImages
             }
           }
-          availability {
-            isEnabledVariantMx
-          }
-        }
       }
     }
   }
