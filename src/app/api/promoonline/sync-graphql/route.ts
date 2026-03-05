@@ -29,9 +29,9 @@ export async function POST() {
     }
 
     // 2. Fetch stock map (variant SKU → total stock across all warehouses)
-    const stockRes = await promoGQL<{ distributorStockCatalog: StockItem[] }>(STOCK_QUERY)
-    const stockMap = new Map<string, number>()
-    for (const s of stockRes.distributorStockCatalog ?? []) {
+      const stockRes = await promoGQL<{ distributorStockCatalog: StockItem[] }>(STOCK_QUERY)
+      const stockMap = new Map<string, number>()
+      for (const s of stockRes?.distributorStockCatalog ?? []) {
       if (s.sku && s.currentStock != null) {
         stockMap.set(s.sku, (stockMap.get(s.sku) ?? 0) + s.currentStock)
       }
