@@ -21,6 +21,9 @@ export async function GET(req: NextRequest) {
 
   try {
     const res = await promoGQL<{ distributorStockCatalog: StockItem[] }>(STOCK_QUERY)
+    if (!res) {
+      return NextResponse.json({ sku, stock: 0, status: 'UNKNOWN', error: 'API unavailable' }, { status: 200 })
+    }
     const stockMap = new Map<string, number>()
     for (const s of res.distributorStockCatalog ?? []) {
       if (s.sku && s.currentStock != null) {
