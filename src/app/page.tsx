@@ -18,18 +18,31 @@ const staticFeatured = [
   { name: "PARAGUAS SOCCER FIELD", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-090-1770140352614.jpg?width=400&height=400&resize=contain", href: "/producto/paraguas-soccer-field-soc-062" },
 ];
 
-function dbProductsToStrip(rows: { sku: string; name: string; image_url: string | null; category_slug: string; slug: string | null }[]) {
-  return rows.map((p) => ({
-    name: p.name,
-    image: p.image_url || PLACEHOLDER_IMAGE,
-    href: p.slug ? `/producto/${p.slug}` : `/productos?category=${p.category_slug}`,
-  }))
+interface DbProduct {
+  sku: string
+  name: string
+  image_url: string | null
+  category_slug: string
+  slug: string | null
+  images_json?: { mainImages?: string[]; vectorImages?: string[] } | null
+}
+
+function dbProductsToStrip(rows: DbProduct[]) {
+  return rows.map((p) => {
+    const mains = p.images_json?.mainImages ?? []
+    return {
+      name: p.name,
+      image: p.image_url || PLACEHOLDER_IMAGE,
+      hoverImage: mains.length > 1 ? mains[1] : null,
+      href: p.slug ? `/producto/${p.slug}` : `/productos?category=${p.category_slug}`,
+    }
+  })
 }
 
 async function getBestSellers() {
   const { data, error } = await supabase
     .from("products")
-    .select("sku, name, image_url, category_slug, slug")
+    .select("sku, name, image_url, category_slug, slug, images_json")
     .eq("is_best_seller", true)
     .limit(24);
   if (error || !data?.length) return null;
@@ -39,7 +52,7 @@ async function getBestSellers() {
 async function getRecommended() {
   const { data, error } = await supabase
     .from("products")
-    .select("sku, name, image_url, category_slug, slug")
+    .select("sku, name, image_url, category_slug, slug, images_json")
     .eq("is_recommended", true)
     .limit(24);
   if (error || !data?.length) return null;
@@ -49,8 +62,8 @@ async function getRecommended() {
 async function getNewProducts() {
   const { data, error } = await supabase
     .from("products")
-    .select("sku, name, image_url, category_slug, slug, created_at")
-    .order("created_at", { ascending: false })
+    .select("sku, name, image_url, category_slug, slug, images_json, created_at")
+    .order("created_at", { ascending: false, nullsFirst: false })
     .limit(24);
   if (error || !data?.length) return null;
   return dbProductsToStrip(data);
