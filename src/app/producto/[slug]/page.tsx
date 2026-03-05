@@ -55,9 +55,10 @@ export default async function ProductPage({ params }: PageProps) {
   }
 
   // Normalize images_json so lateral images always appear
-  const mediaRaw = data.images_json as { mainImages?: unknown; vectorImages?: unknown } | null
+  const mediaRaw = data.images_json as { mainImages?: unknown; vectorImages?: unknown; variantImages?: unknown } | null
   const mainImages = cleanImageList(mediaRaw?.mainImages)
   const vectorImages = cleanImageList(mediaRaw?.vectorImages)
+  const variantImages = cleanImageList(mediaRaw?.variantImages)
 
   // Make sure image_url is always first
   const primaryUrl = (data.image_url as string | null)?.trim() ?? ''
@@ -67,7 +68,7 @@ export default async function ProductPage({ params }: PageProps) {
 
   const normalizedProduct = {
     ...(data as Record<string, unknown>),
-    images_json: { mainImages, vectorImages },
+    images_json: { mainImages, vectorImages, variantImages },
     image_url: mainImages[0] ?? data.image_url ?? null,
   }
 
