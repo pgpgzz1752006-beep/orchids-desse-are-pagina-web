@@ -170,7 +170,14 @@ export async function POST(_req: NextRequest) {
       syncedAt: now,
     })
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
+    const raw = err instanceof Error ? err.message : String(err)
+    const e = err as { code?: string }
+    const isTooMany = e.code === 'TOO_MANY_REQUESTS' || raw.includes('TOO_MANY_REQUESTS') || raw.includes('Too many')
+    const message = isTooMany
+      ? 'El proveedor bloqueó temporalmente el acceso (demasiados intentos). Espera unos minutos e intenta de nuevo.'
+      : raw.startsWith('{') || raw.includes('"errors"')
+      ? 'Error de conexión con el proveedor. Intenta de nuevo más tarde.'
+      : raw
     return NextResponse.json({ ok: false, error: message }, { status: 500 })
   }
 }
