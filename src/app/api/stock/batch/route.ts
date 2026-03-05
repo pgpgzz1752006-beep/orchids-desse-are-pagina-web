@@ -31,6 +31,7 @@ function classifyStock(stock: number | null): StockStatus {
 async function fetchStockMap(): Promise<Map<string, number>> {
   const res = await promoGQL<{ distributorStockCatalog: StockItem[] }>(STOCK_QUERY)
   const map = new Map<string, number>()
+  if (!res) return map
   for (const s of res.distributorStockCatalog ?? []) {
     if (s.sku && s.currentStock != null) {
       map.set(s.sku, (map.get(s.sku) ?? 0) + s.currentStock)
