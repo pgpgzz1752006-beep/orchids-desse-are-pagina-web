@@ -23,6 +23,8 @@ interface Weight {
 interface MediaImages {
   mainImages?: string[]
   vectorImages?: string[]
+  variantImages?: string[]
+  allImages?: string[]
 }
 
 interface Variant {
