@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2, Plus, Minus, ShoppingCart, Tag } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingCart } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 import { useCartStore } from "@/lib/cartStore";
@@ -24,27 +23,12 @@ const formatPrice = (n: number) =>
 
 export default function CarritoPage() {
   const { items, removeItem, updateQuantity } = useCartStore();
-  const [coupon, setCoupon] = useState("");
-  const [couponApplied, setCouponApplied] = useState(false);
-  const [couponError, setCouponError] = useState("");
 
   const subtotal = items.reduce((acc, item) => acc + (item.price ?? 0) * item.quantity, 0);
-  const discount = couponApplied ? Math.round(subtotal * 0.1) : 0;
-  const subtotalAfterDiscount = subtotal - discount;
   const FREE_SHIPPING_THRESHOLD = 5000;
-  const freeShipping = subtotalAfterDiscount >= FREE_SHIPPING_THRESHOLD;
-  const total = subtotalAfterDiscount;
+  const freeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
+  const total = subtotal;
   const totalItems = items.reduce((a, i) => a + i.quantity, 0);
-
-  const handleCoupon = () => {
-    if (coupon.trim().toUpperCase() === "DISEÑARE10") {
-      setCouponApplied(true);
-      setCouponError("");
-    } else {
-      setCouponApplied(false);
-      setCouponError("Cupón no válido.");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#F5F6FA] dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300 flex flex-col">
