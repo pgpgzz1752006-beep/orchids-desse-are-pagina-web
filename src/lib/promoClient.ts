@@ -57,6 +57,13 @@ async function setLoginFailedAt(ts: number) {
   }
 }
 
+export async function getBackoffRemainingMin(): Promise<number> {
+  const failedAt = await getLoginFailedAt()
+  if (!failedAt) return 0
+  const remaining = BACKOFF_MS - (Date.now() - failedAt)
+  return remaining > 0 ? Math.ceil(remaining / 60000) : 0
+}
+
 async function fetchNewToken(): Promise<string> {
   const now = Date.now()
   const failedAt = await getLoginFailedAt()
