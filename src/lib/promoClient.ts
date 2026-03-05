@@ -3,6 +3,8 @@
  * Handles login, token caching (23h), and auto-renew on expiry.
  */
 
+import { createClient } from '@supabase/supabase-js'
+
 const ENDPOINT = process.env.PROMO_GRAPHQL_ENDPOINT!
 const EMAIL = process.env.PROMO_EMAIL!
 const PASSWORD = process.env.PROMO_PASSWORD!
@@ -12,15 +14,55 @@ let cachedToken: string | null = null
 let tokenFetchedAt: number = 0
 const TOKEN_TTL_MS = 23 * 60 * 60 * 1000 // 23 hours
 
-// Rate-limit backoff: if login fails, don't retry for BACKOFF_MS
-let loginFailedAt: number = 0
-const BACKOFF_MS = 5 * 60 * 1000 // 5 minutes
+// Rate-limit backoff: 2 hours, persisted in Supabase so it survives server restarts
+let _memLoginFailedAt: number = 0
+const BACKOFF_MS = 2 * 60 * 60 * 1000 // 2 hours
+
+function getSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
+
+async function getLoginFailedAt(): Promise<number> {
+  // Memory cache first
+  if (_memLoginFailedAt > 0) return _memLoginFailedAt
+  try {
+    const sb = getSupabaseAdmin()
+    const { data } = await sb
+      .from('system_settings')
+      .select('value')
+      .eq('key', 'promo_login_failed_at')
+      .single()
+    const ts = parseInt(data?.value ?? '0', 10)
+    _memLoginFailedAt = ts
+    return ts
+  } catch {
+    return 0
+  }
+}
+
+async function setLoginFailedAt(ts: number) {
+  _memLoginFailedAt = ts
+  try {
+    const sb = getSupabaseAdmin()
+    await sb.from('system_settings').upsert({
+      key: 'promo_login_failed_at',
+      value: String(ts),
+      updated_at: new Date().toISOString(),
+    })
+  } catch {
+    // best-effort persist
+  }
+}
 
 async function fetchNewToken(): Promise<string> {
   const now = Date.now()
-  // If we recently hit a rate limit, don't hammer the API
-  if (loginFailedAt && now - loginFailedAt < BACKOFF_MS) {
-    throw new Error('Promo API rate-limited, backing off')
+  const failedAt = await getLoginFailedAt()
+  if (failedAt && now - failedAt < BACKOFF_MS) {
+    const remainingMin = Math.ceil((BACKOFF_MS - (now - failedAt)) / 60000)
+    throw new Error(`Promo API rate-limited, backing off (${remainingMin} min remaining)`)
   }
   const res = await fetch(ENDPOINT, {
     method: 'POST',
@@ -33,14 +75,14 @@ async function fetchNewToken(): Promise<string> {
   const json = await res.json()
   const token = json?.data?.login?.accessToken
   if (!token) {
-    loginFailedAt = Date.now()
+    await setLoginFailedAt(Date.now())
     const code = json?.errors?.[0]?.extensions?.code ?? json?.errors?.[0]?.message ?? 'UNKNOWN'
     const isTooMany = code === 'TOO_MANY_REQUESTS' || String(code).includes('Too many')
     const err = new Error(isTooMany ? 'TOO_MANY_REQUESTS' : `Promo login failed: ${code}`) as Error & { code: string }
     err.code = isTooMany ? 'TOO_MANY_REQUESTS' : 'LOGIN_FAILED'
     throw err
   }
-  loginFailedAt = 0 // reset on success
+  await setLoginFailedAt(0) // reset on success
   return token
 }
 
