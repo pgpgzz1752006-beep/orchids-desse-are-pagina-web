@@ -19,13 +19,14 @@ async function fetchAndCacheFromGraphQL(sku: string): Promise<Record<string, unk
 
     let found = findInPage(page1.distribuitorProductCatalog.data)
 
-    if (!found) {
-      for (let p = 2; p <= totalPages; p++) {
-        const res = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: p })
-        found = findInPage(res.distribuitorProductCatalog.data)
-        if (found) break
+      if (!found) {
+        for (let p = 2; p <= totalPages; p++) {
+          const res = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: p })
+          if (!res) continue
+          found = findInPage(res.distribuitorProductCatalog.data)
+          if (found) break
+        }
       }
-    }
 
     if (!found) return null
 
