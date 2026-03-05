@@ -54,39 +54,53 @@ export async function promoGQL<T = unknown>(
   query: string,
   variables?: Record<string, unknown>,
   retried = false
-): Promise<T> {
-  const token = await getPromoToken()
-  const res = await fetch(ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ query, variables }),
-    next: { revalidate: 300 },
-  })
-  const json = await res.json()
+): Promise<T | null> {
+  let token: string
+  try {
+    token = await getPromoToken()
+  } catch {
+    // Login failed (rate-limit or network) — return null, never throw to caller
+    return null
+  }
 
-  // Auto-renew on auth errors
-  const firstError = json?.errors?.[0]
-  if (!retried && firstError) {
-    const msg = firstError.message?.toLowerCase() ?? ''
-    if (
-      res.status === 401 ||
-      res.status === 403 ||
-      msg.includes('not authenticated') ||
-      msg.includes('unauthorized') ||
-      msg.includes('token')
-    ) {
-      cachedToken = null
-      return promoGQL<T>(query, variables, true)
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ query, variables }),
+      next: { revalidate: 300 },
+    })
+    const json = await res.json()
+
+    // Auto-renew on auth errors
+    const firstError = json?.errors?.[0]
+    if (!retried && firstError) {
+      const msg = firstError.message?.toLowerCase() ?? ''
+      if (
+        res.status === 401 ||
+        res.status === 403 ||
+        msg.includes('not authenticated') ||
+        msg.includes('unauthorized') ||
+        msg.includes('token')
+      ) {
+        cachedToken = null
+        return promoGQL<T>(query, variables, true)
+      }
     }
-  }
 
-  if (json?.errors) {
-    throw new Error('GraphQL error: ' + JSON.stringify(json.errors))
+    if (json?.errors) {
+      // Log server-side only, never expose to client
+      console.warn('[promoGQL] GraphQL error:', JSON.stringify(json.errors))
+      return null
+    }
+    return json.data as T
+  } catch (e) {
+    console.warn('[promoGQL] fetch error:', (e as Error).message)
+    return null
   }
-  return json.data as T
 }
 
 // ─── Price parsing ──────────────────────────────────────────────────────────
