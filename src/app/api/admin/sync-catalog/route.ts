@@ -6,6 +6,7 @@ import {
   CatalogPage,
   PromoProduct,
   bestVariantPrice,
+  getBackoffRemainingMin,
 } from '@/lib/promoClient'
 import { makeProductSlug, mapToSlug } from '@/lib/categoryMapper'
 
