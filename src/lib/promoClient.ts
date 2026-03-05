@@ -34,7 +34,11 @@ async function fetchNewToken(): Promise<string> {
   const token = json?.data?.login?.accessToken
   if (!token) {
     loginFailedAt = Date.now()
-    throw new Error('Promo login failed: ' + JSON.stringify(json))
+    const code = json?.errors?.[0]?.extensions?.code ?? json?.errors?.[0]?.message ?? 'UNKNOWN'
+    const isTooMany = code === 'TOO_MANY_REQUESTS' || String(code).includes('Too many')
+    const err = new Error(isTooMany ? 'TOO_MANY_REQUESTS' : `Promo login failed: ${code}`) as Error & { code: string }
+    err.code = isTooMany ? 'TOO_MANY_REQUESTS' : 'LOGIN_FAILED'
+    throw err
   }
   loginFailedAt = 0 // reset on success
   return token
