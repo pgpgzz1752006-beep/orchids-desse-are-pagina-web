@@ -18,15 +18,16 @@ function classifyStock(total: number): string {
 
 export async function POST() {
   try {
-    // 1. Fetch all catalog pages
-    const page1 = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: 1 })
-    const catalog1 = page1.distribuitorProductCatalog
-    let allProducts: PromoProduct[] = [...catalog1.data]
+      // 1. Fetch all catalog pages
+      const page1 = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: 1 })
+      if (!page1) return NextResponse.json({ ok: false, error: 'Promo API unavailable' }, { status: 503 })
+      const catalog1 = page1.distribuitorProductCatalog
+      let allProducts: PromoProduct[] = [...catalog1.data]
 
-    for (let p = 2; p <= catalog1.totalPages; p++) {
-      const res = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: p })
-      allProducts = allProducts.concat(res.distribuitorProductCatalog.data)
-    }
+      for (let p = 2; p <= catalog1.totalPages; p++) {
+        const res = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: p })
+        if (res) allProducts = allProducts.concat(res.distribuitorProductCatalog.data)
+      }
 
     // 2. Fetch stock map (variant SKU → total stock across all warehouses)
       const stockRes = await promoGQL<{ distributorStockCatalog: StockItem[] }>(STOCK_QUERY)
