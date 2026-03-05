@@ -283,7 +283,6 @@ function ProductsContent() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300">
-      <Header />
       <main className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-[12px] text-[#888] mb-6">
