@@ -135,11 +135,11 @@ export default function CarritoPage() {
                         <div className="w-full h-[6px] rounded-full bg-[#F0F0F0] dark:bg-[#1E2028] overflow-hidden">
                           <div
                             className="h-full rounded-full bg-[#14C6C9] transition-all duration-500"
-                            style={{ width: `${Math.min((subtotalAfterDiscount / FREE_SHIPPING_THRESHOLD) * 100, 100)}%` }}
-                          />
-                        </div>
-                        <p className="text-[11px] text-[#999] dark:text-[#555]">
-                          Te faltan <span className="font-bold text-[#111] dark:text-white">{formatPrice(FREE_SHIPPING_THRESHOLD - subtotalAfterDiscount)}</span> para envío gratis
+                          style={{ width: `${Math.min((subtotal / FREE_SHIPPING_THRESHOLD) * 100, 100)}%` }}
+                            />
+                          </div>
+                          <p className="text-[11px] text-[#999] dark:text-[#555]">
+                            Te faltan <span className="font-bold text-[#111] dark:text-white">{formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)}</span> para envío gratis
                         </p>
                       </div>
                     )}
