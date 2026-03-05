@@ -279,14 +279,23 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
                     className="block bg-white dark:bg-white border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2"
                     >
                       {/* Uniform gray image background */}
-                      <div className="flex items-center justify-center rounded-[8px] overflow-hidden bg-[#F2F2F2] h-[100px] md:h-[110px] lg:h-[120px] mb-3 p-3 flex-shrink-0">
+                      <div className="flex items-center justify-center rounded-[8px] overflow-hidden bg-[#F2F2F2] h-[100px] md:h-[110px] lg:h-[120px] mb-3 p-3 flex-shrink-0 group/img relative">
                         <Image
                           src={product.image}
                           alt={product.name}
                           width={120}
                           height={120}
-                          className="w-full h-full object-contain"
+                          className={`w-full h-full object-contain transition-opacity duration-300 ${product.hoverImage ? 'group-hover/img:opacity-0' : ''}`}
                         />
+                        {product.hoverImage && (
+                          <Image
+                            src={product.hoverImage}
+                            alt={`${product.name} — vista 2`}
+                            width={120}
+                            height={120}
+                            className="w-full h-full object-contain absolute inset-0 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"
+                          />
+                        )}
                       </div>
                       <p className="font-['Montserrat'] text-[10px] md:text-[11px] font-medium text-[#333333] dark:text-[#333333] text-center uppercase leading-[1.4] min-h-[28px]">
                         {product.name}
