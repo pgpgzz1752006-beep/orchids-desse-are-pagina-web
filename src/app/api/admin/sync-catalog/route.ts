@@ -93,25 +93,28 @@ export async function POST(_req: NextRequest) {
   try {
     const now = new Date().toISOString()
 
-    // Fetch page 1 to get total pages
-    const page1 = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: 1 })
-    const { totalPages, data: page1Data } = page1.distribuitorProductCatalog
-
-    let allProducts: PromoProduct[] = [...page1Data]
-
-    // Fetch remaining pages in parallel batches of 5
-    const BATCH = 5
-    for (let start = 2; start <= totalPages; start += BATCH) {
-      const end = Math.min(start + BATCH - 1, totalPages)
-      const pages = await Promise.all(
-        Array.from({ length: end - start + 1 }, (_, i) =>
-          promoGQL<CatalogPage>(CATALOG_QUERY, { page: start + i })
-        )
-      )
-      for (const p of pages) {
-        allProducts = allProducts.concat(p.distribuitorProductCatalog.data)
+      // Fetch page 1 to get total pages
+      const page1 = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: 1 })
+      if (!page1) {
+        return NextResponse.json({ ok: false, error: 'Promo API unavailable (rate-limited or auth error)' }, { status: 503 })
       }
-    }
+      const { totalPages, data: page1Data } = page1.distribuitorProductCatalog
+
+      let allProducts: PromoProduct[] = [...page1Data]
+
+      // Fetch remaining pages in parallel batches of 5
+      const BATCH = 5
+      for (let start = 2; start <= totalPages; start += BATCH) {
+        const end = Math.min(start + BATCH - 1, totalPages)
+        const pages = await Promise.all(
+          Array.from({ length: end - start + 1 }, (_, i) =>
+            promoGQL<CatalogPage>(CATALOG_QUERY, { page: start + i })
+          )
+        )
+        for (const p of pages) {
+          if (p) allProducts = allProducts.concat(p.distribuitorProductCatalog.data)
+        }
+      }
 
     // Build rows
     const rows = allProducts.map((item) => buildRow(item, now))
