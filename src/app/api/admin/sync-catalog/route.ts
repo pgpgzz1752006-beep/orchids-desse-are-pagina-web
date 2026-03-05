@@ -22,6 +22,13 @@ function buildRow(item: PromoProduct, now: string) {
     )
   )
 
+  // Collect all unique variantImages from every variant
+  const allVariantImages = Array.from(
+    new Set(
+      item.variants.flatMap((v) => v.mediaAssets?.variantImages ?? [])
+    )
+  )
+
   const primaryCat = pm.categories?.[0]
   const api_category_id = primaryCat?.id ?? null
   const api_category_name = primaryCat?.name ?? null
