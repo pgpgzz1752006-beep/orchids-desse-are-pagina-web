@@ -96,7 +96,7 @@ export async function POST(_req: NextRequest) {
       // Fetch page 1 to get total pages
       const page1 = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: 1 })
       if (!page1) {
-        return NextResponse.json({ ok: false, error: 'Promo API unavailable (rate-limited or auth error)' }, { status: 503 })
+        return NextResponse.json({ ok: false, error: 'El proveedor no está disponible en este momento (rate-limited o error de autenticación). Intenta de nuevo en unos minutos.' }, { status: 503 })
       }
       const { totalPages, data: page1Data } = page1.distribuitorProductCatalog
 
