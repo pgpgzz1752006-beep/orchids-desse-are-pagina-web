@@ -179,15 +179,18 @@ export interface ProductGalleryProps {
   name: string
   mainImages: string[]
   vectorImages: string[]
+  variantImages?: string[]
 }
 
 const THUMB_SIZE = 76     // px — thumb square
 const THUMB_GAP = 10      // px — gap between thumbs
 const RAIL_HEIGHT = 480   // px — visible rail window (desktop)
 
-export default function ProductGallery({ name, mainImages, vectorImages }: ProductGalleryProps) {
+export default function ProductGallery({ name, mainImages, vectorImages, variantImages }: ProductGalleryProps) {
   const clean = useCallback(cleanImages, [])
-  const photos = clean(mainImages)
+  // Merge mainImages + variantImages (deduplicated)
+  const allMain = clean([...mainImages, ...(variantImages ?? [])])
+  const photos = allMain
   const vectors = clean(vectorImages)
 
   const [ready, setReady] = useState(false)
