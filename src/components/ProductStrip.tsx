@@ -368,16 +368,26 @@ className="w-full bg-white dark:bg-[#0E0F12] py-6 md:py-16 lg:py-[72px] transiti
                     onClick={(e) => isDragging && e.preventDefault()}
                     draggable={false}
                   >
-                      {/* Image Container - uniform gray background */}
-                      <div className="flex items-center justify-center rounded-[8px] overflow-hidden bg-[#F2F2F2] h-[100px] md:h-[110px] lg:h-[120px] mb-3 p-3 flex-shrink-0">
+                      {/* Image Container */}
+                      <div className="flex items-center justify-center rounded-[8px] overflow-hidden bg-[#F2F2F2] h-[100px] md:h-[110px] lg:h-[120px] mb-3 p-3 flex-shrink-0 group/img relative">
                         <Image
                           src={product.image}
                           alt={product.name}
                           width={120}
                           height={120}
-                          className="w-full h-full object-contain pointer-events-none"
+                          className={`w-full h-full object-contain pointer-events-none transition-opacity duration-300 ${product.hoverImage ? 'group-hover/img:opacity-0' : ''}`}
                           draggable={false}
                         />
+                        {product.hoverImage && (
+                          <Image
+                            src={product.hoverImage}
+                            alt={`${product.name} — vista 2`}
+                            width={120}
+                            height={120}
+                            className="w-full h-full object-contain pointer-events-none absolute inset-0 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"
+                            draggable={false}
+                          />
+                        )}
                       </div>
 
                     {/* Product Name */}
