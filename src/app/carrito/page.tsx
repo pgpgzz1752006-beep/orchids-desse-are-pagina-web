@@ -154,22 +154,46 @@ export default function CarritoPage() {
 
                 <div className="h-px bg-[#F0F0F0] dark:bg-[#1E2028]" />
 
-                <div className="flex flex-col gap-3">
-                  <div className="flex justify-between text-[13px] text-[#666] dark:text-[#999]">
-                    <span>Subtotal ({totalItems} artículo{totalItems !== 1 ? "s" : ""})</span>
-                    <span className="font-semibold text-[#111] dark:text-white">{formatPrice(subtotal)}</span>
-                  </div>
-                  {couponApplied && (
-                    <div className="flex justify-between text-[13px] text-[#7BC043]">
-                      <span>Descuento (10%)</span>
-                      <span className="font-semibold">- {formatPrice(discount)}</span>
+                  <div className="flex flex-col gap-3">
+                    <div className="flex justify-between text-[13px] text-[#666] dark:text-[#999]">
+                      <span>Subtotal ({totalItems} artículo{totalItems !== 1 ? "s" : ""})</span>
+                      <span className="font-semibold text-[#111] dark:text-white">{formatPrice(subtotal)}</span>
                     </div>
-                  )}
-                  <div className="flex justify-between text-[13px] text-[#666] dark:text-[#999]">
-                    <span>Envío</span>
-                    <span className="font-semibold text-[#7BC043]">A cotizar</span>
+                    {couponApplied && (
+                      <div className="flex justify-between text-[13px] text-[#7BC043]">
+                        <span>Descuento (10%)</span>
+                        <span className="font-semibold">- {formatPrice(discount)}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between text-[13px] text-[#666] dark:text-[#999]">
+                      <span>Envío</span>
+                      {freeShipping
+                        ? <span className="font-bold text-[#7BC043]">¡Gratis!</span>
+                        : <span className="font-semibold text-[#7BC043]">A cotizar</span>
+                      }
+                    </div>
+
+                    {/* Barra de progreso hacia envío gratis */}
+                    {!freeShipping && (
+                      <div className="flex flex-col gap-1.5 pt-1">
+                        <div className="w-full h-[6px] rounded-full bg-[#F0F0F0] dark:bg-[#1E2028] overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-[#14C6C9] transition-all duration-500"
+                            style={{ width: `${Math.min((subtotalAfterDiscount / FREE_SHIPPING_THRESHOLD) * 100, 100)}%` }}
+                          />
+                        </div>
+                        <p className="text-[11px] text-[#999] dark:text-[#555]">
+                          Te faltan <span className="font-bold text-[#111] dark:text-white">{formatPrice(FREE_SHIPPING_THRESHOLD - subtotalAfterDiscount)}</span> para envío gratis
+                        </p>
+                      </div>
+                    )}
+
+                    {freeShipping && (
+                      <p className="text-[11px] font-semibold text-[#7BC043]">
+                        ¡Tu pedido califica para envío gratuito!
+                      </p>
+                    )}
                   </div>
-                </div>
 
                 <div className="h-px bg-[#F0F0F0] dark:bg-[#1E2028]" />
 
