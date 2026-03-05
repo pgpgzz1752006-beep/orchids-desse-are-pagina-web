@@ -12,7 +12,16 @@ let cachedToken: string | null = null
 let tokenFetchedAt: number = 0
 const TOKEN_TTL_MS = 23 * 60 * 60 * 1000 // 23 hours
 
+// Rate-limit backoff: if login fails, don't retry for BACKOFF_MS
+let loginFailedAt: number = 0
+const BACKOFF_MS = 5 * 60 * 1000 // 5 minutes
+
 async function fetchNewToken(): Promise<string> {
+  const now = Date.now()
+  // If we recently hit a rate limit, don't hammer the API
+  if (loginFailedAt && now - loginFailedAt < BACKOFF_MS) {
+    throw new Error('Promo API rate-limited, backing off')
+  }
   const res = await fetch(ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -23,7 +32,11 @@ async function fetchNewToken(): Promise<string> {
   })
   const json = await res.json()
   const token = json?.data?.login?.accessToken
-  if (!token) throw new Error('Promo login failed: ' + JSON.stringify(json))
+  if (!token) {
+    loginFailedAt = Date.now()
+    throw new Error('Promo login failed: ' + JSON.stringify(json))
+  }
+  loginFailedAt = 0 // reset on success
   return token
 }
 
