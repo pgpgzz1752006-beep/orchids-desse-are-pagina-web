@@ -1430,17 +1430,14 @@ function BannerManagerCard() {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('bucket', 'project-uploads')
-      const res = await fetch('/api/admin/upload-image', { method: 'POST', body: formData })
-      if (!res.ok) {
-        // Fallback: use object URL for preview only (user can paste URL manually)
-        const url = URL.createObjectURL(file)
-        setForm(f => ({ ...f, image_url: url }))
-        flash('No se pudo subir. Usa la URL directa del proveedor.')
-        return
-      }
-      const data = await res.json()
-      setForm(f => ({ ...f, image_url: data.url }))
-      flash('Imagen subida correctamente')
+    const res = await fetch('/api/admin/upload-image', { method: 'POST', body: formData })
+        const data = await res.json()
+        if (!res.ok) {
+          setError(data.error ?? 'Error al subir imagen')
+          return
+        }
+        setForm(f => ({ ...f, image_url: data.url }))
+        flash('Imagen subida correctamente')
     } catch {
       flash('Error al subir imagen. Usa la URL directamente.')
     } finally {
