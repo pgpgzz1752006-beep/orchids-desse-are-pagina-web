@@ -30,7 +30,10 @@ export default function CarritoPage() {
 
   const subtotal = items.reduce((acc, item) => acc + (item.price ?? 0) * item.quantity, 0);
   const discount = couponApplied ? Math.round(subtotal * 0.1) : 0;
-  const total = subtotal - discount;
+  const subtotalAfterDiscount = subtotal - discount;
+  const FREE_SHIPPING_THRESHOLD = 5000;
+  const freeShipping = subtotalAfterDiscount >= FREE_SHIPPING_THRESHOLD;
+  const total = subtotalAfterDiscount;
   const totalItems = items.reduce((a, i) => a + i.quantity, 0);
 
   const handleCoupon = () => {
