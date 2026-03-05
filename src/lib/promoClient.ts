@@ -235,6 +235,7 @@ export interface PromoVariant {
   size: string | null
   pricing: { priceMx: Array<{ amount: string; currency: string }> } | null
   availability: { isEnabledVariantMx: boolean } | null
+  mediaAssets: { variantImages: string[] } | null
 }
 
 export interface PromoProductModel {
