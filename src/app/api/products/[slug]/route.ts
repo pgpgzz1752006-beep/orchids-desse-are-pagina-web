@@ -11,6 +11,7 @@ async function fetchAndCacheFromGraphQL(sku: string): Promise<Record<string, unk
   // Scan all pages to find the product by SKU
   try {
     const page1 = await promoGQL<CatalogPage>(CATALOG_QUERY, { page: 1 })
+    if (!page1) return null
     const totalPages = page1.distribuitorProductCatalog.totalPages
 
     const findInPage = (data: PromoProduct[]) =>
