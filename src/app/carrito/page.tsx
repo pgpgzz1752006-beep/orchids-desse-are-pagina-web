@@ -229,9 +229,14 @@ export default function CarritoPage() {
                   <span className="text-[20px] font-bold text-[#14C6C9]">{formatPrice(total)}</span>
                 </div>
 
-                <button className="w-full h-[52px] rounded-xl bg-[#14C6C9] hover:bg-[#0fa8ab] active:scale-[0.98] text-white font-bold text-[14px] uppercase tracking-widest transition-all duration-200 shadow-md hover:shadow-lg">
+                <a
+                  href="https://link.mercadopago.com.mx/disenarepromocionale"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full h-[52px] rounded-xl bg-[#14C6C9] hover:bg-[#0fa8ab] active:scale-[0.98] text-white font-bold text-[14px] uppercase tracking-widest transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center"
+                >
                   Proceder al pago
-                </button>
+                </a>
 
                 <Link href="/productos" className="text-center text-[12px] text-[#AAAAAA] dark:text-[#555] hover:text-[#14C6C9] transition-colors duration-200">
                   ← Seguir comprando
