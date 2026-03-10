@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2, Plus, Minus, ShoppingCart, Zap, Droplets, Printer, Stamp, Flame, Pen, Upload, X, CheckCircle2 } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingCart, Zap, Droplets, Printer, Stamp, Pen, Upload, X, CheckCircle2 } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 import { useCartStore } from "@/lib/cartStore";
@@ -23,12 +23,11 @@ const formatPrice = (n: number) =>
   n.toLocaleString("es-MX", { style: "currency", currency: "MXN" });
 
 const TECNICAS = [
-  { id: "laser",    label: "Grabado Láser",   desc: "Metal, madera, cuero y acrílico.",      price: 100, icon: Zap,      color: "#14C6C9", bg: "#F8FFFE", border: "#D0F5F5", darkBg: "#0E1A1A", darkBorder: "#1A2E2E" },
-  { id: "seri",     label: "Serigrafía",       desc: "Textiles y plásticos.",                 price: 100, icon: Printer,  color: "#E0007A", bg: "#FFF8FE", border: "#F0D0F5", darkBg: "#1A0E1A", darkBorder: "#2E1A2E" },
-  { id: "tampo",    label: "Tampografía",      desc: "Superficies irregulares o curvas.",     price: 100, icon: Stamp,    color: "#B8A800", bg: "#FFFFF5", border: "#F0F0C0", darkBg: "#1A1A0E", darkBorder: "#2E2E1A" },
-  { id: "bordado",  label: "Bordado",          desc: "Gorras, playeras y mochilas.",          price: 100, icon: Pen,      color: "#7BC043", bg: "#F5FFF8", border: "#C0F0D0", darkBg: "#0E1A12", darkBorder: "#1A2E20" },
-  { id: "subli",    label: "Sublimación",      desc: "Telas y materiales poliéster.",         price: 100, icon: Droplets, color: "#1A3D8F", bg: "#F5F8FF", border: "#C0D0F5", darkBg: "#0E1018", darkBorder: "#1A202E" },
-  { id: "transfer", label: "Transfer Digital", desc: "Vinil aplicado con calor.",             price: 100, icon: Flame,    color: "#FF4500", bg: "#FFF5F5", border: "#F5C0C0", darkBg: "#1A0E0E", darkBorder: "#2E1A1A" },
+  { id: "laser",   label: "Grabado Láser", desc: "Metal, madera, cuero y acrílico.",  price: 60,  icon: Zap,      color: "#14C6C9" },
+  { id: "seri",    label: "Serigrafía",    desc: "Textiles y plásticos.",              price: 50,  icon: Printer,  color: "#E0007A" },
+  { id: "tampo",   label: "Tampografía",   desc: "Superficies irregulares o curvas.", price: 40,  icon: Stamp,    color: "#B8A800" },
+  { id: "bordado", label: "Bordado",       desc: "Gorras, playeras y mochilas.",      price: 100, icon: Pen,      color: "#7BC043" },
+  { id: "subli",   label: "Sublimación",   desc: "Telas y materiales poliéster.",     price: 35,  icon: Droplets, color: "#1A3D8F" },
 ];
 
 export default function CarritoPage() {
