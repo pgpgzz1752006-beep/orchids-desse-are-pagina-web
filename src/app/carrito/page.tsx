@@ -64,6 +64,8 @@ export default function CarritoPage() {
             </Link>
           </div>
         ) : (
+          <div className="flex flex-col gap-8">
+
           <div className="flex flex-col lg:flex-row gap-8 items-start">
 
             {/* Items list */}
@@ -108,77 +110,6 @@ export default function CarritoPage() {
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Técnicas de grabado */}
-            <div className="w-full bg-white dark:bg-[#12141A] rounded-2xl border border-[#EFEFEF] dark:border-[#1E2028] shadow-sm p-5 mt-2">
-              <h3 className="text-[13px] font-bold text-[#111] dark:text-white uppercase tracking-wider mb-4">Técnicas de personalización disponibles</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-
-                <div className="flex items-start gap-3 p-3 rounded-xl bg-[#F8FFFE] dark:bg-[#0E1A1A] border border-[#D0F5F5] dark:border-[#1A2E2E]">
-                  <div className="w-8 h-8 rounded-lg bg-[#14C6C9]/10 flex items-center justify-center flex-shrink-0">
-                    <Zap className="w-4 h-4 text-[#14C6C9]" />
-                  </div>
-                  <div>
-                    <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Grabado Láser</p>
-                    <p className="text-[10px] text-[#888] dark:text-[#666] mt-0.5 leading-snug">Grabado permanente de alta precisión en metal, madera, cuero y acrílico.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 rounded-xl bg-[#FFF8FE] dark:bg-[#1A0E1A] border border-[#F0D0F5] dark:border-[#2E1A2E]">
-                  <div className="w-8 h-8 rounded-lg bg-[#E0007A]/10 flex items-center justify-center flex-shrink-0">
-                    <Printer className="w-4 h-4 text-[#E0007A]" />
-                  </div>
-                  <div>
-                    <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Serigrafía</p>
-                    <p className="text-[10px] text-[#888] dark:text-[#666] mt-0.5 leading-snug">Impresión con tinta de alta durabilidad ideal para textiles y plásticos.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 rounded-xl bg-[#FFFFF5] dark:bg-[#1A1A0E] border border-[#F0F0C0] dark:border-[#2E2E1A]">
-                  <div className="w-8 h-8 rounded-lg bg-[#F3E300]/20 flex items-center justify-center flex-shrink-0">
-                    <Stamp className="w-4 h-4 text-[#B8A800]" />
-                  </div>
-                  <div>
-                    <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Tampografía</p>
-                    <p className="text-[10px] text-[#888] dark:text-[#666] mt-0.5 leading-snug">Transferencia de tinta en superficies irregulares, curvas o de difícil acceso.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 rounded-xl bg-[#F5FFF8] dark:bg-[#0E1A12] border border-[#C0F0D0] dark:border-[#1A2E20]">
-                  <div className="w-8 h-8 rounded-lg bg-[#7BC043]/10 flex items-center justify-center flex-shrink-0">
-                    <Pen className="w-4 h-4 text-[#7BC043]" />
-                  </div>
-                  <div>
-                    <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Bordado</p>
-                    <p className="text-[10px] text-[#888] dark:text-[#666] mt-0.5 leading-snug">Diseño en hilo de alta calidad sobre gorras, playeras y mochilas.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 rounded-xl bg-[#F5F8FF] dark:bg-[#0E1018] border border-[#C0D0F5] dark:border-[#1A202E]">
-                  <div className="w-8 h-8 rounded-lg bg-[#1A3D8F]/10 flex items-center justify-center flex-shrink-0">
-                    <Droplets className="w-4 h-4 text-[#1A3D8F]" />
-                  </div>
-                  <div>
-                    <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Sublimación</p>
-                    <p className="text-[10px] text-[#888] dark:text-[#666] mt-0.5 leading-snug">Impresión a todo color y a todo lo ancho en telas y materiales poliéster.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 rounded-xl bg-[#FFF5F5] dark:bg-[#1A0E0E] border border-[#F5C0C0] dark:border-[#2E1A1A]">
-                  <div className="w-8 h-8 rounded-lg bg-[#FF4500]/10 flex items-center justify-center flex-shrink-0">
-                    <Flame className="w-4 h-4 text-[#FF4500]" />
-                  </div>
-                  <div>
-                    <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Transfer Digital</p>
-                    <p className="text-[10px] text-[#888] dark:text-[#666] mt-0.5 leading-snug">Impresión en vinil o calcomanía aplicada con calor sobre distintas superficies.</p>
-                  </div>
-                </div>
-
-              </div>
-              <p className="text-[10px] text-[#AAAAAA] dark:text-[#555] mt-4 text-center">
-                La técnica disponible depende del producto. Nuestro equipo te asesorará al confirmar tu pedido.
-              </p>
             </div>
 
             {/* Order summary */}
@@ -242,6 +173,67 @@ export default function CarritoPage() {
                   ← Seguir comprando
                 </Link>
               </div>
+            </div>
+
+          </div>
+
+            {/* Técnicas de grabado — ancho completo */}
+            <div className="w-full bg-white dark:bg-[#12141A] rounded-2xl border border-[#EFEFEF] dark:border-[#1E2028] shadow-sm p-6">
+              <h3 className="text-[13px] font-bold text-[#111] dark:text-white uppercase tracking-wider mb-4">Técnicas de personalización disponibles</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+
+                <div className="flex flex-col items-center text-center gap-2 p-4 rounded-xl bg-[#F8FFFE] dark:bg-[#0E1A1A] border border-[#D0F5F5] dark:border-[#1A2E2E]">
+                  <div className="w-10 h-10 rounded-xl bg-[#14C6C9]/10 flex items-center justify-center">
+                    <Zap className="w-5 h-5 text-[#14C6C9]" />
+                  </div>
+                  <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Grabado Láser</p>
+                  <p className="text-[10px] text-[#888] dark:text-[#666] leading-snug">Metal, madera, cuero y acrílico.</p>
+                </div>
+
+                <div className="flex flex-col items-center text-center gap-2 p-4 rounded-xl bg-[#FFF8FE] dark:bg-[#1A0E1A] border border-[#F0D0F5] dark:border-[#2E1A2E]">
+                  <div className="w-10 h-10 rounded-xl bg-[#E0007A]/10 flex items-center justify-center">
+                    <Printer className="w-5 h-5 text-[#E0007A]" />
+                  </div>
+                  <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Serigrafía</p>
+                  <p className="text-[10px] text-[#888] dark:text-[#666] leading-snug">Textiles y plásticos.</p>
+                </div>
+
+                <div className="flex flex-col items-center text-center gap-2 p-4 rounded-xl bg-[#FFFFF5] dark:bg-[#1A1A0E] border border-[#F0F0C0] dark:border-[#2E2E1A]">
+                  <div className="w-10 h-10 rounded-xl bg-[#F3E300]/20 flex items-center justify-center">
+                    <Stamp className="w-5 h-5 text-[#B8A800]" />
+                  </div>
+                  <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Tampografía</p>
+                  <p className="text-[10px] text-[#888] dark:text-[#666] leading-snug">Superficies irregulares o curvas.</p>
+                </div>
+
+                <div className="flex flex-col items-center text-center gap-2 p-4 rounded-xl bg-[#F5FFF8] dark:bg-[#0E1A12] border border-[#C0F0D0] dark:border-[#1A2E20]">
+                  <div className="w-10 h-10 rounded-xl bg-[#7BC043]/10 flex items-center justify-center">
+                    <Pen className="w-5 h-5 text-[#7BC043]" />
+                  </div>
+                  <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Bordado</p>
+                  <p className="text-[10px] text-[#888] dark:text-[#666] leading-snug">Gorras, playeras y mochilas.</p>
+                </div>
+
+                <div className="flex flex-col items-center text-center gap-2 p-4 rounded-xl bg-[#F5F8FF] dark:bg-[#0E1018] border border-[#C0D0F5] dark:border-[#1A202E]">
+                  <div className="w-10 h-10 rounded-xl bg-[#1A3D8F]/10 flex items-center justify-center">
+                    <Droplets className="w-5 h-5 text-[#1A3D8F]" />
+                  </div>
+                  <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Sublimación</p>
+                  <p className="text-[10px] text-[#888] dark:text-[#666] leading-snug">Telas y materiales poliéster.</p>
+                </div>
+
+                <div className="flex flex-col items-center text-center gap-2 p-4 rounded-xl bg-[#FFF5F5] dark:bg-[#1A0E0E] border border-[#F5C0C0] dark:border-[#2E1A1A]">
+                  <div className="w-10 h-10 rounded-xl bg-[#FF4500]/10 flex items-center justify-center">
+                    <Flame className="w-5 h-5 text-[#FF4500]" />
+                  </div>
+                  <p className="text-[12px] font-bold text-[#111] dark:text-white leading-tight">Transfer Digital</p>
+                  <p className="text-[10px] text-[#888] dark:text-[#666] leading-snug">Vinil aplicado con calor.</p>
+                </div>
+
+              </div>
+              <p className="text-[10px] text-[#AAAAAA] dark:text-[#555] mt-4 text-center">
+                La técnica disponible depende del producto. Nuestro equipo te asesorará al confirmar tu pedido.
+              </p>
             </div>
 
           </div>
