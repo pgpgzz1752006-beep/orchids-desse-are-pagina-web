@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import Image from "next/image";
 import { Upload, X, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 
 interface Props {
@@ -94,12 +93,11 @@ export default function MockupEditor({ productImage, productName }: Props) {
         style={{ aspectRatio: "1 / 1" }}
       >
         {/* Product image */}
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={productImage}
           alt={productName}
-          fill
-          className="object-contain p-6 pointer-events-none"
-          sizes="600px"
+          className="absolute inset-0 w-full h-full object-contain p-6 pointer-events-none"
         />
 
         {/* Design overlay */}

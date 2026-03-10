@@ -294,7 +294,7 @@ export default function ProductDetailClient({ product }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16">
 
           {/* ── LEFT: Gallery + Mockup editor ────────────────────────── */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 min-w-0">
             <ProductGallery
               name={name}
               mainImages={mainImages}

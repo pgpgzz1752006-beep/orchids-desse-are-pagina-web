@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import Image from "next/image";
 import { Upload, X, ZoomIn, ZoomOut, RotateCcw, Download, RotateCw, Eye } from "lucide-react";
 
 interface Props {
@@ -198,12 +197,11 @@ export default function MockupEditorAvanzado({ productImages, productName }: Pro
         className="relative w-full bg-[#F8F8F8] dark:bg-zinc-950 select-none"
         style={{ aspectRatio: "1 / 1" }}
       >
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={currentProductImage}
           alt={`${productName} - ${activeView}`}
-          fill
-          className="object-contain p-6 pointer-events-none"
-          sizes="600px"
+          className="absolute inset-0 w-full h-full object-contain p-6 pointer-events-none"
         />
 
         {/* Design overlay */}
