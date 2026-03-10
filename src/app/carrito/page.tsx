@@ -221,7 +221,7 @@ export default function CarritoPage() {
               </div>
               <p className="text-[11px] text-[#AAAAAA] dark:text-[#555] mb-4">Selecciona una opción — se sumará al precio del pedido.</p>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {TECNICAS.map((t) => {
                   const Icon = t.icon;
                   const isSelected = selectedTecnica === t.id;
