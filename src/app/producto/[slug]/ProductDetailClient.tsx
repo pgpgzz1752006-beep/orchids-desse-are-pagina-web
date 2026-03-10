@@ -6,6 +6,15 @@ import { useRouter } from 'next/navigation'
 import { ShoppingCart, ChevronLeft, Minus, Plus } from 'lucide-react'
 import { useCartStore } from '@/lib/cartStore'
 import ProductGallery from '@/components/ProductGallery'
+import MockupEditor from '@/components/MockupEditor'
+import MockupEditorAvanzado from '@/components/MockupEditorAvanzado'
+
+const APPAREL_KEYWORDS = ['playera', 'sudadera', 'polo', 'camisa', 'camiseta', 'hoodie', 'jersey', 'blusa', 'franela']
+
+function isApparel(name: string): boolean {
+  const lower = name.toLowerCase()
+  return APPAREL_KEYWORDS.some(k => lower.includes(k))
+}
 
 interface Dimensions {
   heightInCentimeters?: number | null
@@ -284,14 +293,33 @@ export default function ProductDetailClient({ product }: Props) {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16">
 
-          {/* ── LEFT: Gallery ────────────────────────────────────────── */}
-          <div>
+          {/* ── LEFT: Gallery + Mockup editor ────────────────────────── */}
+          <div className="flex flex-col gap-6">
             <ProductGallery
-                name={name}
-                mainImages={mainImages}
-                vectorImages={vectorImages}
-                variantImages={variantImages}
-              />
+              name={name}
+              mainImages={mainImages}
+              vectorImages={vectorImages}
+              variantImages={variantImages}
+            />
+
+            {/* Mockup editor — avanzado para prendas, intermedio para el resto */}
+            {mainImages[0] && (
+              isApparel(name) ? (
+                <MockupEditorAvanzado
+                  productName={name}
+                  productImages={{
+                    front:  mainImages[0],
+                    back:   mainImages[1],
+                    sleeve: mainImages[2],
+                  }}
+                />
+              ) : (
+                <MockupEditor
+                  productImage={mainImages[0]}
+                  productName={name}
+                />
+              )
+            )}
           </div>
 
           {/* ── RIGHT: Product info ───────────────────────────────────── */}
