@@ -89,6 +89,7 @@ export default function ProductDetailClient({ product }: Props) {
   const router = useRouter()
   const addItem = useCartStore((s) => s.addItem)
   const [related, setRelated] = useState<RelatedProduct[]>([])
+  const [activeGalleryImage, setActiveGalleryImage] = useState<string>('')
 
   // Quantity stepper
   const [qty, setQty] = useState(1)
@@ -300,22 +301,23 @@ export default function ProductDetailClient({ product }: Props) {
               mainImages={mainImages}
               vectorImages={vectorImages}
               variantImages={variantImages}
+              onActiveImageChange={setActiveGalleryImage}
             />
 
-            {/* Mockup editor — avanzado para prendas, intermedio para el resto */}
+            {/* Mockup editor — sigue la imagen activa de la galería */}
             {mainImages[0] && (
               isApparel(name) ? (
                 <MockupEditorAvanzado
                   productName={name}
                   productImages={{
-                    front:  mainImages[0],
+                    front:  activeGalleryImage || mainImages[0],
                     back:   mainImages[1],
                     sleeve: mainImages[2],
                   }}
                 />
               ) : (
                 <MockupEditor
-                  productImage={mainImages[0]}
+                  productImage={activeGalleryImage || mainImages[0]}
                   productName={name}
                 />
               )

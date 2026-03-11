@@ -180,13 +180,14 @@ export interface ProductGalleryProps {
   mainImages: string[]
   vectorImages: string[]
   variantImages?: string[]
+  onActiveImageChange?: (src: string) => void
 }
 
 const THUMB_SIZE = 76     // px — thumb square
 const THUMB_GAP = 10      // px — gap between thumbs
 const RAIL_HEIGHT = 480   // px — visible rail window (desktop)
 
-export default function ProductGallery({ name, mainImages, vectorImages, variantImages }: ProductGalleryProps) {
+export default function ProductGallery({ name, mainImages, vectorImages, variantImages, onActiveImageChange }: ProductGalleryProps) {
   const clean = useCallback(cleanImages, [])
   // Merge mainImages + variantImages (deduplicated)
   const allMain = clean([...mainImages, ...(variantImages ?? [])])
@@ -220,6 +221,13 @@ export default function ProductGallery({ name, mainImages, vectorImages, variant
       railRef.current.scrollLeft = 0
     }
   }, [tab])
+
+  // Notify parent whenever the active image changes
+  useEffect(() => {
+    const img = visibleImages[activeIdx] ?? visibleImages[0]
+    if (img) onActiveImageChange?.(img)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIdx, tab, visibleImages.length])
 
   // Mark ready after mount (avoids SSR hydration mismatch)
   useEffect(() => { setReady(true) }, [])
