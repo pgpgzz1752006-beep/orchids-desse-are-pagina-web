@@ -17,11 +17,13 @@ export async function POST() {
   const { data: products } = await supabase
     .from('products')
     .select('sku, slug, image_url, images_json')
-    .not('images_json', 'is', null)
+    .not('image_url', 'is', null)
 
+  // Include: products with 1 main image OR null/missing images_json
   const singleImage = (products ?? []).filter((p: any) => {
     const imgs = p.images_json?.mainImages
-    return Array.isArray(imgs) && imgs.length === 1
+    if (!Array.isArray(imgs)) return true   // no mainImages at all
+    return imgs.length <= 1
   })
 
   let updated = 0
