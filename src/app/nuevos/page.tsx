@@ -4,7 +4,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, Suspense, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { Sparkles } from "lucide-react";
@@ -218,7 +217,6 @@ function NuevosContent() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300">
-      <Header />
       <main className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 py-8">
 
         {/* Breadcrumb */}
