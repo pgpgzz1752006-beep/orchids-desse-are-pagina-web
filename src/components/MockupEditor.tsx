@@ -119,7 +119,7 @@ export default function MockupEditor({ productImage, productName }: Props) {
             <img
               src={designSrc}
               alt="Tu diseño"
-              className="max-w-[300px] max-h-[300px] object-contain pointer-events-none drop-shadow-lg"
+              className="max-w-[300px] max-h-[300px] object-contain pointer-events-none drop-shadow-lg grayscale"
               draggable={false}
             />
           </div>

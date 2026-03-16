@@ -224,7 +224,7 @@ export default function MockupEditorAvanzado({ productImages, productName }: Pro
             <img
               src={designSrc}
               alt="Tu diseño"
-              className="max-w-[280px] max-h-[280px] object-contain pointer-events-none drop-shadow-xl"
+              className="max-w-[280px] max-h-[280px] object-contain pointer-events-none drop-shadow-xl grayscale"
               draggable={false}
             />
           </div>
