@@ -36,6 +36,8 @@ export default function CarritoPage() {
   const [selectedTecnica, setSelectedTecnica] = useState<string | null>(null);
   const [designFile, setDesignFile]           = useState<File | null>(null);
   const [designPreview, setDesignPreview]     = useState<string | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError]     = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const tecnica = TECNICAS.find(t => t.id === selectedTecnica) ?? null;
@@ -70,6 +72,38 @@ export default function CarritoPage() {
     setDesignFile(null);
     setDesignPreview(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  async function handleCheckout() {
+    setCheckoutLoading(true);
+    setCheckoutError(null);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map(i => ({
+            id: i.id,
+            name: i.name,
+            sku: i.sku,
+            price: i.price,
+            quantity: i.quantity,
+            image: i.image,
+          })),
+          tecnica: tecnica ? { label: tecnica.label, price: tecnica.price } : null,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.init_point) {
+        setCheckoutError(data.error || "Error al procesar el pago");
+        return;
+      }
+      window.location.href = data.init_point;
+    } catch {
+      setCheckoutError("Error de conexión. Intenta de nuevo.");
+    } finally {
+      setCheckoutLoading(false);
+    }
   }
 
   return (
@@ -195,14 +229,22 @@ export default function CarritoPage() {
                     <span className="text-[20px] font-bold text-[#14C6C9]">{formatPrice(total)}</span>
                   </div>
 
-                  <a
-                    href="https://link.mercadopago.com.mx/disenarepromocionale"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full h-[52px] rounded-xl bg-[#14C6C9] hover:bg-[#0fa8ab] active:scale-[0.98] text-white font-bold text-[14px] uppercase tracking-widest transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center"
+                  <button
+                    onClick={handleCheckout}
+                    disabled={checkoutLoading}
+                    className="w-full h-[52px] rounded-xl bg-[#14C6C9] hover:bg-[#0fa8ab] active:scale-[0.98] text-white font-bold text-[14px] uppercase tracking-widest transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Proceder al pago
-                  </a>
+                    {checkoutLoading ? (
+                      <span className="flex items-center gap-2">
+                        <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" className="opacity-25" /><path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="opacity-75" /></svg>
+                        Procesando...
+                      </span>
+                    ) : "Proceder al pago"}
+                  </button>
+
+                  {checkoutError && (
+                    <p className="text-[12px] text-red-500 text-center">{checkoutError}</p>
+                  )}
 
                   <Link href="/productos" className="text-center text-[12px] text-[#AAAAAA] dark:text-[#555] hover:text-[#14C6C9] transition-colors duration-200">
                     ← Seguir comprando
