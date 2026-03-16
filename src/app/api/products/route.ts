@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       )
   
     if (category) {
-      // 1. Fetch mapping for this site slug
+      // 1. Try mapping for this site slug
       const { data: mapping } = await supabaseAdmin
         .from('category_mapping')
         .select('api_category_ids')
@@ -49,16 +49,8 @@ export async function GET(req: NextRequest) {
         // Filter by real API IDs
         query = query.in('api_category_id', mapping.api_category_ids)
       } else {
-        // Fallback or explicit empty result if mapping missing
-        // According to requirements: "Si no hay mapeo configurado... devolver lista vacía"
-        console.warn(`[products] No mapping found for category: ${category}`)
-        return NextResponse.json({
-          products: [],
-          total: 0,
-          page,
-          totalPages: 0,
-          error: `Falta mapear categoría: ${category}`
-        })
+        // Fallback: filter directly by category_slug
+        query = query.eq('category_slug', category)
       }
     }
 
