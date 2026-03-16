@@ -45,14 +45,32 @@ function parseImageUrl(raw: string | null): string | null {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  termos: "Bebidas y Termos",
-  bolsas: "Bolsas, Mochilas y Maletas",
-  libretas: "Libretas, Escritura y Oficina",
+  agendas: "Agendas",
+  antiestres: "Antiestres",
+  viaje: "Artículos para Viaje",
   bar: "Bar",
-  regalos: "Sets de Regalo y Accesorios",
+  bebidas: "Bebidas",
+  belleza: "Belleza",
+  bolsas: "Bolsas",
+  complementos: "Complementos",
   deportes: "Deportes",
-  hogar: "Hogar y Herramientas",
-  gorras: "Textiles y Gorras",
+  entretenimiento: "Entretenimiento",
+  escritura: "Escritura",
+  herramientas: "Herramientas",
+  hieleras: "Hieleras y Portaviandas",
+  hogar: "Hogar",
+  libretas: "Libretas y Carpetas",
+  llaveros: "Llaveros",
+  maletas: "Maletas",
+  mochilas: "Mochilas",
+  ninos: "Niños",
+  oficina: "Oficina",
+  paraguas: "Paraguas e Impermeables",
+  portafolios: "Portafolios",
+  salud: "Salud",
+  "sets-regalo": "Sets de Regalo",
+  tecnologia: "Tecnología",
+  textiles: "Textiles",
 };
 
 function SkeletonCard() {
