@@ -1,12 +1,29 @@
 export const CATEGORY_KEYWORDS: Record<string, string[]> = {
-  termos: ['termo', 'cilindro', 'botella', 'tumbler', 'vaso termico', 'vaso térmico', 'hidroflask'],
-  bolsas: ['bolsa', 'mochila', 'maleta', 'morral', 'tote', 'backpack'],
-  libretas: ['libreta', 'cuaderno', 'carpeta', 'agenda', 'bloc', 'notebook'],
-  bar: ['bar', 'coctel', 'cóctel', 'shot', 'hielera', 'destapador', 'vino', 'copa', 'corkscrew', 'sacacorchos'],
-  regalos: ['set', 'kit', 'regalo', 'gift', 'pack', 'combo'],
-  deportes: ['balón', 'balon', 'soccer', 'sport', 'gym', 'fitness', 'futbol', 'fútbol', 'pelota', 'deporte'],
-  hogar: ['hogar', 'cocina', 'taza', 'recipiente', 'caja', 'organizador', 'colador', 'plato', 'bowl'],
-  gorras: ['gorra', 'playera', 'camiseta', 'polo', 'cap', 'sombrero', 'bucket hat'],
+  agendas: ['agenda'],
+  antiestres: ['anti-stress', 'antiestrés', 'antiestres', 'anti stress', 'stress'],
+  viaje: ['viaje', 'cangurera', 'neceser', 'organizador de viaje', 'porta documento', 'lentes'],
+  bar: ['destapador', 'licorera', 'sacacorcho', 'bar ', 'hielera para vino', 'set de vino', 'vino'],
+  bebidas: ['termo', 'cilindro', 'taza', 'vaso', 'botella', 'jarra', 'infusor', 'café', 'coffee', 'mug', 'tumbler', 'cup'],
+  belleza: ['cosmetiquera', 'maquillaje', 'brocha', 'espejo', 'manicure', 'costurero', 'joyería', 'joyero', 'belleza', 'dama'],
+  textiles: ['playera', 'gorra', 'chamarra', 'chaleco', 'sudadera', 'polo', 'camisa', 'camiseta', 'hoodie', 'jersey', 'blusa', 'franela', 'sombrero', 'cachucha', 'buff', 'pañuelo', 'mandil'],
+  tecnologia: ['usb', 'power bank', 'bocina', 'audifonos', 'audífonos', 'cargador', 'cable', 'hub', 'bluetooth', 'wireless', 'mouse', 'teclado', 'speaker', 'earbuds', 'smartwatch', 'powerbank'],
+  'sets-regalo': ['set ', 'kit ', 'estuche'],
+  salud: ['gel antibacterial', 'sanitizante', 'pastillero', 'cubreboca', 'tapaboca', 'termómetro', 'botiquín', 'salud'],
+  ninos: ['niño', 'niña', 'infantil', 'escolar', 'juguete', 'alcancía', 'kids'],
+  oficina: ['calculadora', 'portagafete', 'gafete', 'reconocimiento', 'reloj', 'porta notas', 'oficina', 'ejecutivo'],
+  paraguas: ['paraguas', 'impermeable', 'sombrilla'],
+  portafolios: ['portafolio', 'portalaptop', 'porta laptop'],
+  escritura: ['bolígrafo', 'boligrafo', 'pluma', 'lápiz', 'lapiz', 'marcador', 'resaltador', 'stylus', 'pen '],
+  hieleras: ['hielera', 'lonchera', 'portavianda', 'lunch', 'cooler'],
+  mochilas: ['mochila'],
+  maletas: ['maleta', 'trolley'],
+  llaveros: ['llavero'],
+  libretas: ['libreta', 'cuaderno', 'carpeta', 'folder', 'block'],
+  herramientas: ['herramienta', 'navaja', 'lámpara', 'lampara', 'linterna', 'flexómetro', 'desarmador', 'pinza'],
+  deportes: ['balón', 'balon', 'deporti', 'yoga', 'gym', 'fitness', 'fútbol', 'futbol', 'sport'],
+  hogar: ['bbq', 'parrilla', 'cesto', 'cocina', 'decoración', 'jardín', 'maceta', 'mascota', 'tabla', 'queso', 'portarretrato'],
+  complementos: ['popsocket', 'cordón', 'lanyard', 'pin ', 'broche', 'clip', 'sujetador'],
+  bolsas: ['bolsa', 'tote', 'ecológica', 'reutilizable'],
 }
 
 export function mapToSlug(name: string, rawCategory: string): string {
@@ -17,7 +34,7 @@ export function mapToSlug(name: string, rawCategory: string): string {
       if (haystack.includes(kw)) return slug
     }
   }
-  return 'regalos' // fallback
+  return 'complementos' // fallback
 }
 
 /** Generate a URL-safe slug from name + sku */

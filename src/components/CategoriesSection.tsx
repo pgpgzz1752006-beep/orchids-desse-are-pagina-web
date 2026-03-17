@@ -5,8 +5,8 @@ import Link from "next/link";
 
 const categories = [
   {
-    label: "Termos y cilindros",
-    href: "/productos?category=termos",
+    label: "Bebidas y termos",
+    href: "/productos?category=bebidas",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/TMPS-217-RG_7-1770139822312.jpg?width=800&height=800&resize=contain",
     overlayColor: "rgba(107, 43, 131, 0.78)",
   },
@@ -30,7 +30,7 @@ const categories = [
   },
   {
     label: "Sets de regalo",
-    href: "/productos?category=regalos",
+    href: "/productos?category=sets-regalo",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SET-023-N_6-1770139576900.jpg?width=800&height=800&resize=contain",
     overlayColor: "rgba(34, 167, 214, 0.78)",
   },
@@ -47,8 +47,8 @@ const categories = [
     overlayColor: "rgba(122, 174, 43, 0.78)",
   },
   {
-    label: "Gorras y playeras",
-    href: "/categorias/gorras-playeras",
+    label: "Textiles",
+    href: "/productos?category=textiles",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/CAP-021-AC_3-1770139581820.jpg?width=800&height=800&resize=contain",
     overlayColor: "rgba(210, 138, 27, 0.78)",
   },
