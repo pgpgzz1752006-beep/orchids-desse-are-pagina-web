@@ -58,7 +58,24 @@ export default async function ProductPage({ params }: PageProps) {
   const mediaRaw = data.images_json as { mainImages?: unknown; vectorImages?: unknown; variantImages?: unknown } | null
   const mainImages = cleanImageList(mediaRaw?.mainImages)
   const vectorImages = cleanImageList(mediaRaw?.vectorImages)
-  const variantImages = cleanImageList(mediaRaw?.variantImages)
+  let variantImages = cleanImageList(mediaRaw?.variantImages)
+
+  // Fallback: extract variant images from variants_json if images_json.variantImages is empty
+  if (variantImages.length === 0) {
+    const variants = (data.variants_json ?? []) as Array<{ mediaAssets?: { variantImages?: unknown } }>
+    const extracted: string[] = []
+    for (const v of variants) {
+      const vi = v?.mediaAssets?.variantImages
+      if (Array.isArray(vi)) {
+        for (const url of vi) {
+          if (typeof url === 'string' && url.startsWith('http') && !extracted.includes(url)) {
+            extracted.push(url)
+          }
+        }
+      }
+    }
+    variantImages = extracted
+  }
 
   // Make sure image_url is always first
   const primaryUrl = (data.image_url as string | null)?.trim() ?? ''
