@@ -96,8 +96,31 @@ export async function GET(req: NextRequest) {
   }
   // If HIDE_OUT_OF_STOCK=false → no filter (show everything)
 
+  // Default sort: by stock descending (mirrors promo catalog's "Posición" order)
+  let orderCol = 'stock'
+  let ascending = false
+  let nullsFirst = false
+
+  if (sort === 'newest') {
+    orderCol = 'created_at'
+    ascending = false
+    nullsFirst = false
+  } else if (sort === 'name') {
+    orderCol = 'name'
+    ascending = true
+    nullsFirst = true
+  } else if (sort === 'price_asc') {
+    orderCol = 'price_mx'
+    ascending = true
+    nullsFirst = false
+  } else if (sort === 'price_desc') {
+    orderCol = 'price_mx'
+    ascending = false
+    nullsFirst = false
+  }
+
   const { data, count, error } = await query
-    .order(sort === 'newest' ? 'created_at' : 'name', { ascending: sort !== 'newest', nullsFirst: sort !== 'newest' })
+    .order(orderCol, { ascending, nullsFirst })
     .range(offset, offset + limit - 1)
 
   if (error) {
