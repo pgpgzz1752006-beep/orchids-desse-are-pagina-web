@@ -30,41 +30,34 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300 flex flex-col">
 
-      {/* Multicolor top bar */}
-      <div className="flex w-full h-[10px]">
-        {colorBarSegments.map((seg, i) => (
-          <div key={i} style={{ backgroundColor: seg.color, width: seg.width }} />
-        ))}
-      </div>
-
-      {/* Header mini */}
-      <div className="w-full flex items-center justify-center py-5 px-4 border-b border-[#E8E8E8] dark:border-[#1E2028]">
-        <a href="/">
-          <Image
-            src="/brand/logo-light.webp"
-            alt="Diseñare Promocionales"
-            width={220}
-            height={80}
-            className="h-[52px] w-auto object-contain block dark:hidden"
-            priority
-          />
-          <Image
-            src="/brand/logo-dark.webp"
-            alt="Diseñare Promocionales"
-            width={220}
-            height={80}
-            className="h-[52px] w-auto object-contain hidden dark:block"
-            priority
-          />
-        </a>
-      </div>
-
       {/* Main content */}
       <main className="flex-1 flex items-center justify-center px-4 py-12 md:py-16">
         <div className="w-full max-w-[440px]">
 
           {/* Card */}
           <div className="bg-white dark:bg-[#12141A] rounded-2xl shadow-[0_4px_32px_rgba(0,0,0,0.10)] dark:shadow-[0_4px_32px_rgba(0,0,0,0.40)] border border-[#EFEFEF] dark:border-[#1E2028] px-8 py-10 md:px-10 md:py-12">
+
+            {/* Logo inside card */}
+            <div className="flex justify-center mb-6">
+              <a href="/">
+                <Image
+                  src="/brand/logo-light.webp"
+                  alt="Diseñare Promocionales"
+                  width={180}
+                  height={65}
+                  className="h-[48px] w-auto object-contain block dark:hidden"
+                  priority
+                />
+                <Image
+                  src="/brand/logo-dark.webp"
+                  alt="Diseñare Promocionales"
+                  width={180}
+                  height={65}
+                  className="h-[48px] w-auto object-contain hidden dark:block"
+                  priority
+                />
+              </a>
+            </div>
 
             {/* Title */}
             <h1 className="text-[24px] md:text-[26px] font-bold text-[#111111] dark:text-white text-center mb-1 leading-tight">
@@ -73,13 +66,6 @@ export default function LoginPage() {
             <p className="text-[13px] md:text-[14px] text-[#777] dark:text-[#999] text-center mb-8">
               Accede a tu cuenta de Diseñare Promocionales
             </p>
-
-            {/* Multicolor accent line */}
-            <div className="flex w-full h-[4px] rounded-full overflow-hidden mb-8">
-              {colorBarSegments.map((seg, i) => (
-                <div key={i} style={{ backgroundColor: seg.color, width: seg.width }} />
-              ))}
-            </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
