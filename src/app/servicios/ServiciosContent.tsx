@@ -113,13 +113,6 @@ export default function ServiciosContent() {
   return (
     <div className="min-h-screen bg-white dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300 flex flex-col">
 
-      {/* Multicolor top bar */}
-      <div className="flex w-full h-[10px]">
-        {colorBarSegments.map((seg, i) => (
-          <div key={i} style={{ backgroundColor: seg.color, width: seg.width }} />
-        ))}
-      </div>
-
       {/* ══════════════════════════════════════════════════════════════════════
           HERO
       ══════════════════════════════════════════════════════════════════════ */}
@@ -129,12 +122,6 @@ export default function ServiciosContent() {
         <div className="absolute bottom-[-80px] left-[-80px] w-[300px] h-[300px] bg-[#E0007A]/8 rounded-full blur-[100px]" />
 
         <div className="relative max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16 py-20 md:py-28 lg:py-32 text-center">
-          <div className="flex w-full h-[4px] rounded-full overflow-hidden max-w-[120px] mx-auto mb-8">
-            {colorBarSegments.map((seg, i) => (
-              <div key={i} style={{ backgroundColor: seg.color, width: seg.width }} />
-            ))}
-          </div>
-
           <h1 className="text-[32px] md:text-[44px] lg:text-[52px] font-extrabold text-white leading-[1.1] tracking-tight mb-5">
             Nuestros <span className="text-[#14C6C9]">Servicios</span>
           </h1>
