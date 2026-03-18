@@ -73,7 +73,7 @@ const servicios = [
     icon: Palette,
     color: "#E0007A",
     title: "Personalización Integral",
-    desc: "Todos nuestros productos son 100% personalizables con tu logotipo. Ofrecemos 5 técnicas de grabado y un visualizador en línea para que veas el resultado antes de ordenar.",
+    desc: "Todos nuestros productos son 100% personalizables con tu logotipo. Ofrecemos 5 técnicas de impresión y un visualizador en línea para que veas el resultado antes de ordenar.",
   },
   {
     icon: Truck,
