@@ -4,7 +4,8 @@ import Link from "next/link";
 import {
   Zap, Printer, Stamp, Pen, Droplets,
   Truck, Package, Palette, ShieldCheck, Headphones,
-  CheckCircle2, ArrowRight, Phone,
+  CheckCircle2, ArrowRight, Phone, Megaphone,
+  Flag, CreditCard, RectangleHorizontal, FileText, Shirt,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -283,6 +284,95 @@ export default function ServiciosContent() {
                 )}
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          SERVICIOS ADICIONALES DE PUBLICIDAD
+      ══════════════════════════════════════════════════════════════════════ */}
+      <section className="w-full bg-white dark:bg-[#0A0B0E] py-16 md:py-20">
+        <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
+          <div className="flex items-center gap-3 justify-center mb-3">
+            <Megaphone className="w-7 h-7 text-[#E0007A]" />
+            <h2 className="text-[24px] md:text-[32px] font-extrabold text-[#111] dark:text-white tracking-tight">
+              Servicios de <span className="text-[#E0007A]">Publicidad</span>
+            </h2>
+          </div>
+          <p className="text-[14px] md:text-[15px] text-[#888] dark:text-[#999] text-center max-w-[650px] mx-auto mb-12">
+            Además de productos promocionales, ofrecemos una gama completa de servicios de publicidad e impresión para llevar tu marca a otro nivel.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              {
+                icon: RectangleHorizontal,
+                color: "#1A3D8F",
+                title: "Lonas y Banners",
+                desc: "Impresión en gran formato de lonas publicitarias, banners, pendones y vinil para interiores y exteriores con tintas de alta resolución y durabilidad.",
+              },
+              {
+                icon: FileText,
+                color: "#14C6C9",
+                title: "Flyers y Papelería",
+                desc: "Diseño e impresión de volantes, trípticos, tarjetas de presentación, notas de remisión, hojas membretadas y todo tipo de papelería corporativa.",
+              },
+              {
+                icon: CreditCard,
+                color: "#7BC043",
+                title: "Credenciales y Gafetes",
+                desc: "Credenciales personalizadas con fotografía, código QR o código de barras. Incluimos porta gafetes, cintas y accesorios para identificación corporativa.",
+              },
+              {
+                icon: Flag,
+                color: "#E0007A",
+                title: "Toldos y Banderas",
+                desc: "Toldos publicitarios, banderas tipo pluma, fly banners y estructuras portátiles para eventos, ferias, puntos de venta y activaciones de marca.",
+              },
+              {
+                icon: Shirt,
+                color: "#6A1B9A",
+                title: "Diseño de Botargas",
+                desc: "Creación y fabricación de botargas personalizadas con tu mascota o personaje de marca. Diseño a medida con materiales de alta calidad y comodidad.",
+              },
+              {
+                icon: Palette,
+                color: "#B8A800",
+                title: "Diseño Gráfico",
+                desc: "Servicio profesional de diseño de logotipos, identidad corporativa, diseño de empaques, catálogos, y material publicitario digital e impreso.",
+              },
+            ].map((s) => {
+              const Icon = s.icon;
+              return (
+                <div
+                  key={s.title}
+                  className="bg-[#FAFAFA] dark:bg-[#12141A] rounded-2xl border border-[#EFEFEF] dark:border-[#1E2028] p-6 md:p-7 flex flex-col gap-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+                >
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    style={{ backgroundColor: s.color + "15" }}
+                  >
+                    <Icon className="w-6 h-6" style={{ color: s.color }} />
+                  </div>
+                  <h3 className="text-[15px] font-bold text-[#111] dark:text-white">{s.title}</h3>
+                  <p className="text-[13px] text-[#666] dark:text-[#999] leading-relaxed">{s.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-10 text-center">
+            <p className="text-[13px] text-[#888] dark:text-[#999] mb-4">
+              ¿Necesitas un servicio que no aparece aquí? Contáctanos y lo hacemos realidad.
+            </p>
+            <a
+              href="https://wa.me/529512424333?text=Hola%2C%20me%20interesan%20sus%20servicios%20de%20publicidad"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#E0007A] hover:bg-[#c4006b] text-white font-bold text-[12px] uppercase tracking-widest rounded-xl transition-colors"
+            >
+              <Phone className="w-4 h-4" /> Consultar servicios
+            </a>
           </div>
         </div>
       </section>
