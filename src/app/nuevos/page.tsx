@@ -7,6 +7,7 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { Sparkles } from "lucide-react";
+import { useImageBgColor } from "@/hooks/useImageBgColor";
 
 interface ImagesJson {
   mainImages?: string[];
@@ -92,10 +93,15 @@ function ProductCard({ product }: { product: Product }) {
     switchTo(0);
   };
 
+  // Detect image background color
+  const bgType = useImageBgColor(images[0]);
+  const imageBg = bgType === "white" ? "bg-white" : "bg-[#F2F2F2]";
+  const cardBg = bgType === "white" ? "bg-white" : "bg-[#F7F7F7]";
+
   return (
     <Link
       href={href}
-      className="group bg-white border border-[#D9D9D9] rounded-[11px] p-3 flex flex-col transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] cursor-pointer relative"
+      className={`group ${cardBg} border border-[#D9D9D9] rounded-[11px] p-3 flex flex-col transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] cursor-pointer relative`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -104,7 +110,7 @@ function ProductCard({ product }: { product: Product }) {
         Nuevo
       </span>
 
-      <div className="relative flex items-center justify-center rounded-[10px] overflow-hidden bg-[#F2F2F2] h-[160px] mb-2 p-3 flex-shrink-0">
+      <div className={`relative flex items-center justify-center rounded-[10px] overflow-hidden ${imageBg} h-[160px] mb-2 p-3 flex-shrink-0`}>
         <Image
           src={images[activeIdx] ?? "/placeholder-product.png"}
           alt={product.name}

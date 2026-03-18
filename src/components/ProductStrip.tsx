@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState, useEffect, useCallback, useId } from "react";
+import { useImageBgColor } from "@/hooks/useImageBgColor";
 
 interface Product {
   name: string;
@@ -17,6 +18,49 @@ interface ProductStripProps {
   titleBold: string;
   products: Product[];
   autoplay?: boolean;
+}
+
+function StripCard({ product, isDragging, isStatic }: { product: Product; isDragging?: boolean; isStatic?: boolean }) {
+  const bgType = useImageBgColor(product.image);
+  const imageBg = bgType === "white" ? "bg-white" : "bg-[#F2F2F2]";
+  const cardBg = bgType === "white" ? "bg-white" : "bg-[#F7F7F7]";
+
+  const cardClass = isStatic
+    ? `block ${cardBg} border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2`
+    : `block ${cardBg} border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.04] hover:border-[#BDBDBD] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] dark:hover:border-[#3A3D44] dark:hover:shadow-[0_16px_34px_rgba(0,0,0,0.3)] active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm`;
+
+  return (
+    <Link
+      href={product.href}
+      className={cardClass}
+      onClick={isDragging ? (e) => e.preventDefault() : undefined}
+      draggable={false}
+    >
+      <div className={`flex items-center justify-center rounded-[8px] overflow-hidden ${imageBg} h-[100px] md:h-[110px] lg:h-[120px] mb-3 p-3 flex-shrink-0 group/img relative`}>
+        <Image
+          src={product.image}
+          alt={product.name}
+          width={120}
+          height={120}
+          className={`w-full h-full object-contain pointer-events-none transition-opacity duration-300 ${product.hoverImage ? 'group-hover/img:opacity-0' : ''}`}
+          draggable={false}
+        />
+        {product.hoverImage && (
+          <Image
+            src={product.hoverImage}
+            alt={`${product.name} — vista 2`}
+            width={120}
+            height={120}
+            className="w-full h-full object-contain pointer-events-none absolute inset-0 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"
+            draggable={false}
+          />
+        )}
+      </div>
+      <p className="font-['Montserrat'] text-[10px] md:text-[11px] lg:text-[11px] font-medium text-[#333333] dark:text-[#333333] text-center uppercase leading-[1.4] min-h-[28px]">
+        {product.name}
+      </p>
+    </Link>
+  );
 }
 
 // Marquee speed configuration (px per second)
@@ -273,35 +317,10 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
           <div className="w-full px-2 md:px-4">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {products.slice(0, 6).map((product, index) => (
-                  <Link
-                    key={`${product.name}-${index}`}
-                    href={product.href}
-                    className="block bg-white dark:bg-white border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2"
-                    >
-                      {/* Uniform gray image background */}
-                      <div className="flex items-center justify-center rounded-[8px] overflow-hidden bg-[#F2F2F2] h-[100px] md:h-[110px] lg:h-[120px] mb-3 p-3 flex-shrink-0 group/img relative">
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          width={120}
-                          height={120}
-                          className={`w-full h-full object-contain transition-opacity duration-300 ${product.hoverImage ? 'group-hover/img:opacity-0' : ''}`}
-                        />
-                        {product.hoverImage && (
-                          <Image
-                            src={product.hoverImage}
-                            alt={`${product.name} — vista 2`}
-                            width={120}
-                            height={120}
-                            className="w-full h-full object-contain absolute inset-0 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"
-                          />
-                        )}
-                      </div>
-                      <p className="font-['Montserrat'] text-[10px] md:text-[11px] font-medium text-[#333333] dark:text-[#333333] text-center uppercase leading-[1.4] min-h-[28px]">
-                        {product.name}
-                      </p>
-                    </Link>
-                ))}
+                <div key={`${product.name}-${index}`}>
+                  <StripCard product={product} isStatic />
+                </div>
+              ))}
               </div>
             </div>
           </section>
@@ -362,39 +381,7 @@ className="w-full bg-white dark:bg-[#0E0F12] py-6 md:py-16 lg:py-[72px] transiti
                     className="flex-shrink-0 px-2 lg:px-[10px]"
                     style={{ width: `${cardWidth}px` }}
                   >
-                  <Link
-                    href={product.href}
-                    className="block bg-white dark:bg-white border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.04] hover:border-[#BDBDBD] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] dark:hover:border-[#3A3D44] dark:hover:shadow-[0_16px_34px_rgba(0,0,0,0.3)] active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm"
-                    onClick={(e) => isDragging && e.preventDefault()}
-                    draggable={false}
-                  >
-                      {/* Image Container */}
-                      <div className="flex items-center justify-center rounded-[8px] overflow-hidden bg-[#F2F2F2] h-[100px] md:h-[110px] lg:h-[120px] mb-3 p-3 flex-shrink-0 group/img relative">
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          width={120}
-                          height={120}
-                          className={`w-full h-full object-contain pointer-events-none transition-opacity duration-300 ${product.hoverImage ? 'group-hover/img:opacity-0' : ''}`}
-                          draggable={false}
-                        />
-                        {product.hoverImage && (
-                          <Image
-                            src={product.hoverImage}
-                            alt={`${product.name} — vista 2`}
-                            width={120}
-                            height={120}
-                            className="w-full h-full object-contain pointer-events-none absolute inset-0 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"
-                            draggable={false}
-                          />
-                        )}
-                      </div>
-
-                    {/* Product Name */}
-                      <p className="font-['Montserrat'] text-[10px] md:text-[11px] lg:text-[11px] font-medium text-[#333333] dark:text-[#333333] text-center uppercase leading-[1.4] min-h-[28px]">
-                        {product.name}
-                      </p>
-                    </Link>
+                    <StripCard product={product} isDragging={isDragging} />
                   </div>
               ))}
             </div>

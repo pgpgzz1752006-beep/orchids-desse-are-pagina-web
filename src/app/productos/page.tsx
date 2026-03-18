@@ -9,6 +9,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ProductFilters from "@/components/ProductFilters";
 import { SlidersHorizontal } from "lucide-react";
 import { Drawer } from "vaul";
+import { useImageBgColor } from "@/hooks/useImageBgColor";
 
 interface ImagesJson {
   mainImages?: string[];
@@ -101,6 +102,11 @@ function ProductCard({ product }: { product: Product }) {
     ? `/producto/${product.slug}`
     : `/productos?category=${product.category_slug}`;
 
+  // Detect image background color
+  const bgType = useImageBgColor(images[0]);
+  const imageBg = bgType === "white" ? "bg-white" : "bg-[#F2F2F2]";
+  const cardBg = bgType === "white" ? "bg-white" : "bg-[#F7F7F7]";
+
   const switchTo = (idx: number) => {
     if (idx === activeIdx) return;
     setFading(true);
@@ -128,12 +134,12 @@ function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       href={href}
-      className="group bg-white dark:bg-white border border-[#D9D9D9] rounded-[11px] p-3 flex flex-col transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] cursor-pointer"
+      className={`group ${cardBg} border border-[#D9D9D9] rounded-[11px] p-3 flex flex-col transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.03] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] cursor-pointer`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {/* Main image */}
-      <div className="relative flex items-center justify-center rounded-[10px] overflow-hidden bg-[#F2F2F2] h-[140px] sm:h-[160px] lg:h-[180px] mb-2 p-3 flex-shrink-0">
+      <div className={`relative flex items-center justify-center rounded-[10px] overflow-hidden ${imageBg} h-[140px] sm:h-[160px] lg:h-[180px] mb-2 p-3 flex-shrink-0`}>
         <Image
           src={images[activeIdx] ?? "/placeholder-product.png"}
           alt={product.name}
