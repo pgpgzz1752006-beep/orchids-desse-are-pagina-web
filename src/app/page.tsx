@@ -11,10 +11,10 @@ const PLACEHOLDER_IMAGE = "/placeholder-product.png";
 
 const staticFeatured = [
   { name: "VASO CHAMPION", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-048-R-1770140355309.jpg?width=400&height=400&resize=contain", href: "/producto/vaso-champion-soc-048" },
-  { name: "BALÓN SPORT", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-350-N-1770140350957.jpg?width=400&height=400&resize=contain", href: "/producto/bal-n-sport-soc-350" },
-  { name: "BALÓN SPACE", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-090-1770140352614.jpg?width=400&height=400&resize=contain", href: "/producto/bal-n-space-soc-650" },
-  { name: "PELOTA ANTI-STRESS COLORFUL", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-011-01_1-1770140356623.jpg?width=400&height=400&resize=contain", href: "/producto/pelota-anti-stress-colorful-soc-910-" },
-  { name: "BALÓN KIRALY", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-075-1770140354033.jpg?width=400&height=400&resize=contain", href: "/producto/bal-n-kiraly-soc-550" },
+  { name: "BALÓN SPORT", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-350-N-1770140350957.jpg?width=400&height=400&resize=contain", href: "/producto/balon-sport-soc-350" },
+  { name: "BALÓN SPACE", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-090-1770140352614.jpg?width=400&height=400&resize=contain", href: "/producto/balon-space-soc-650" },
+  { name: "PELOTA ANTI-STRESS COLORFUL", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-011-01_1-1770140356623.jpg?width=400&height=400&resize=contain", href: "/producto/pelota-anti-stress-colorful-soc-910" },
+  { name: "BALÓN KIRALY", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-075-1770140354033.jpg?width=400&height=400&resize=contain", href: "/producto/balon-kiraly-soc-550" },
   { name: "PARAGUAS SOCCER FIELD", image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/227d548b-b8f5-4d86-a14b-344106766009/SOC-090-1770140352614.jpg?width=400&height=400&resize=contain", href: "/producto/paraguas-soccer-field-soc-062" },
 ];
 
