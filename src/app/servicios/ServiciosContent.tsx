@@ -28,6 +28,7 @@ const tecnicas = [
     icon: Zap,
     color: "#14C6C9",
     title: "Grabado Láser",
+    price: 60,
     desc: "Grabado permanente de alta precisión sobre metal, madera, cuero, acrílico y vidrio. Ideal para artículos ejecutivos, termos, plumas y reconocimientos con un acabado elegante y duradero.",
     materiales: ["Metal", "Madera", "Cuero", "Acrílico", "Vidrio"],
   },
@@ -35,6 +36,7 @@ const tecnicas = [
     icon: Printer,
     color: "#E0007A",
     title: "Serigrafía",
+    price: 50,
     desc: "Impresión con tinta de alta durabilidad directamente sobre el producto. Perfecta para grandes tirajes en textiles, plásticos, vidrio y papel con colores vibrantes y resistencia al lavado.",
     materiales: ["Textiles", "Plásticos", "Vidrio", "Papel"],
   },
@@ -42,6 +44,7 @@ const tecnicas = [
     icon: Stamp,
     color: "#B8A800",
     title: "Tampografía",
+    price: 40,
     desc: "Transferencia de tinta mediante un tampón de silicón, ideal para superficies irregulares, curvas o de difícil acceso. La técnica más versátil para plumas, encendedores y artículos pequeños.",
     materiales: ["Superficies curvas", "Plásticos", "Cerámica", "Metal"],
   },
@@ -49,6 +52,7 @@ const tecnicas = [
     icon: Pen,
     color: "#7BC043",
     title: "Bordado",
+    price: 100,
     desc: "Diseño en hilo de alta calidad cosido directamente sobre la prenda. Otorga un acabado premium y profesional con excelente durabilidad. Ideal para uniformes, gorras y mochilas corporativas.",
     materiales: ["Gorras", "Playeras", "Sudaderas", "Mochilas"],
   },
@@ -56,6 +60,7 @@ const tecnicas = [
     icon: Droplets,
     color: "#1A3D8F",
     title: "Sublimación",
+    price: 35,
     desc: "Impresión fotográfica a todo color directamente en la fibra del material. Permite diseños complejos, degradados y fotografías sin límite de colores sobre materiales de poliéster y cerámica.",
     materiales: ["Poliéster", "Cerámica", "Telas blancas", "Mouse pads"],
   },
@@ -218,7 +223,7 @@ export default function ServiciosContent() {
                     <div>
                       <h3 className="text-[16px] md:text-[18px] font-bold text-[#111] dark:text-white">{t.title}</h3>
                       <p className="text-[11px] font-semibold uppercase tracking-wider mt-0.5" style={{ color: t.color }}>
-                        Desde $35 MXN / pieza
+                        Desde ${t.price} MXN / pieza
                       </p>
                     </div>
                   </div>
