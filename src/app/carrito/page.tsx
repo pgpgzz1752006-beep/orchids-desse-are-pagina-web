@@ -8,17 +8,6 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 import { useCartStore } from "@/lib/cartStore";
 
-const colorBarSegments = [
-  { color: "#F3E300", width: "12%" },
-  { color: "#7BC043", width: "14%" },
-  { color: "#1FB6FF", width: "16%" },
-  { color: "#198FD6", width: "14%" },
-  { color: "#1A3D8F", width: "14%" },
-  { color: "#E0007A", width: "12%" },
-  { color: "#6A1B9A", width: "12%" },
-  { color: "#3E2A84", width: "6%" },
-];
-
 const formatPrice = (n: number) =>
   n.toLocaleString("es-MX", { style: "currency", currency: "MXN" });
 
@@ -109,21 +98,9 @@ export default function CarritoPage() {
   return (
     <div className="min-h-screen bg-[#F5F6FA] dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300 flex flex-col">
 
-      {/* Multicolor top bar */}
-      <div className="flex w-full h-[10px]">
-        {colorBarSegments.map((seg, i) => (
-          <div key={i} style={{ backgroundColor: seg.color, width: seg.width }} />
-        ))}
-      </div>
-
       {/* Page title */}
       <div className="w-full bg-white dark:bg-[#0E0F12] pt-8 pb-6 px-6 md:px-10 lg:px-16">
         <h1 className="text-[22px] md:text-[28px] font-bold text-[#111] dark:text-white">Mi carrito</h1>
-        <div className="flex w-full h-[4px] rounded-full overflow-hidden mt-3 max-w-[120px]">
-          {colorBarSegments.map((seg, i) => (
-            <div key={i} style={{ backgroundColor: seg.color, width: seg.width }} />
-          ))}
-        </div>
       </div>
 
       {/* Main content */}
