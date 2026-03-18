@@ -46,8 +46,8 @@ export default function LoginPage() {
             {/* Logo */}
             <div className="flex justify-center mb-6">
               <a href="/">
-                <Image src="/brand/logo-light.webp" alt="Diseñare Promocionales" width={260} height={90} className="h-[72px] w-auto object-contain block dark:hidden" priority />
-                <Image src="/brand/logo-dark.webp" alt="Diseñare Promocionales" width={260} height={90} className="h-[72px] w-auto object-contain hidden dark:block" priority />
+                <Image src="/brand/logo-light.webp" alt="Diseñare Promocionales" width={260} height={90} className="h-[90px] w-auto object-contain block dark:hidden" priority />
+                <Image src="/brand/logo-dark.webp" alt="Diseñare Promocionales" width={260} height={90} className="h-[90px] w-auto object-contain hidden dark:block" priority />
               </a>
             </div>
 
