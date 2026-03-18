@@ -204,7 +204,7 @@ export default function CategoriasPage() {
                 {/* Image — links to full category */}
                 <Link
                   href={`/productos?category=${cat.slug}`}
-                  className="w-2/5 relative bg-gray-100 dark:bg-white/5 block flex-shrink-0"
+                  className="w-2/5 relative bg-gray-100 dark:bg-white/5 block flex-shrink-0 h-full overflow-hidden"
                 >
                   <Image
                     src={cat.image}
