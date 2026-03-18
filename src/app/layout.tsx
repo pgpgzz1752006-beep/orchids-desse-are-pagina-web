@@ -3,6 +3,7 @@ import "./globals.css";
 import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
 import ErrorReporter from "@/components/ErrorReporter";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/components/AuthProvider";
 import Header from "@/components/Header";
 import Script from "next/script";
 
@@ -36,10 +37,12 @@ export default function RootLayout({
           data-debug="true"
           data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
         />
-            <ThemeProvider>
+            <AuthProvider>
+              <ThemeProvider>
                 <Header />
                 {children}
               </ThemeProvider>
+            </AuthProvider>
           <VisualEditsMessenger />
         </body>
     </html>

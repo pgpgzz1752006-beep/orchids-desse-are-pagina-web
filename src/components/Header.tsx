@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Search, User, ShoppingCart, Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { useCartStore } from "@/lib/cartStore";
+import { useAuth } from "./AuthProvider";
 
 const navItems = [
   { label: "CATEGORÍAS", href: "/categorias", active: false },
@@ -29,6 +30,7 @@ const colorBarSegments = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { user } = useAuth();
   const [mounted, setMounted] = useState(false);
   const cartCount = useCartStore((s) => s.items.reduce((a, i) => a + i.quantity, 0));
 
@@ -130,11 +132,16 @@ export default function Header() {
               <Search className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
             </button>
             <a
-              href="/login"
-              className="p-1.5 md:p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] dark:hover:text-white hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
+              href={user ? "/cuenta" : "/login"}
+              className={`relative p-1.5 md:p-2 transition-all duration-200 ease-out hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded ${
+                user ? "text-[#14C6C9]" : "text-[#7A7A7A] hover:text-[#111111] dark:hover:text-white"
+              }`}
               aria-label="Mi cuenta"
             >
               <User className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
+              {user && (
+                <span className="absolute -top-0.5 -right-0.5 w-[10px] h-[10px] rounded-full bg-[#7BC043] border-2 border-white dark:border-[#0E0F12]" />
+              )}
             </a>
               <a
                 href="/carrito"

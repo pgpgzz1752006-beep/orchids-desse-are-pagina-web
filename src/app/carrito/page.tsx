@@ -3,10 +3,13 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2, Plus, Minus, ShoppingCart, Zap, Droplets, Printer, Stamp, Pen, Upload, X, CheckCircle2 } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingCart, Zap, Droplets, Printer, Stamp, Pen, Upload, X, CheckCircle2, LogIn } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 import { useCartStore } from "@/lib/cartStore";
+import { useAuth } from "@/components/AuthProvider";
+import { useOrderStore } from "@/lib/orderStore";
+import { useAddressStore } from "@/lib/addressStore";
 
 const formatPrice = (n: number) =>
   n.toLocaleString("es-MX", { style: "currency", currency: "MXN" });
@@ -20,7 +23,10 @@ const TECNICAS = [
 ];
 
 export default function CarritoPage() {
-  const { items, removeItem, updateQuantity } = useCartStore();
+  const { user } = useAuth();
+  const { items, removeItem, updateQuantity, clearCart } = useCartStore();
+  const { addOrder } = useOrderStore();
+  const { getDefault } = useAddressStore();
 
   const [selectedTecnica, setSelectedTecnica] = useState<string | null>(null);
   const [designFile, setDesignFile]           = useState<File | null>(null);
@@ -64,6 +70,10 @@ export default function CarritoPage() {
   }
 
   async function handleCheckout() {
+    if (!user) {
+      window.location.href = "/login";
+      return;
+    }
     setCheckoutLoading(true);
     setCheckoutError(null);
     try {
@@ -87,6 +97,17 @@ export default function CarritoPage() {
         setCheckoutError(data.error || "Error al procesar el pago");
         return;
       }
+      // Save order to history
+      const defaultAddr = getDefault();
+      addOrder({
+        items: items.map(i => ({ id: i.id, name: i.name, sku: i.sku, price: i.price ?? null, quantity: i.quantity, image: i.image })),
+        tecnica: tecnica ? { label: tecnica.label, price: tecnica.price } : null,
+        subtotal,
+        total,
+        status: "pending",
+        shippingAddress: defaultAddr ? `${defaultAddr.street} ${defaultAddr.exterior}, ${defaultAddr.city}, ${defaultAddr.state}` : undefined,
+      });
+      clearCart();
       window.location.href = data.init_point;
     } catch {
       setCheckoutError("Error de conexión. Intenta de nuevo.");
@@ -206,18 +227,25 @@ export default function CarritoPage() {
                     <span className="text-[20px] font-bold text-[#14C6C9]">{formatPrice(total)}</span>
                   </div>
 
-                  <button
-                    onClick={handleCheckout}
-                    disabled={checkoutLoading}
-                    className="w-full h-[52px] rounded-xl bg-[#14C6C9] hover:bg-[#0fa8ab] active:scale-[0.98] text-white font-bold text-[14px] uppercase tracking-widest transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {checkoutLoading ? (
-                      <span className="flex items-center gap-2">
-                        <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" className="opacity-25" /><path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="opacity-75" /></svg>
-                        Procesando...
-                      </span>
-                    ) : "Proceder al pago"}
-                  </button>
+                  {!user ? (
+                    <Link href="/login"
+                      className="w-full h-[52px] rounded-xl bg-[#14C6C9] hover:bg-[#0fa8ab] active:scale-[0.98] text-white font-bold text-[14px] uppercase tracking-widest transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                      <LogIn className="w-5 h-5" /> Inicia sesión para comprar
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={handleCheckout}
+                      disabled={checkoutLoading}
+                      className="w-full h-[52px] rounded-xl bg-[#14C6C9] hover:bg-[#0fa8ab] active:scale-[0.98] text-white font-bold text-[14px] uppercase tracking-widest transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {checkoutLoading ? (
+                        <span className="flex items-center gap-2">
+                          <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" className="opacity-25" /><path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="opacity-75" /></svg>
+                          Procesando...
+                        </span>
+                      ) : "Proceder al pago"}
+                    </button>
+                  )}
 
                   {checkoutError && (
                     <p className="text-[12px] text-red-500 text-center">{checkoutError}</p>
