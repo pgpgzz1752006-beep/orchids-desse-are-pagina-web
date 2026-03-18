@@ -196,38 +196,47 @@ export default function CategoriasPage() {
       <div className="w-full pl-3 pr-4 md:pl-4 md:pr-6 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
           {categorias.map((cat) => (
-            <Link
+            <div
               key={cat.title}
-              href={`/productos?category=${cat.slug}`}
-              className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm cursor-pointer h-52 will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:-translate-y-[3px] active:scale-[1.02]"
+              className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm h-52 will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:-translate-y-[3px] active:scale-[1.02]"
             >
               <div className="flex h-full">
-                <div className="w-2/5 relative bg-gray-100 dark:bg-white/5">
+                {/* Image — links to full category */}
+                <Link
+                  href={`/productos?category=${cat.slug}`}
+                  className="w-2/5 relative bg-gray-100 dark:bg-white/5 block flex-shrink-0"
+                >
                   <Image
                     src={cat.image}
                     alt={cat.title}
                     fill
                     className="object-cover"
                   />
-                </div>
+                </Link>
                 <div className="flex-1 p-3 flex flex-col justify-start overflow-hidden">
-                  <h3 className="font-['Montserrat'] font-bold text-sm md:text-base">
-                    {cat.title}
-                  </h3>
+                  <Link href={`/productos?category=${cat.slug}`}>
+                    <h3 className="font-['Montserrat'] font-bold text-sm md:text-base hover:text-[#14C6C9] transition-colors">
+                      {cat.title}
+                    </h3>
+                  </Link>
                   <div className="mt-1 space-y-0">
                     {cat.subcategories.map((sub) => (
-                      <p
+                      <Link
                         key={sub}
-                        className="text-xs leading-tight font-semibold text-[#7A7A7A] dark:text-gray-400"
+                        href={`/productos?category=${cat.slug}&q=${encodeURIComponent(sub.toLowerCase())}`}
+                        className="block text-xs leading-tight font-semibold text-[#7A7A7A] dark:text-gray-400 hover:text-[#14C6C9] dark:hover:text-[#14C6C9] transition-colors"
                       >
                         {sub}
-                      </p>
+                      </Link>
                     ))}
                   </div>
                 </div>
-                <div className={`w-5 ${cat.barColor}`} />
+                <Link
+                  href={`/productos?category=${cat.slug}`}
+                  className={`w-5 ${cat.barColor} block flex-shrink-0`}
+                />
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
