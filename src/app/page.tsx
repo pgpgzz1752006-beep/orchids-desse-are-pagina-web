@@ -6,6 +6,7 @@ import ChatButtonSection from "@/components/ChatButtonSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
+import { filterWhiteBgProducts } from "@/lib/imageAnalyzer";
 
 const PLACEHOLDER_IMAGE = "/placeholder-product.png";
 
@@ -44,9 +45,10 @@ async function getBestSellers() {
     .from("products")
     .select("sku, name, image_url, category_slug, slug, images_json")
     .eq("is_best_seller", true)
-    .limit(24);
+    .limit(48);
   if (error || !data?.length) return null;
-  return dbProductsToStrip(data);
+  const all = dbProductsToStrip(data);
+  return filterWhiteBgProducts(all, 12);
 }
 
 async function getRecommended() {
@@ -54,9 +56,10 @@ async function getRecommended() {
     .from("products")
     .select("sku, name, image_url, category_slug, slug, images_json")
     .eq("is_recommended", true)
-    .limit(24);
+    .limit(48);
   if (error || !data?.length) return null;
-  return dbProductsToStrip(data);
+  const all = dbProductsToStrip(data);
+  return filterWhiteBgProducts(all, 12);
 }
 
 async function getNewProducts() {
@@ -64,9 +67,10 @@ async function getNewProducts() {
     .from("products")
     .select("sku, name, image_url, category_slug, slug, images_json, created_at")
     .order("created_at", { ascending: false, nullsFirst: false })
-    .limit(24);
+    .limit(48);
   if (error || !data?.length) return null;
-  return dbProductsToStrip(data);
+  const all = dbProductsToStrip(data);
+  return filterWhiteBgProducts(all, 12);
 }
 
 export default async function Home() {
