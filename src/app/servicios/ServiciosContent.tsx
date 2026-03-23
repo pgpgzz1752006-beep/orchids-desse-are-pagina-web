@@ -276,7 +276,7 @@ export default function ServiciosContent() {
             En 4 sencillos pasos tienes tus productos personalizados.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
             {pasos.map((p, idx) => (
               <div key={p.step} className="relative bg-white dark:bg-[#12141A] rounded-2xl border border-[#EFEFEF] dark:border-[#1E2028] p-6 text-center">
                 <div className="text-[42px] font-black text-[#14C6C9]/15 leading-none mb-2">{p.step}</div>
