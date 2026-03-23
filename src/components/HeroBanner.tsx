@@ -159,7 +159,7 @@ export default function HeroBanner() {
 
   return (
     <section
-      className="relative w-full bg-white dark:bg-[#0E0F12] transition-colors duration-300 -mt-1"
+      className="relative w-full bg-white dark:bg-[#0E0F12] transition-colors duration-300 -mt-3 md:-mt-1"
       data-autoplay={!reducedMotion && !isPaused ? "on" : "off"}
     >
       <div
