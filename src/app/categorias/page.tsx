@@ -194,11 +194,20 @@ export default function CategoriasPage() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#0E0F12] text-[#111111] dark:text-white">
       <div className="w-full px-2 md:pl-4 md:pr-6 py-4 md:py-10">
-        <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-2">
-          {categorias.map((cat) => (
+        <div className="grid grid-cols-6 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-2">
+          {categorias.map((cat, idx) => {
+            // Mobile uses 6-col grid. Normal items span 2 (= 3 per row).
+            // Last row: if 2 remain, each spans 3 (= 2 per row). If 1 remains, spans 6 (full width).
+            const remainder = categorias.length % 3;
+            const isLastRow = remainder > 0 && idx >= categorias.length - remainder;
+            let mobileSpan = "col-span-2"; // default: 3 items per row
+            if (isLastRow && remainder === 2) mobileSpan = "col-span-3";
+            if (isLastRow && remainder === 1) mobileSpan = "col-span-6";
+
+            return (
             <div
               key={cat.title}
-              className="rounded-lg md:rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:-translate-y-[3px] active:scale-[1.02]"
+              className={`${mobileSpan} md:col-span-1 rounded-lg md:rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:-translate-y-[3px] active:scale-[1.02]`}
             >
               {/* Mobile: vertical layout */}
               <div className="flex flex-col md:hidden">
@@ -250,7 +259,8 @@ export default function CategoriasPage() {
                 />
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
       </div>
 
