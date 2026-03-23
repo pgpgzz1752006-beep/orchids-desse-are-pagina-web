@@ -164,7 +164,7 @@ export default function HeroBanner() {
     >
       <div
         ref={containerRef}
-        className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[19/7] xl:h-[clamp(480px,48vh,640px)] 2xl:h-[clamp(520px,52vh,720px)]"
+        className="relative w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-[19/7] xl:h-[clamp(480px,48vh,640px)] 2xl:h-[clamp(520px,52vh,720px)]"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onTouchStart={handleTouchStart}
