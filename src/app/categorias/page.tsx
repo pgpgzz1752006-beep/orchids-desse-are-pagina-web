@@ -193,25 +193,38 @@ const categorias = [
 export default function CategoriasPage() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#0E0F12] text-[#111111] dark:text-white">
-      <div className="w-full pl-3 pr-4 md:pl-4 md:pr-6 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+      <div className="w-full px-2 md:pl-4 md:pr-6 py-4 md:py-10">
+        <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-2">
           {categorias.map((cat) => (
             <div
               key={cat.title}
-              className="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm h-52 will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:-translate-y-[3px] active:scale-[1.02]"
+              className="rounded-lg md:rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-sm will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-2 hover:scale-[1.05] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:-translate-y-[3px] active:scale-[1.02]"
             >
-              <div className="flex h-full">
-                {/* Image — links to full category */}
+              {/* Mobile: vertical layout */}
+              <div className="flex flex-col md:hidden">
+                <Link
+                  href={`/productos?category=${cat.slug}`}
+                  className="relative bg-gray-100 dark:bg-white/5 block w-full h-[100px] overflow-hidden"
+                >
+                  <Image src={cat.image} alt={cat.title} fill className="object-cover" />
+                  <div className={`absolute bottom-0 left-0 right-0 h-[3px] ${cat.barColor}`} />
+                </Link>
+                <div className="p-1.5 text-center">
+                  <Link href={`/productos?category=${cat.slug}`}>
+                    <h3 className="font-['Montserrat'] font-bold text-[9px] leading-tight hover:text-[#14C6C9] transition-colors uppercase">
+                      {cat.title}
+                    </h3>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Desktop: horizontal layout */}
+              <div className="hidden md:flex h-52">
                 <Link
                   href={`/productos?category=${cat.slug}`}
                   className="w-2/5 relative bg-gray-100 dark:bg-white/5 block flex-shrink-0 h-full overflow-hidden"
                 >
-                  <Image
-                    src={cat.image}
-                    alt={cat.title}
-                    fill
-                    className="object-cover"
-                  />
+                  <Image src={cat.image} alt={cat.title} fill className="object-cover" />
                 </Link>
                 <div className="flex-1 p-3 flex flex-col justify-start overflow-hidden">
                   <Link href={`/productos?category=${cat.slug}`}>
