@@ -304,12 +304,12 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     if (prefersReducedMotion && autoplay) {
       return (
         <section 
-          className="w-full bg-white dark:bg-[#0E0F12] py-6 md:py-16 lg:py-[72px] transition-colors duration-300 overflow-hidden"
+          className="w-full bg-white dark:bg-[#0E0F12] py-3 md:py-16 lg:py-[72px] transition-colors duration-300 overflow-hidden"
           data-autoplay="reduced-motion"
           data-carousel-id={carouselId}
         >
-          <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 mb-10 md:mb-12">
-            <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
+          <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 mb-4 md:mb-12">
+            <h2 className="text-center font-['Montserrat'] text-[22px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
               <span className="font-normal">{titleRegular} </span>
               <span className="font-extrabold">{titleBold}</span>
             </h2>
@@ -329,13 +329,13 @@ export default function ProductStrip({ titleRegular, titleBold, products, autopl
     
       return (
       <section 
-className="w-full bg-white dark:bg-[#0E0F12] py-6 md:py-16 lg:py-[72px] transition-colors duration-300 overflow-hidden"
+className="w-full bg-white dark:bg-[#0E0F12] py-3 md:py-16 lg:py-[72px] transition-colors duration-300 overflow-hidden"
           data-autoplay={autoplay ? "on" : "off"}
         data-carousel-id={carouselId}
       >
         {/* Title - centered with max-width */}
-        <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 mb-10 md:mb-12">
-          <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
+        <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 mb-4 md:mb-12">
+          <h2 className="text-center font-['Montserrat'] text-[22px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
             <span className="font-normal">{titleRegular} </span>
             <span className="font-extrabold">{titleBold}</span>
           </h2>
