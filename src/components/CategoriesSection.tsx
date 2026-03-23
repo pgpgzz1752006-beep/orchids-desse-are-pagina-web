@@ -59,7 +59,7 @@ export default function CategoriesSection() {
     <section className="w-full bg-white dark:bg-[#0E0F12] py-4 md:py-16 lg:py-[72px] transition-colors duration-300 ease-in-out">
       {/* Title */}
       <div className="w-full max-w-[1440px] mx-auto px-4 mb-4 md:mb-10 lg:mb-12">
-        <h2 className="text-center font-['Montserrat'] text-[28px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
+        <h2 className="text-center font-['Montserrat'] text-[22px] md:text-[36px] lg:text-[42px] tracking-[0.02em] text-[#111111] dark:text-[#F2F2F2]">
           <span className="font-normal">CATEGORÍAS </span>
           <span className="font-extrabold">DESTACADAS</span>
         </h2>
@@ -67,12 +67,12 @@ export default function CategoriesSection() {
 
       {/* Categories Grid — full width, minimal padding */}
         <div className="w-full">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-[2px] md:gap-1">
           {categories.map((category, index) => (
             <Link
               key={category.label}
               href={category.href}
-              className="group relative h-[260px] md:h-[300px] lg:h-[320px] overflow-hidden block will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:scale-[1.01] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-md"
+              className="group relative h-[160px] md:h-[300px] lg:h-[320px] overflow-hidden block will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)] hover:z-10 active:scale-[1.01] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-md"
             >
               {/* Background Image */}
               <Image
@@ -86,10 +86,10 @@ export default function CategoriesSection() {
 
               {/* Color Overlay at Bottom */}
               <div
-                className="absolute bottom-0 left-0 right-0 h-[56px] md:h-[60px] lg:h-[64px] flex items-center justify-center transition-opacity duration-200 ease-out group-hover:opacity-90"
+                className="absolute bottom-0 left-0 right-0 h-[40px] md:h-[60px] lg:h-[64px] flex items-center justify-center transition-opacity duration-200 ease-out group-hover:opacity-90"
                 style={{ backgroundColor: category.overlayColor }}
               >
-                <span className="font-['Montserrat'] text-white text-[18px] md:text-[22px] lg:text-[24px] font-semibold text-center px-4">
+                <span className="font-['Montserrat'] text-white text-[13px] md:text-[22px] lg:text-[24px] font-semibold text-center px-2 md:px-4">
                   {category.label}
                 </span>
               </div>
