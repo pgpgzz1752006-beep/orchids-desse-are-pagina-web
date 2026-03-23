@@ -251,6 +251,20 @@ export default function ServiciosContent() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════
+          BANNER IMPRESIÓN — ancho completo
+      ══════════════════════════════════════════════════════════════════════ */}
+      <div className="w-full">
+        <Image
+          src="/servicios-impresion.png"
+          alt="Proceso de impresión profesional"
+          width={1920}
+          height={500}
+          className="w-full h-[200px] md:h-[300px] lg:h-[380px] object-cover"
+          priority
+        />
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════════
           PROCESO PASO A PASO
       ══════════════════════════════════════════════════════════════════════ */}
       <section className="w-full bg-[#F5F6FA] dark:bg-[#0E0F12] py-16 md:py-20">
@@ -258,20 +272,9 @@ export default function ServiciosContent() {
           <h2 className="text-[24px] md:text-[32px] font-extrabold text-[#111] dark:text-white text-center mb-3 tracking-tight">
             ¿Cómo funciona?
           </h2>
-          <p className="text-[14px] md:text-[15px] text-[#888] dark:text-[#999] text-center max-w-[500px] mx-auto mb-10">
+          <p className="text-[14px] md:text-[15px] text-[#888] dark:text-[#999] text-center max-w-[500px] mx-auto mb-12">
             En 4 sencillos pasos tienes tus productos personalizados.
           </p>
-
-          {/* Imagen de impresión */}
-          <div className="w-full max-w-[900px] mx-auto mb-12 rounded-2xl overflow-hidden shadow-lg">
-            <Image
-              src="/servicios-impresion.png"
-              alt="Proceso de impresión profesional"
-              width={900}
-              height={400}
-              className="w-full h-[180px] md:h-[260px] lg:h-[320px] object-cover"
-            />
-          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {pasos.map((p, idx) => (
