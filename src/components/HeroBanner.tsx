@@ -164,7 +164,7 @@ export default function HeroBanner() {
     >
       <div
         ref={containerRef}
-        className="relative w-full aspect-[2/1] sm:aspect-[16/9] lg:aspect-[19/7] xl:h-[clamp(480px,48vh,640px)] 2xl:h-[clamp(520px,52vh,720px)]"
+        className="relative w-full aspect-[16/9] sm:aspect-[16/9] lg:aspect-[19/7] xl:h-[clamp(480px,48vh,640px)] 2xl:h-[clamp(520px,52vh,720px)]"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onTouchStart={handleTouchStart}
@@ -178,7 +178,7 @@ export default function HeroBanner() {
               src={slide.src}
               alt={slide.alt}
               fill
-              className="object-cover sm:object-contain lg:object-cover object-center sm:object-[18%_50%] lg:object-[18%_50%] 2xl:object-[15%_50%]"
+              className="object-contain sm:object-contain lg:object-cover object-[18%_50%] lg:object-[18%_50%] 2xl:object-[15%_50%]"
               priority={index <= 1}
               loading={index <= 1 ? "eager" : "lazy"}
               sizes="100vw"

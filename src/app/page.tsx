@@ -88,12 +88,14 @@ export default async function Home() {
     <div id="top" className="min-h-screen bg-white dark:bg-[#0E0F12] font-['Montserrat'] transition-colors duration-300">
       <main className="w-full">
         <HeroBanner />
+        <div className="-mt-8 md:mt-0 relative z-10">
         <ProductStrip
           titleRegular="MÁS"
           titleBold="VENDIDOS"
           products={featuredProducts}
           autoplay
         />
+        </div>
         <CategoriesSection />
         <ProductStrip
           titleRegular="PRODUCTOS"
