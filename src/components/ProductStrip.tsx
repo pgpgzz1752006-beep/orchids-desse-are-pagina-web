@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState, useEffect, useCallback, useId } from "react";
-import { useImageBgColor } from "@/hooks/useImageBgColor";
 
 interface Product {
   name: string;
@@ -21,9 +20,8 @@ interface ProductStripProps {
 }
 
 function StripCard({ product, isDragging, isStatic }: { product: Product; isDragging?: boolean; isStatic?: boolean }) {
-  const bgType = useImageBgColor(product.image);
-  const imageBg = bgType === "white" ? "bg-white" : "bg-[#F2F2F2]";
-  const cardBg = bgType === "white" ? "bg-white" : "bg-[#F7F7F7]";
+  const imageBg = "bg-white";
+  const cardBg = "bg-white";
 
   const cardClass = isStatic
     ? `block ${cardBg} border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2`
