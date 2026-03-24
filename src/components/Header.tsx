@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Search, User, ShoppingCart, Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { useCartStore } from "@/lib/cartStore";
@@ -29,6 +30,10 @@ const colorBarSegments = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
   const { theme, toggleTheme } = useTheme();
   const { user } = useAuth();
   const [mounted, setMounted] = useState(false);
@@ -37,6 +42,22 @@ export default function Header() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchOpen]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = searchQuery.trim();
+    if (q) {
+      router.push(`/productos?q=${encodeURIComponent(q)}`);
+      setSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
 
   return (
     <header className="w-full bg-white dark:bg-[#0E0F12]">
@@ -126,6 +147,7 @@ export default function Header() {
               )}
             </button>
             <button
+              onClick={() => setSearchOpen(true)}
               className="p-1.5 md:p-2 text-[#7A7A7A] transition-all duration-200 ease-out hover:text-[#111111] hover:-translate-y-[1px] hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#14C6C9]/30 rounded"
               aria-label="Buscar"
             >
@@ -209,6 +231,47 @@ export default function Header() {
                 )
               ))}
           </nav>
+        </div>
+      )}
+      {/* Search Overlay */}
+      {searchOpen && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 backdrop-blur-sm" onClick={() => setSearchOpen(false)}>
+          <div
+            className="w-full max-w-2xl mt-16 md:mt-24 mx-4 bg-white dark:bg-[#1A1D24] rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-4 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <form onSubmit={handleSearch} className="flex items-center gap-3 p-4 md:p-5">
+              <Search className="w-5 h-5 md:w-6 md:h-6 text-[#7A7A7A] flex-shrink-0" strokeWidth={1.5} />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar productos..."
+                className="flex-1 bg-transparent font-['Montserrat'] text-base md:text-lg text-[#111111] dark:text-white placeholder:text-[#AAAAAA] outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setSearchOpen(false)}
+                className="p-1.5 text-[#7A7A7A] hover:text-[#111111] dark:hover:text-white transition-colors rounded"
+              >
+                <X className="w-5 h-5" strokeWidth={1.5} />
+              </button>
+            </form>
+            {searchQuery.trim() && (
+              <div className="border-t border-gray-100 dark:border-white/10 px-4 pb-4 pt-2">
+                <button
+                  onClick={handleSearch}
+                  className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors flex items-center gap-3"
+                >
+                  <Search className="w-4 h-4 text-[#14C6C9]" strokeWidth={2} />
+                  <span className="font-['Montserrat'] text-sm text-[#111111] dark:text-white">
+                    Buscar <strong>&quot;{searchQuery.trim()}&quot;</strong> en productos
+                  </span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </header>
