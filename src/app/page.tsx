@@ -45,10 +45,10 @@ async function getBestSellers() {
     .from("products")
     .select("sku, name, image_url, category_slug, slug, images_json")
     .eq("is_best_seller", true)
-    .limit(48);
+    .limit(80);
   if (error || !data?.length) return null;
   const all = dbProductsToStrip(data);
-  return filterWhiteBgProducts(all, 12);
+  return filterWhiteBgProducts(all);
 }
 
 async function getRecommended() {
@@ -56,10 +56,10 @@ async function getRecommended() {
     .from("products")
     .select("sku, name, image_url, category_slug, slug, images_json")
     .eq("is_recommended", true)
-    .limit(48);
+    .limit(80);
   if (error || !data?.length) return null;
   const all = dbProductsToStrip(data);
-  return filterWhiteBgProducts(all, 12);
+  return filterWhiteBgProducts(all);
 }
 
 async function getNewProducts() {
@@ -67,10 +67,10 @@ async function getNewProducts() {
     .from("products")
     .select("sku, name, image_url, category_slug, slug, images_json, created_at")
     .order("created_at", { ascending: false, nullsFirst: false })
-    .limit(48);
+    .limit(80);
   if (error || !data?.length) return null;
   const all = dbProductsToStrip(data);
-  return filterWhiteBgProducts(all, 12);
+  return filterWhiteBgProducts(all);
 }
 
 export default async function Home() {

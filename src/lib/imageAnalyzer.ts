@@ -49,8 +49,8 @@ export async function analyzeImageBg(imageUrl: string): Promise<"white" | "gray"
 
     const avgBrightness = count > 0 ? totalBrightness / count : 0;
 
-    // White bg: brightness > 225 (covers near-white product backgrounds)
-    const result: "white" | "gray" = avgBrightness > 225 ? "white" : "gray";
+    // White bg: brightness > 245 (strict — only truly white backgrounds)
+    const result: "white" | "gray" = avgBrightness > 245 ? "white" : "gray";
     cache.set(imageUrl, result);
     return result;
   } catch {
@@ -75,7 +75,6 @@ export async function filterWhiteBgProducts<T extends { image: string }>(
 
   const whiteBg = results.filter((r) => r.bg === "white").map((r) => r.product);
 
-  // If not enough white-bg products, return all
-  if (whiteBg.length < minCount) return products;
-  return whiteBg;
+  // If not enough white-bg products, return what we have (even if fewer)
+  return whiteBg.length > 0 ? whiteBg : products;
 }
