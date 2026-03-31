@@ -20,7 +20,7 @@ function toProxyUrl(src: string): string {
 
 function analyzeImage(img: HTMLImageElement): "white" | "gray" {
   const canvas = document.createElement("canvas");
-  const size = Math.min(img.naturalWidth, img.naturalHeight, 64);
+  const size = Math.min(img.naturalWidth, img.naturalHeight, 50);
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -28,27 +28,24 @@ function analyzeImage(img: HTMLImageElement): "white" | "gray" {
 
   ctx.drawImage(img, 0, 0, size, size);
 
-  // Sample pixels from all four corners
-  const sampleSize = Math.max(2, Math.floor(size * 0.08));
-  const positions: Array<[number, number]> = [];
-  for (let dx = 0; dx < sampleSize; dx++) {
-    for (let dy = 0; dy < sampleSize; dy++) {
-      positions.push([dx, dy]);                         // top-left
-      positions.push([size - 1 - dx, dy]);             // top-right
-      positions.push([dx, size - 1 - dy]);             // bottom-left
-      positions.push([size - 1 - dx, size - 1 - dy]); // bottom-right
+  // Sample ALL border pixels (top row, bottom row, left col, right col)
+  const borderWidth = Math.max(2, Math.floor(size * 0.06));
+  let totalR = 0, totalG = 0, totalB = 0, count = 0;
+
+  for (let x = 0; x < size; x++) {
+    for (let y = 0; y < size; y++) {
+      // Only sample pixels within the border band
+      if (x < borderWidth || x >= size - borderWidth || y < borderWidth || y >= size - borderWidth) {
+        const pixel = ctx.getImageData(x, y, 1, 1).data;
+        totalR += pixel[0];
+        totalG += pixel[1];
+        totalB += pixel[2];
+        count++;
+      }
     }
   }
 
-  let totalR = 0, totalG = 0, totalB = 0, count = 0;
-  for (const [x, y] of positions) {
-    const pixel = ctx.getImageData(x, y, 1, 1).data;
-    totalR += pixel[0];
-    totalG += pixel[1];
-    totalB += pixel[2];
-    count++;
-  }
-
+  if (count === 0) return "gray";
   const lightness = (totalR / count + totalG / count + totalB / count) / 3;
   return lightness > 235 ? "white" : "gray";
 }
