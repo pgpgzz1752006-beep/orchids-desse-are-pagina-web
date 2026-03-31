@@ -3,55 +3,103 @@
 import { useState, useEffect } from "react";
 
 /**
- * Samples corner pixels of an image to detect whether its background is
- * white (#FFFFFF-ish) or grayish, and returns the appropriate CSS background.
+ * Analyzes the 4 corners of a product image (10x10 px each) to detect
+ * the real background color, then returns a CSS color string for the card.
  *
- * Uses Next.js /_next/image proxy to bypass CORS restrictions on external CDNs.
- * Returns "white" | "gray" after analysis, or null while loading.
+ * Rules:
+ *  - brightness > 248 & neutral → white bg (#FFFFFF)
+ *  - brightness 200–248 & neutral → use the exact detected gray as card bg
+ *  - non-neutral (colorful) → white bg (#FFFFFF)
+ *  - dark / error → light fallback (#F2F2F2)
  */
 
-const cache = new Map<string, "white" | "gray">();
+interface BgResult {
+  /** CSS color for the card background */
+  cardBg: string;
+  /** CSS color for the image area background */
+  imageBg: string;
+}
+
+const cache = new Map<string, BgResult>();
+
+const DEFAULT_RESULT: BgResult = { cardBg: "#F7F7F7", imageBg: "#F2F2F2" };
+const WHITE_RESULT: BgResult = { cardBg: "#FFFFFF", imageBg: "#FFFFFF" };
 
 /** Convert external URL to Next.js image proxy URL (same-origin, CORS-safe) */
 function toProxyUrl(src: string): string {
-  if (src.startsWith("/")) return src; // already local
+  if (src.startsWith("/")) return src;
   return `/_next/image?url=${encodeURIComponent(src)}&w=64&q=50`;
 }
 
-function analyzeImage(img: HTMLImageElement): "white" | "gray" {
+function analyzeImage(img: HTMLImageElement): BgResult {
   const canvas = document.createElement("canvas");
-  const size = Math.min(img.naturalWidth, img.naturalHeight, 50);
+  const size = Math.min(img.naturalWidth, img.naturalHeight, 64);
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  if (!ctx) return "gray";
+  if (!ctx) return DEFAULT_RESULT;
 
   ctx.drawImage(img, 0, 0, size, size);
 
-  // Sample ALL border pixels (top row, bottom row, left col, right col)
-  const borderWidth = Math.max(2, Math.floor(size * 0.06));
+  // Sample 10x10 pixel areas from each of the 4 corners
+  const sample = Math.max(3, Math.min(10, Math.floor(size * 0.16)));
+  const corners: Array<{ x: number; y: number }> = [
+    { x: 0, y: 0 },                             // top-left
+    { x: size - sample, y: 0 },                  // top-right
+    { x: 0, y: size - sample },                  // bottom-left
+    { x: size - sample, y: size - sample },       // bottom-right
+  ];
+
   let totalR = 0, totalG = 0, totalB = 0, count = 0;
 
-  for (let x = 0; x < size; x++) {
-    for (let y = 0; y < size; y++) {
-      // Only sample pixels within the border band
-      if (x < borderWidth || x >= size - borderWidth || y < borderWidth || y >= size - borderWidth) {
-        const pixel = ctx.getImageData(x, y, 1, 1).data;
-        totalR += pixel[0];
-        totalG += pixel[1];
-        totalB += pixel[2];
-        count++;
-      }
+  for (const corner of corners) {
+    const imgData = ctx.getImageData(corner.x, corner.y, sample, sample);
+    const d = imgData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      totalR += d[i];
+      totalG += d[i + 1];
+      totalB += d[i + 2];
+      count++;
     }
   }
 
-  if (count === 0) return "gray";
-  const lightness = (totalR / count + totalG / count + totalB / count) / 3;
-  return lightness > 235 ? "white" : "gray";
+  if (count === 0) return DEFAULT_RESULT;
+
+  const avgR = Math.round(totalR / count);
+  const avgG = Math.round(totalG / count);
+  const avgB = Math.round(totalB / count);
+  const brightness = (avgR + avgG + avgB) / 3;
+
+  // Check if the color is neutral (R, G, B are all close to each other)
+  const maxDiff = Math.max(
+    Math.abs(avgR - avgG),
+    Math.abs(avgR - avgB),
+    Math.abs(avgG - avgB)
+  );
+  const isNeutral = maxDiff < 10;
+
+  // White pure background
+  if (brightness > 248 && isNeutral) {
+    return WHITE_RESULT;
+  }
+
+  // Gray background — use the detected gray as the card color
+  if (brightness >= 200 && brightness <= 248 && isNeutral) {
+    const color = `rgb(${avgR}, ${avgG}, ${avgB})`;
+    return { cardBg: color, imageBg: color };
+  }
+
+  // Colorful background or non-neutral → white card
+  if (!isNeutral && brightness > 180) {
+    return WHITE_RESULT;
+  }
+
+  // Dark or anything else → light fallback
+  return DEFAULT_RESULT;
 }
 
-export function useImageBgColor(src: string | null | undefined): "white" | "gray" | null {
-  const [bg, setBg] = useState<"white" | "gray" | null>(() => {
+export function useImageBgColor(src: string | null | undefined): BgResult | null {
+  const [bg, setBg] = useState<BgResult | null>(() => {
     if (src && cache.has(src)) return cache.get(src)!;
     return null;
   });
@@ -64,7 +112,6 @@ export function useImageBgColor(src: string | null | undefined): "white" | "gray
     }
 
     const img = new Image();
-    // No crossOrigin needed — proxied URL is same-origin
 
     img.onload = () => {
       try {
@@ -72,14 +119,14 @@ export function useImageBgColor(src: string | null | undefined): "white" | "gray
         cache.set(src, result);
         setBg(result);
       } catch {
-        cache.set(src, "gray");
-        setBg("gray");
+        cache.set(src, DEFAULT_RESULT);
+        setBg(DEFAULT_RESULT);
       }
     };
 
     img.onerror = () => {
-      cache.set(src, "gray");
-      setBg("gray");
+      cache.set(src, DEFAULT_RESULT);
+      setBg(DEFAULT_RESULT);
     };
 
     img.src = toProxyUrl(src);

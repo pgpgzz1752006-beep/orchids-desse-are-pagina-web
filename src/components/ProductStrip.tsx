@@ -21,22 +21,23 @@ interface ProductStripProps {
 }
 
 function StripCard({ product, isDragging, isStatic }: { product: Product; isDragging?: boolean; isStatic?: boolean }) {
-  const bgType = useImageBgColor(product.image);
-  const imageBg = bgType === "white" ? "bg-white" : "bg-[#F2F2F2]";
-  const cardBg = bgType === "white" ? "bg-white" : "bg-[#F7F7F7]";
+  const bgResult = useImageBgColor(product.image);
+  const cardColor = bgResult?.cardBg ?? "#F7F7F7";
+  const imageColor = bgResult?.imageBg ?? "#F2F2F2";
 
-  const cardClass = isStatic
-    ? `block ${cardBg} border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2`
-    : `block ${cardBg} border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.04] hover:border-[#BDBDBD] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] dark:hover:border-[#3A3D44] dark:hover:shadow-[0_16px_34px_rgba(0,0,0,0.3)] active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm`;
+  const baseClass = isStatic
+    ? `block border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col transition-all duration-200 hover:border-[#BDBDBD] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2`
+    : `block border border-[#D9D9D9] dark:border-[#2A2D34] rounded-[11px] p-3 lg:p-[14px] flex flex-col will-change-transform transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[6px] hover:scale-[1.04] hover:border-[#BDBDBD] hover:shadow-[0_16px_34px_rgba(0,0,0,0.14)] dark:hover:border-[#3A3D44] dark:hover:shadow-[0_16px_34px_rgba(0,0,0,0.3)] active:-translate-y-[3px] active:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14C6C9]/60 focus-visible:ring-offset-2 motion-reduce:hover:transform-none motion-reduce:hover:shadow-sm`;
 
   return (
     <Link
       href={product.href}
-      className={cardClass}
+      className={baseClass}
+      style={{ backgroundColor: cardColor }}
       onClick={isDragging ? (e) => e.preventDefault() : undefined}
       draggable={false}
     >
-      <div className={`flex items-center justify-center rounded-[8px] overflow-hidden ${imageBg} h-[100px] md:h-[110px] lg:h-[120px] mb-3 p-3 flex-shrink-0 group/img relative`}>
+      <div className="flex items-center justify-center rounded-[8px] overflow-hidden h-[100px] md:h-[110px] lg:h-[120px] mb-3 p-3 flex-shrink-0 group/img relative" style={{ backgroundColor: imageColor }}>
         <Image
           src={product.image}
           alt={product.name}
