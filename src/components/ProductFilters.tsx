@@ -132,7 +132,8 @@ export default function ProductFilters({
                 <div className="pb-4 space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                   {section.data.map((item: any) => {
                     const value = section.id === "cat" ? item.id : item.value;
-                    const label = section.id === "cat" ? item.name : item.value;
+                    const rawLabel = section.id === "cat" ? item.name : item.value;
+                    const label = rawLabel.replace(/_/g, " ");
                     const isSelected = selectedFilters[section.key].includes(value);
 
                     return (
