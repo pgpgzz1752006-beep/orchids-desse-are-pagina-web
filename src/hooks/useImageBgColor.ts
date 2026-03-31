@@ -41,26 +41,22 @@ function analyzeImage(img: HTMLImageElement): BgResult {
 
   ctx.drawImage(img, 0, 0, size, size);
 
-  // Sample 10x10 pixel areas from each of the 4 corners
-  const sample = Math.max(3, Math.min(10, Math.floor(size * 0.16)));
-  const corners: Array<{ x: number; y: number }> = [
-    { x: 0, y: 0 },                             // top-left
-    { x: size - sample, y: 0 },                  // top-right
-    { x: 0, y: size - sample },                  // bottom-left
-    { x: size - sample, y: size - sample },       // bottom-right
+  // Sample the 4 corner pixels
+  const corners: Array<[number, number]> = [
+    [0, 0],
+    [size - 1, 0],
+    [0, size - 1],
+    [size - 1, size - 1],
   ];
 
   let totalR = 0, totalG = 0, totalB = 0, count = 0;
 
-  for (const corner of corners) {
-    const imgData = ctx.getImageData(corner.x, corner.y, sample, sample);
-    const d = imgData.data;
-    for (let i = 0; i < d.length; i += 4) {
-      totalR += d[i];
-      totalG += d[i + 1];
-      totalB += d[i + 2];
-      count++;
-    }
+  for (const [x, y] of corners) {
+    const pixel = ctx.getImageData(x, y, 1, 1).data;
+    totalR += pixel[0];
+    totalG += pixel[1];
+    totalB += pixel[2];
+    count++;
   }
 
   if (count === 0) return DEFAULT_RESULT;
