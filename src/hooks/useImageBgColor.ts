@@ -50,7 +50,7 @@ function analyzeImage(img: HTMLImageElement): "white" | "gray" {
   }
 
   const lightness = (totalR / count + totalG / count + totalB / count) / 3;
-  return lightness > 245 ? "white" : "gray";
+  return lightness > 250 ? "white" : "gray";
 }
 
 export function useImageBgColor(src: string | null | undefined): "white" | "gray" | null {
