@@ -217,7 +217,7 @@ export default function CategoriasPage() {
                     {cat.subcategories.map((sub) => (
                       <Link
                         key={sub}
-                        href={`/productos?category=${cat.slug}`}
+                        href={`/productos?category=${cat.slug}&q=${encodeURIComponent(sub.toLowerCase())}`}
                         className="block text-xs leading-tight font-semibold text-[#7A7A7A] dark:text-gray-400 hover:text-[#14C6C9] dark:hover:text-[#14C6C9] transition-colors"
                       >
                         {sub}

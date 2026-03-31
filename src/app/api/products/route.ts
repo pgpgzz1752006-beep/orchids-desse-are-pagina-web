@@ -76,10 +76,16 @@ export async function GET(req: NextRequest) {
   }
 
 
-  if (q) {
-    // Search across name, product_type, brand, and sku
+  if (q && !category) {
+    // Global search: across name, product_type, brand, and sku
     const pattern = `%${q}%`
     query = query.or(`name.ilike.${pattern},product_type.ilike.${pattern},brand.ilike.${pattern},sku.ilike.${pattern}`)
+  } else if (q && category) {
+    // Category + subcategory search: try to narrow by q within the category
+    // Split q into words and match any word in name
+    const words = q.split(/\s+/).filter(Boolean)
+    const nameFilters = words.map(w => `name.ilike.%${w}%`).join(',')
+    query = query.or(nameFilters)
   }
 
   if (tag === 'best_seller') {
@@ -121,9 +127,48 @@ export async function GET(req: NextRequest) {
     nullsFirst = false
   }
 
-  const { data, count, error } = await query
+  let { data, count, error } = await query
     .order(orderCol, { ascending, nullsFirst })
     .range(offset, offset + limit - 1)
+
+  // Fallback: if category+q search yields 0 results, retry without q (show full category)
+  if (!error && (count === 0 || !data?.length) && q && category) {
+    let fallbackQuery = supabaseAdmin
+      .from('products')
+      .select(
+        'id, sku, name, slug, image_url, images_json, category_slug, api_category_id, price, price_mx, currency_mx, price_source, price_updated_at, stock, stock_status, stock_updated_at, colors, brand, product_type, capacity, created_at',
+        { count: 'exact' }
+      )
+
+    // Re-apply category filter
+    const { data: fallbackMapping } = await supabaseAdmin
+      .from('category_mapping')
+      .select('api_category_ids')
+      .eq('site_slug', category)
+      .single()
+
+    if (fallbackMapping?.api_category_ids?.length) {
+      fallbackQuery = fallbackQuery.in('api_category_id', fallbackMapping.api_category_ids)
+    } else {
+      fallbackQuery = fallbackQuery.eq('category_slug', category)
+    }
+
+    if (HIDE_OUT_OF_STOCK && HIDE_IF_STOCK_UNKNOWN) {
+      fallbackQuery = fallbackQuery.gt('stock', 0)
+    } else if (HIDE_OUT_OF_STOCK) {
+      fallbackQuery = fallbackQuery.or('stock.gt.0,stock.is.null')
+    }
+
+    const fallback = await fallbackQuery
+      .order(orderCol, { ascending, nullsFirst })
+      .range(offset, offset + limit - 1)
+
+    if (!fallback.error) {
+      data = fallback.data
+      count = fallback.count
+      error = fallback.error
+    }
+  }
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
