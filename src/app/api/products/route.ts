@@ -77,7 +77,9 @@ export async function GET(req: NextRequest) {
 
 
   if (q) {
-    query = query.ilike('name', `%${q}%`)
+    // Search across name, product_type, brand, and sku
+    const pattern = `%${q}%`
+    query = query.or(`name.ilike.${pattern},product_type.ilike.${pattern},brand.ilike.${pattern},sku.ilike.${pattern}`)
   }
 
   if (tag === 'best_seller') {
