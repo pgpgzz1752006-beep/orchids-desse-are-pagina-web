@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import AdminGuard from "@/components/AdminGuard";
 
 interface HealthResult {
   endpoint_used: string;
@@ -25,6 +26,14 @@ function errorLabel(code: string | null, message: string | null): string {
 }
 
 export default function AdminPage() {
+  return (
+    <AdminGuard>
+      <AdminContent />
+    </AdminGuard>
+  );
+}
+
+function AdminContent() {
   const [health, setHealth] = useState<HealthResult | null>(null);
   const [healthLoading, setHealthLoading] = useState(false);
 
