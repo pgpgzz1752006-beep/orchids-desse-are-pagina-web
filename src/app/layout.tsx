@@ -8,8 +8,9 @@ import Header from "@/components/Header";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Diseñare Promocionales",
-  description: "Artículos promocionales personalizados - Diseñare Promocionales",
+  title: "Diseñare Promocionales | Artículos Promocionales en Oaxaca",
+  description: "Artículos promocionales personalizados en Oaxaca. Grabado láser, sublimación, serigrafía y más. Diseñare Promocionales - tu mejor opción en productos promocionales en Oaxaca, México.",
+  keywords: ["artículos promocionales", "promocionales Oaxaca", "grabado láser Oaxaca", "productos personalizados", "sublimación", "serigrafía", "Diseñare Promocionales", "promocionales México", "regalos corporativos Oaxaca"],
   icons: {
     icon: "/favicon.png",
     apple: "/apple-touch-icon.png",
