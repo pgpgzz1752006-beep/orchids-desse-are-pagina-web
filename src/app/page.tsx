@@ -74,6 +74,7 @@ async function getNewProducts() {
 }
 
 export default async function Home() {
+  console.log('app loaded');
   const [bestSellers, recommended, newProducts] = await Promise.all([
     getBestSellers(),
     getRecommended(),
