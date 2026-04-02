@@ -15,8 +15,8 @@ export type CartItem = {
 interface CartStore {
   items: CartItem[]
   addItem: (item: Omit<CartItem, 'quantity'>, qty?: number) => void
-  removeItem: (id: string) => void
-  updateQuantity: (id: string, delta: number) => void
+  removeItem: (id: string, color?: string | null) => void
+  updateQuantity: (id: string, delta: number, color?: string | null) => void
   clearCart: () => void
 }
 
@@ -38,13 +38,13 @@ export const useCartStore = create<CartStore>()(
             return { items: [...state.items, { ...incoming, quantity: qty }] }
           }),
 
-      removeItem: (id) =>
-        set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
+      removeItem: (id, color) =>
+        set((state) => ({ items: state.items.filter((i) => !(i.id === id && (i.color ?? null) === (color ?? null))) })),
 
-      updateQuantity: (id, delta) =>
+      updateQuantity: (id, delta, color) =>
         set((state) => ({
           items: state.items
-            .map((i) => (i.id === id ? { ...i, quantity: i.quantity + delta } : i))
+            .map((i) => (i.id === id && (i.color ?? null) === (color ?? null) ? { ...i, quantity: i.quantity + delta } : i))
             .filter((i) => i.quantity > 0),
         })),
 

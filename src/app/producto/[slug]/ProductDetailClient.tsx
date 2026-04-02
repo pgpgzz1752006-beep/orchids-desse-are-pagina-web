@@ -96,6 +96,7 @@ export default function ProductDetailClient({ product }: Props) {
   const [stockError, setStockError] = useState<string | null>(null)
   const [ctaBlocked, setCtaBlocked] = useState(false)
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
+  const [qtyInput, setQtyInput] = useState('1')
 
   const name = product.name as string
   const sku = product.sku as string
@@ -181,15 +182,28 @@ export default function ProductDetailClient({ product }: Props) {
   function changeQty(delta: number) {
     setQty((prev) => {
       const max = stock != null && stock > 0 ? stock : 9999
-      return Math.min(Math.max(prev + delta, 1), max)
+      const next = Math.min(Math.max(prev + delta, 1), max)
+      setQtyInput(String(next))
+      return next
     })
   }
 
   function handleInputQty(e: React.ChangeEvent<HTMLInputElement>) {
-    const val = parseInt(e.target.value, 10)
-    if (isNaN(val)) return
+    const raw = e.target.value.replace(/[^0-9]/g, '')
+    setQtyInput(raw)
+    if (raw === '') return
+    const val = parseInt(raw, 10)
     const max = stock != null && stock > 0 ? stock : 9999
     setQty(Math.min(Math.max(val, 1), max))
+  }
+
+  function handleInputBlur() {
+    if (qtyInput === '' || parseInt(qtyInput, 10) < 1) {
+      setQty(1)
+      setQtyInput('1')
+    } else {
+      setQtyInput(String(qty))
+    }
   }
 
     // ── Add to cart + navigate ────────────────────────────────────────────────
@@ -369,13 +383,13 @@ export default function ProductDetailClient({ product }: Props) {
                   <Minus size={15} />
                 </button>
                 <input
-                  type="number"
-                  value={qty}
-                  min={1}
-                  max={stock != null && stock > 0 ? stock : undefined}
+                  type="text"
+                  inputMode="numeric"
+                  value={qtyInput}
                   onChange={handleInputQty}
+                  onBlur={handleInputBlur}
                   aria-label="Cantidad"
-                  className="w-14 h-11 text-center text-sm font-semibold text-zinc-900 dark:text-white bg-white dark:bg-zinc-900 border-x border-zinc-200 dark:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#14C6C9]/50 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  className="w-14 h-11 text-center text-sm font-semibold text-zinc-900 dark:text-white bg-white dark:bg-zinc-900 border-x border-zinc-200 dark:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#14C6C9]/50"
                 />
                 <button
                   onClick={() => changeQty(1)}

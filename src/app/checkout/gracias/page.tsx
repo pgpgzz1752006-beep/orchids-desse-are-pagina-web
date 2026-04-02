@@ -14,8 +14,8 @@ export default function GraciasPage() {
         const items = JSON.parse(raw);
         if (Array.isArray(items) && items.length > 0) {
           const lines = items.map(
-            (item: { name?: string; quantity?: number; price?: number }) =>
-              `- ${item.name || "Producto"} x${item.quantity || 1} ($${((item.price || 0) * (item.quantity || 1)).toFixed(2)})`
+            (item: { name?: string; quantity?: number; price?: number; color?: string | null }) =>
+              `- ${item.name || "Producto"}${item.color ? ` (Color: ${item.color})` : ""} x${item.quantity || 1} ($${((item.price || 0) * (item.quantity || 1)).toFixed(2)})`
           );
           const total = items.reduce(
             (sum: number, item: { price?: number; quantity?: number }) =>
