@@ -149,10 +149,14 @@ export default function CarritoPage() {
                     <div className="flex-1 min-w-0">
                       <p className="text-[11px] text-[#AAAAAA] dark:text-[#666] font-medium uppercase tracking-wider mb-1">{item.sku}</p>
                       <Link href={`/producto/${item.slug}`}>
-                        <h3 className="text-[13px] md:text-[14px] font-bold text-[#111] dark:text-white leading-tight mb-3 hover:text-[#14C6C9] transition-colors truncate">
+                        <h3 className="text-[13px] md:text-[14px] font-bold text-[#111] dark:text-white leading-tight hover:text-[#14C6C9] transition-colors truncate">
                           {item.name}
                         </h3>
                       </Link>
+                      {item.color && (
+                        <p className="text-[11px] text-[#14C6C9] font-medium mb-2">Color: {item.color}</p>
+                      )}
+                      {!item.color && <div className="mb-3" />}
                       <div className="flex items-center justify-between flex-wrap gap-3">
                         <div className="flex items-center border border-[#E0E0E0] dark:border-[#2A2D36] rounded-lg overflow-hidden">
                           <button onClick={() => updateQuantity(item.id, -1)} className="w-8 h-8 flex items-center justify-center text-[#555] dark:text-[#aaa] hover:bg-[#F0F0F0] dark:hover:bg-[#1E2028] transition-colors duration-150" aria-label="Disminuir">

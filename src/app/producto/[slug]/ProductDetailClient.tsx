@@ -95,6 +95,7 @@ export default function ProductDetailClient({ product }: Props) {
   const [qty, setQty] = useState(1)
   const [stockError, setStockError] = useState<string | null>(null)
   const [ctaBlocked, setCtaBlocked] = useState(false)
+  const [selectedColor, setSelectedColor] = useState<string | null>(null)
 
   const name = product.name as string
   const sku = product.sku as string
@@ -228,6 +229,7 @@ export default function ProductDetailClient({ product }: Props) {
         price,
         image: mainImages[0] ?? '',
         slug,
+        color: selectedColor,
       },
       qty
     )
@@ -411,16 +413,21 @@ export default function ProductDetailClient({ product }: Props) {
             {colors.length > 0 && (
               <div>
                 <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
-                  Colores disponibles ({colors.length})
+                  Color {selectedColor && <span className="text-[#14C6C9]">— {selectedColor}</span>}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {colors.map((c) => (
-                    <span
+                    <button
                       key={c}
-                      className="px-3 py-1 rounded-full text-xs border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-900"
+                      onClick={() => setSelectedColor(selectedColor === c ? null : c)}
+                      className={`px-3 py-1.5 rounded-full text-xs border transition-all duration-150 ${
+                        selectedColor === c
+                          ? 'border-[#14C6C9] bg-[#14C6C9]/10 text-[#14C6C9] font-semibold ring-1 ring-[#14C6C9]/30'
+                          : 'border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-900 hover:border-zinc-400 dark:hover:border-zinc-500'
+                      }`}
                     >
                       {c}
-                    </span>
+                    </button>
                   ))}
                 </div>
               </div>

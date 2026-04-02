@@ -9,6 +9,7 @@ export type CartItem = {
   image: string
   price: number | null
   quantity: number
+  color?: string | null
 }
 
 interface CartStore {
@@ -26,11 +27,11 @@ export const useCartStore = create<CartStore>()(
 
         addItem: (incoming, qty = 1) =>
           set((state) => {
-            const existing = state.items.find((i) => i.id === incoming.id)
+            const existing = state.items.find((i) => i.id === incoming.id && (i.color ?? null) === (incoming.color ?? null))
             if (existing) {
               return {
                 items: state.items.map((i) =>
-                  i.id === incoming.id ? { ...i, quantity: i.quantity + qty } : i
+                  i.id === incoming.id && (i.color ?? null) === (incoming.color ?? null) ? { ...i, quantity: i.quantity + qty } : i
                 ),
               }
             }
