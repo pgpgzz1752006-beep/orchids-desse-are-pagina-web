@@ -108,6 +108,9 @@ function AdminContent() {
           {/* Image diagnosis */}
           <ImageDiagnosisCard />
 
+          {/* Manual product creation */}
+          <ManualProductCard />
+
           {/* Banner management */}
           <BannerManagerCard />
 
@@ -1740,6 +1743,319 @@ function BannerManagerCard() {
       </p>
     </div>
   )
+}
+
+/* ─── Manual product creation card ──────────────────────────────── */
+function ManualProductCard() {
+  const [showForm, setShowForm] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [colorInput, setColorInput] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    sku: "",
+    price: "",
+    category_slug: "",
+    description_mx: "",
+    stock: "",
+    brand: "",
+    material: "",
+    capacity: "",
+    measure: "",
+    colors: [] as string[],
+    image_url: "",
+  });
+
+  const uploadRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
+  function addColor() {
+    const c = colorInput.trim();
+    if (c && !form.colors.includes(c)) {
+      setForm((f) => ({ ...f, colors: [...f.colors, c] }));
+      setColorInput("");
+    }
+  }
+
+  function removeColor(c: string) {
+    setForm((f) => ({ ...f, colors: f.colors.filter((x) => x !== c) }));
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("bucket", "project-uploads");
+      const res = await fetch("/api/admin/upload-image", { method: "POST", body: fd });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setForm((f) => ({ ...f, image_url: data.url }));
+      }
+    } catch {}
+    setUploading(false);
+    if (uploadRef.current) uploadRef.current.value = "";
+  }
+
+  async function handleSave() {
+    if (!form.name.trim() || !form.sku.trim()) {
+      setMsg({ ok: false, text: "Nombre y SKU son requeridos." });
+      return;
+    }
+    setSaving(true);
+    setMsg(null);
+    try {
+      const res = await fetch("/api/admin/manual-product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setMsg({ ok: false, text: data.error || "Error al guardar" });
+      } else {
+        setMsg({ ok: true, text: `Producto "${data.product.name}" creado (SKU: ${data.product.sku})` });
+        setForm({
+          name: "", sku: "", price: "", category_slug: "", description_mx: "",
+          stock: "", brand: "", material: "", capacity: "", measure: "",
+          colors: [], image_url: "",
+        });
+      }
+    } catch {
+      setMsg({ ok: false, text: "Error de red" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2D34] rounded-2xl p-6 shadow-xl">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <p className="text-[#888] text-xs uppercase tracking-widest mb-1">Agregar producto manual</p>
+          <p className="text-[#555] text-xs">Crea un producto que no viene del catálogo del proveedor.</p>
+        </div>
+        <button
+          onClick={() => setShowForm((v) => !v)}
+          className="text-[10px] bg-[#14C6C9]/10 border border-[#14C6C9]/30 text-[#14C6C9] px-3 py-1.5 rounded-lg uppercase tracking-wider hover:bg-[#14C6C9]/20 transition-colors"
+        >
+          {showForm ? "Cerrar" : "+ Nuevo producto"}
+        </button>
+      </div>
+
+      {msg && (
+        <div className={`mb-3 rounded-xl px-4 py-2 text-xs ${msg.ok ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300" : "bg-red-500/10 border border-red-500/30 text-red-300"}`}>
+          {msg.ok ? "✅ " : "❌ "}{msg.text}
+        </div>
+      )}
+
+      {showForm && (
+        <div className="bg-[#0E0F12] rounded-xl p-4 space-y-3 border border-[#2A2D34]">
+          {/* Row 1: Name + SKU */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Nombre *</label>
+              <input
+                type="text"
+                value={form.name}
+                onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                placeholder="Ej: Taza Personalizada 11oz"
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+              />
+            </div>
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">SKU *</label>
+              <input
+                type="text"
+                value={form.sku}
+                onChange={(e) => setForm((f) => ({ ...f, sku: e.target.value }))}
+                placeholder="Ej: TAZA-001"
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9] uppercase"
+              />
+            </div>
+          </div>
+
+          {/* Row 2: Price + Stock + Category */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Precio (MXN)</label>
+              <input
+                type="number"
+                step="0.01"
+                value={form.price}
+                onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
+                placeholder="0.00"
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+              />
+            </div>
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Stock</label>
+              <input
+                type="number"
+                value={form.stock}
+                onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
+                placeholder="Ej: 100"
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+              />
+            </div>
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Categoría</label>
+              <select
+                value={form.category_slug}
+                onChange={(e) => setForm((f) => ({ ...f, category_slug: e.target.value }))}
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-[#14C6C9]"
+              >
+                <option value="">Sin categoría</option>
+                <option value="termos-y-cilindros">Termos y Cilindros</option>
+                <option value="escritura">Escritura</option>
+                <option value="tecnologia">Tecnología</option>
+                <option value="textil">Textil</option>
+                <option value="bolsas-y-mochilas">Bolsas y Mochilas</option>
+                <option value="herramientas">Herramientas</option>
+                <option value="salud-y-ejercicio">Salud y Ejercicio</option>
+                <option value="hogar-y-cocina">Hogar y Cocina</option>
+                <option value="oficina">Oficina</option>
+                <option value="ecologicos">Ecológicos</option>
+                <option value="antiestres">Antiestrés</option>
+                <option value="agendas">Agendas</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Row 3: Brand + Material + Capacity + Measure */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Marca</label>
+              <input
+                type="text"
+                value={form.brand}
+                onChange={(e) => setForm((f) => ({ ...f, brand: e.target.value }))}
+                placeholder="Ej: Diseñare"
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+              />
+            </div>
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Material</label>
+              <input
+                type="text"
+                value={form.material}
+                onChange={(e) => setForm((f) => ({ ...f, material: e.target.value }))}
+                placeholder="Ej: Cerámica"
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+              />
+            </div>
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Capacidad</label>
+              <input
+                type="text"
+                value={form.capacity}
+                onChange={(e) => setForm((f) => ({ ...f, capacity: e.target.value }))}
+                placeholder="Ej: 11 oz"
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+              />
+            </div>
+            <div>
+              <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Medidas</label>
+              <input
+                type="text"
+                value={form.measure}
+                onChange={(e) => setForm((f) => ({ ...f, measure: e.target.value }))}
+                placeholder="Ej: 9.5 x 8 cm"
+                className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+              />
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Descripción</label>
+            <textarea
+              value={form.description_mx}
+              onChange={(e) => setForm((f) => ({ ...f, description_mx: e.target.value }))}
+              placeholder="Descripción del producto..."
+              rows={3}
+              className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9] resize-none"
+            />
+          </div>
+
+          {/* Colors */}
+          <div>
+            <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Colores disponibles</label>
+            <div className="flex gap-2 mb-2">
+              <input
+                type="text"
+                value={colorInput}
+                onChange={(e) => setColorInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addColor())}
+                placeholder="Ej: Rojo"
+                className="flex-1 bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9]"
+              />
+              <button
+                onClick={addColor}
+                type="button"
+                className="text-[10px] bg-[#14C6C9]/10 border border-[#14C6C9]/30 text-[#14C6C9] px-3 py-2 rounded-xl hover:bg-[#14C6C9]/20 transition-colors"
+              >
+                Agregar
+              </button>
+            </div>
+            {form.colors.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {form.colors.map((c) => (
+                  <span key={c} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#14C6C9]/10 border border-[#14C6C9]/30 text-[#14C6C9] text-[10px]">
+                    {c}
+                    <button onClick={() => removeColor(c)} className="hover:text-red-400 transition-colors">✕</button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Image */}
+          <div>
+            <label className="text-[#555] text-[10px] uppercase tracking-wider block mb-1">Imagen del producto</label>
+            <input
+              type="url"
+              value={form.image_url}
+              onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
+              placeholder="https://... (URL de la imagen)"
+              className="w-full bg-[#1A1D24] border border-[#333] rounded-xl px-3 py-2 text-white text-xs placeholder-[#444] focus:outline-none focus:border-[#14C6C9] mb-2"
+            />
+            <div className="flex items-center gap-2">
+              <span className="text-[#555] text-[10px]">— o —</span>
+              <label className={`text-[10px] border border-[#333] rounded-lg px-3 py-1.5 cursor-pointer transition-colors ${uploading ? "opacity-50 text-[#555]" : "text-[#14C6C9] hover:border-[#14C6C9]"}`}>
+                {uploading ? "Subiendo..." : "Subir imagen"}
+                <input ref={uploadRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
+              </label>
+            </div>
+            {form.image_url && (
+              <div className="mt-2 w-20 h-20 rounded-xl overflow-hidden border border-[#2A2D34] bg-[#1A1D24]">
+                <img src={form.image_url} alt="Preview" className="w-full h-full object-contain" onError={(e) => { (e.target as HTMLImageElement).style.opacity = "0.2"; }} />
+              </div>
+            )}
+          </div>
+
+          {/* Save */}
+          <div className="flex gap-2 pt-1">
+            <button
+              onClick={handleSave}
+              disabled={saving || !form.name.trim() || !form.sku.trim()}
+              className="flex-1 bg-[#14C6C9] hover:bg-[#11b3b6] disabled:bg-[#14C6C9]/30 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-xl transition-colors text-xs uppercase tracking-wider"
+            >
+              {saving ? "Guardando..." : "Guardar producto"}
+            </button>
+            <button
+              onClick={() => setShowForm(false)}
+              className="border border-[#333] text-[#555] hover:text-[#888] hover:border-[#555] text-xs px-4 py-2 rounded-xl transition-colors"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 /* ─── Manual Excel upload card ───────────────────────────────────── */

@@ -98,16 +98,41 @@ export default function CarritoPage() {
         setCheckoutError(data.error || "Error al procesar el pago");
         return;
       }
-      // Save order to history
+      // Save order details for WhatsApp message and order history
+      const orderItems = items.map(i => ({
+        id: i.id, name: i.name, sku: i.sku, price: i.price ?? null,
+        quantity: i.quantity, image: i.image, color: i.color ?? null,
+      }));
       const defaultAddr = getDefault();
-      addOrder({
-        items: items.map(i => ({ id: i.id, name: i.name, sku: i.sku, price: i.price ?? null, quantity: i.quantity, image: i.image })),
+      const orderData = {
+        items: orderItems,
         tecnica: tecnica ? { label: tecnica.label, price: tecnica.price } : null,
         subtotal,
         total,
-        status: "pending",
+        status: "pending" as const,
         shippingAddress: defaultAddr ? `${defaultAddr.street} ${defaultAddr.exterior}, ${defaultAddr.city}, ${defaultAddr.state}` : undefined,
-      });
+      };
+
+      // Save to zustand order store
+      addOrder(orderData);
+
+      // Also save directly to localStorage as backup (zustand persist can be async)
+      try {
+        const existingOrders = JSON.parse(localStorage.getItem("disenare-orders") || '{"state":{"orders":[]}}'  );
+        const newOrder = {
+          ...orderData,
+          id: crypto.randomUUID(),
+          createdAt: new Date().toISOString(),
+        };
+        existingOrders.state.orders.unshift(newOrder);
+        localStorage.setItem("disenare-orders", JSON.stringify(existingOrders));
+      } catch {}
+
+      // Save for WhatsApp message on gracias page
+      localStorage.setItem("lastOrder", JSON.stringify(
+        items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, color: i.color ?? null, sku: i.sku }))
+      ));
+
       clearCart();
       window.location.href = data.init_point;
     } catch {

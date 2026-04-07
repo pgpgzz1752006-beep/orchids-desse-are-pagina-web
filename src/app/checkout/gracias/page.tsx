@@ -3,29 +3,63 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import { useOrderStore } from "@/lib/orderStore";
 
 export default function GraciasPage() {
   const [cartSummary, setCartSummary] = useState("");
+  const { orders, addOrder } = useOrderStore();
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem("lastOrder") || localStorage.getItem("cart");
-      if (raw) {
-        const items = JSON.parse(raw);
-        if (Array.isArray(items) && items.length > 0) {
-          const lines = items.map(
-            (item: { name?: string; quantity?: number; price?: number; color?: string | null }) =>
-              `- ${item.name || "Producto"}${item.color ? ` (Color: ${item.color})` : ""} x${item.quantity || 1} ($${((item.price || 0) * (item.quantity || 1)).toFixed(2)})`
-          );
-          const total = items.reduce(
-            (sum: number, item: { price?: number; quantity?: number }) =>
-              sum + (item.price || 0) * (item.quantity || 1),
-            0
-          );
-          setCartSummary(
-            `\n\nMi pedido:\n${lines.join("\n")}\n\nTotal: $${total.toFixed(2)}`
-          );
+      // Try lastOrder first (saved before clearCart), then fallback to zustand cart
+      let items: Array<{ name?: string; quantity?: number; price?: number; color?: string | null; sku?: string; id?: string; image?: string }> = [];
+      const lastOrder = localStorage.getItem("lastOrder");
+      if (lastOrder) {
+        items = JSON.parse(lastOrder);
+      } else {
+        const zustandCart = localStorage.getItem("disenare-cart");
+        if (zustandCart) {
+          const parsed = JSON.parse(zustandCart);
+          items = parsed?.state?.items ?? [];
         }
+      }
+
+      // Ensure the order is saved to order history (backup in case it wasn't saved before redirect)
+      if (items.length > 0 && orders.length === 0) {
+        const total = items.reduce((sum, i) => sum + (i.price || 0) * (i.quantity || 1), 0);
+        addOrder({
+          items: items.map(i => ({
+            id: i.id || crypto.randomUUID(),
+            name: i.name || "Producto",
+            sku: i.sku || "",
+            price: i.price ?? null,
+            quantity: i.quantity || 1,
+            image: i.image || "",
+          })),
+          tecnica: null,
+          subtotal: total,
+          total,
+          status: "pending",
+        });
+      }
+
+      if (Array.isArray(items) && items.length > 0) {
+        const lines = items.map((item) => {
+          const name = item.name || "Producto";
+          const qty = item.quantity || 1;
+          const color = item.color ? `Color: ${item.color}` : "";
+          const sku = item.sku ? `SKU: ${item.sku}` : "";
+          const price = item.price ? `$${(item.price * qty).toFixed(2)}` : "Consultar precio";
+          const details = [color, sku].filter(Boolean).join(" | ");
+          return `• ${name} x${qty}\n  ${details ? details + "\n  " : ""}${price}`;
+        });
+        const total = items.reduce(
+          (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
+          0
+        );
+        setCartSummary(
+          `\n\n📦 *Mi pedido:*\n\n${lines.join("\n\n")}\n\n💰 *Total: $${total.toFixed(2)} MXN*`
+        );
       }
     } catch {
       // ignore
@@ -33,7 +67,7 @@ export default function GraciasPage() {
   }, []);
 
   const whatsappMessage = encodeURIComponent(
-    `Hola, acabo de realizar un pago en Diseñare Promocionales y quiero confirmar mi pedido.${cartSummary}\n\n¿Podrían confirmarme los detalles de envío y personalización?`
+    `Hola, acabo de realizar un pago en Diseñare Promocionales y quiero confirmar mi pedido.${cartSummary}\n\nPor favor confírmenme los detalles de envío y personalización. 🙏`
   );
 
   return (
