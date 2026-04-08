@@ -22,29 +22,39 @@ export default function GraciasPage() {
       }
 
       // Read order items for WhatsApp message
-      let items: Array<{ name?: string; quantity?: number; price?: number; color?: string | null; sku?: string; id?: string; image?: string }> = [];
       const lastOrder = localStorage.getItem("lastOrder");
       if (lastOrder) {
-        items = JSON.parse(lastOrder);
-      }
+        const parsed = JSON.parse(lastOrder);
+        // Support new format {items, tecnica, total} and old format (array)
+        const items: Array<{ name?: string; quantity?: number; price?: number; color?: string | null; sku?: string }> = Array.isArray(parsed) ? parsed : (parsed.items ?? []);
+        const tecnica: { label: string; price: number } | null = Array.isArray(parsed) ? null : (parsed.tecnica ?? null);
+        const savedTotal: number | null = Array.isArray(parsed) ? null : (parsed.total ?? null);
 
-      if (Array.isArray(items) && items.length > 0) {
-        const lines = items.map((item) => {
-          const name = item.name || "Producto";
-          const qty = item.quantity || 1;
-          const color = item.color ? `Color: ${item.color}` : "";
-          const sku = item.sku ? `SKU: ${item.sku}` : "";
-          const price = item.price ? `$${(item.price * qty).toFixed(2)}` : "Consultar precio";
-          const details = [color, sku].filter(Boolean).join(" | ");
-          return `• ${name} x${qty}\n  ${details ? details + "\n  " : ""}${price}`;
-        });
-        const total = items.reduce(
-          (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
-          0
-        );
-        setCartSummary(
-          `\n\n📦 *Mi pedido:*\n\n${lines.join("\n\n")}\n\n💰 *Total: $${total.toFixed(2)} MXN*`
-        );
+        if (items.length > 0) {
+          const lines = items.map((item) => {
+            const name = item.name || "Producto";
+            const qty = item.quantity || 1;
+            const color = item.color ? `Color: ${item.color}` : "";
+            const sku = item.sku ? `SKU: ${item.sku}` : "";
+            const price = item.price ? `$${(item.price * qty).toFixed(2)}` : "Consultar precio";
+            const details = [color, sku].filter(Boolean).join(" | ");
+            return `• ${name} x${qty}\n  ${details ? details + "\n  " : ""}${price}`;
+          });
+
+          let tecnicaLine = "";
+          if (tecnica) {
+            tecnicaLine = `\n\n🎨 *Personalización: ${tecnica.label}* — $${tecnica.price.toFixed(2)}`;
+          }
+
+          const total = savedTotal ?? items.reduce(
+            (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
+            0
+          );
+
+          setCartSummary(
+            `\n\n📦 *Mi pedido:*\n\n${lines.join("\n\n")}${tecnicaLine}\n\n💰 *Total: $${total.toFixed(2)} MXN*`
+          );
+        }
       }
     } catch {
       // ignore

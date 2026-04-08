@@ -123,9 +123,11 @@ export default function CarritoPage() {
       } catch {}
 
       // Save for WhatsApp message on gracias page + order ID for status update
-      localStorage.setItem("lastOrder", JSON.stringify(
-        items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, color: i.color ?? null, sku: i.sku }))
-      ));
+      localStorage.setItem("lastOrder", JSON.stringify({
+        items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, color: i.color ?? null, sku: i.sku })),
+        tecnica: tecnica ? { label: tecnica.label, price: tecnica.price } : null,
+        total,
+      }));
       localStorage.setItem("lastOrderId", orderId);
 
       clearCart();
