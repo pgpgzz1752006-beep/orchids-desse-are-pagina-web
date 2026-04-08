@@ -7,40 +7,25 @@ import { useOrderStore } from "@/lib/orderStore";
 
 export default function GraciasPage() {
   const [cartSummary, setCartSummary] = useState("");
-  const { orders, addOrder } = useOrderStore();
+  const { updateOrderStatus } = useOrderStore();
 
   useEffect(() => {
     try {
-      // Try lastOrder first (saved before clearCart), then fallback to zustand cart
+      // Mark the order as approved since user arrived at success page
+      const lastOrderId = localStorage.getItem("lastOrderId");
+      if (lastOrderId) {
+        updateOrderStatus(lastOrderId, "approved");
+        // Force persist flush
+        const storeState = useOrderStore.getState();
+        localStorage.setItem("disenare-orders", JSON.stringify({ state: { orders: storeState.orders }, version: 0 }));
+        localStorage.removeItem("lastOrderId");
+      }
+
+      // Read order items for WhatsApp message
       let items: Array<{ name?: string; quantity?: number; price?: number; color?: string | null; sku?: string; id?: string; image?: string }> = [];
       const lastOrder = localStorage.getItem("lastOrder");
       if (lastOrder) {
         items = JSON.parse(lastOrder);
-      } else {
-        const zustandCart = localStorage.getItem("disenare-cart");
-        if (zustandCart) {
-          const parsed = JSON.parse(zustandCart);
-          items = parsed?.state?.items ?? [];
-        }
-      }
-
-      // Ensure the order is saved to order history (backup in case it wasn't saved before redirect)
-      if (items.length > 0 && orders.length === 0) {
-        const total = items.reduce((sum, i) => sum + (i.price || 0) * (i.quantity || 1), 0);
-        addOrder({
-          items: items.map(i => ({
-            id: i.id || crypto.randomUUID(),
-            name: i.name || "Producto",
-            sku: i.sku || "",
-            price: i.price ?? null,
-            quantity: i.quantity || 1,
-            image: i.image || "",
-          })),
-          tecnica: null,
-          subtotal: total,
-          total,
-          status: "pending",
-        });
       }
 
       if (Array.isArray(items) && items.length > 0) {

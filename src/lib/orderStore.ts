@@ -25,6 +25,7 @@ interface OrderStore {
   orders: Order[];
   addOrder: (o: Omit<Order, "id" | "createdAt">) => string;
   updateOrderStatus: (id: string, status: Order["status"]) => void;
+  clearOrders: () => void;
 }
 
 export const useOrderStore = create<OrderStore>()(
@@ -41,6 +42,7 @@ export const useOrderStore = create<OrderStore>()(
         set((s) => ({
           orders: s.orders.map((o) => (o.id === id ? { ...o, status } : o)),
         })),
+      clearOrders: () => set({ orders: [] }),
     }),
     { name: "disenare-orders" }
   )

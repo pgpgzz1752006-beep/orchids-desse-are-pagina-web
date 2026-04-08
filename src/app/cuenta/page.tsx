@@ -30,6 +30,40 @@ export default function CuentaPage() {
   const { addresses, addAddress, updateAddress, removeAddress, setDefault } = useAddressStore();
   const { orders } = useOrderStore();
 
+  // Deduplicate orders on mount (fix for previously duplicated orders)
+  useEffect(() => {
+    const raw = localStorage.getItem("disenare-orders");
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw);
+      const allOrders: Array<{ id: string; items: Array<{ name: string; quantity: number }>; total: number; createdAt: string; status: string; [key: string]: unknown }> = parsed?.state?.orders ?? [];
+      if (allOrders.length <= 1) return;
+
+      // Deduplicate by matching items+total (same order placed at similar times)
+      const seen = new Map<string, typeof allOrders[0]>();
+      for (const order of allOrders) {
+        const key = order.items.map(i => `${i.name}:${i.quantity}`).sort().join("|") + `|${order.total}`;
+        const existing = seen.get(key);
+        if (!existing) {
+          seen.set(key, order);
+        } else {
+          // Keep the one with better status (approved > pending > rejected)
+          const priority = { approved: 3, rejected: 1, pending: 2 } as Record<string, number>;
+          if ((priority[order.status] || 0) > (priority[existing.status] || 0)) {
+            seen.set(key, order);
+          }
+        }
+      }
+
+      const deduped = Array.from(seen.values());
+      if (deduped.length < allOrders.length) {
+        parsed.state.orders = deduped;
+        localStorage.setItem("disenare-orders", JSON.stringify(parsed));
+        window.location.reload();
+      }
+    } catch {}
+  }, []);
+
   const [tab, setTab] = useState<Tab>("perfil");
 
   // Profile

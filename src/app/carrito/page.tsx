@@ -113,25 +113,20 @@ export default function CarritoPage() {
         shippingAddress: defaultAddr ? `${defaultAddr.street} ${defaultAddr.exterior}, ${defaultAddr.city}, ${defaultAddr.state}` : undefined,
       };
 
-      // Save to zustand order store
-      addOrder(orderData);
+      // Save to zustand order store (single source of truth)
+      const orderId = addOrder(orderData);
 
-      // Also save directly to localStorage as backup (zustand persist can be async)
+      // Force zustand persist to flush to localStorage synchronously
       try {
-        const existingOrders = JSON.parse(localStorage.getItem("disenare-orders") || '{"state":{"orders":[]}}'  );
-        const newOrder = {
-          ...orderData,
-          id: crypto.randomUUID(),
-          createdAt: new Date().toISOString(),
-        };
-        existingOrders.state.orders.unshift(newOrder);
-        localStorage.setItem("disenare-orders", JSON.stringify(existingOrders));
+        const storeState = useOrderStore.getState();
+        localStorage.setItem("disenare-orders", JSON.stringify({ state: { orders: storeState.orders }, version: 0 }));
       } catch {}
 
-      // Save for WhatsApp message on gracias page
+      // Save for WhatsApp message on gracias page + order ID for status update
       localStorage.setItem("lastOrder", JSON.stringify(
         items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, color: i.color ?? null, sku: i.sku }))
       ));
+      localStorage.setItem("lastOrderId", orderId);
 
       clearCart();
       window.location.href = data.init_point;
