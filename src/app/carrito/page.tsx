@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2, Plus, Minus, ShoppingCart, Zap, Droplets, Printer, Stamp, Pen, Upload, X, CheckCircle2, LogIn } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingCart, Zap, Droplets, Printer, Stamp, Pen, Upload, X, CheckCircle2, LogIn, MapPin } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 import { useCartStore } from "@/lib/cartStore";
@@ -15,18 +15,31 @@ const formatPrice = (n: number) =>
   n.toLocaleString("es-MX", { style: "currency", currency: "MXN" });
 
 const TECNICAS = [
-  { id: "laser",   label: "Grabado Láser", desc: "Metal, madera, cuero y acrílico.",  price: 60,  icon: Zap,      color: "#14C6C9" },
-  { id: "seri",    label: "Serigrafía",    desc: "Textiles y plásticos.",              price: 50,  icon: Printer,  color: "#E0007A" },
-  { id: "tampo",   label: "Tampografía",   desc: "Superficies irregulares o curvas.", price: 40,  icon: Stamp,    color: "#B8A800" },
-  { id: "bordado", label: "Bordado",       desc: "Gorras, playeras y mochilas.",      price: 100, icon: Pen,      color: "#7BC043" },
-  { id: "subli",   label: "Sublimación",   desc: "Telas y materiales poliéster.",     price: 35,  icon: Droplets, color: "#1A3D8F" },
+  { id: "laser",   label: "Grabado Láser", desc: "Metal, madera, cuero y acrílico.",  tiers: [100, 55, 30], icon: Zap,      color: "#14C6C9" },
+  { id: "seri",    label: "Serigrafía",    desc: "Textiles y plásticos.",              tiers: [75, 50, 35],  icon: Printer,  color: "#E0007A" },
+  { id: "tampo",   label: "Tampografía",   desc: "Superficies irregulares o curvas.",  tiers: [155, 40, 21], icon: Stamp,    color: "#B8A800" },
+  { id: "bordado", label: "Bordado",       desc: "Gorras, playeras y mochilas.",       tiers: [100, 65, 45], icon: Pen,      color: "#7BC043" },
+  { id: "subli",   label: "Sublimación",   desc: "Telas y materiales poliéster.",      tiers: [45, 23, 11],  icon: Droplets, color: "#1A3D8F" },
 ];
+
+// tiers: [1-10 pzas, 11-100 pzas, 101-10000 pzas] — price per piece
+function getTierPrice(tiers: number[], qty: number): number {
+  if (qty <= 10) return tiers[0];
+  if (qty <= 100) return tiers[1];
+  return tiers[2];
+}
+
+function getTierLabel(qty: number): string {
+  if (qty <= 10) return "1-10 pzas";
+  if (qty <= 100) return "11-100 pzas";
+  return "101+ pzas";
+}
 
 export default function CarritoPage() {
   const { user } = useAuth();
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
   const { addOrder } = useOrderStore();
-  const { getDefault } = useAddressStore();
+  const { addresses, getDefault } = useAddressStore();
 
   const [selectedTecnica, setSelectedTecnica] = useState<string | null>(null);
   const [designFile, setDesignFile]           = useState<File | null>(null);
@@ -38,11 +51,16 @@ export default function CarritoPage() {
   const tecnica = TECNICAS.find(t => t.id === selectedTecnica) ?? null;
 
   const subtotal    = items.reduce((acc, item) => acc + (item.price ?? 0) * item.quantity, 0);
-  const tecnicaCost = tecnica ? tecnica.price : 0;
+  const totalItems   = items.reduce((a, i) => a + i.quantity, 0);
+  const tecnicaPricePerPiece = tecnica ? getTierPrice(tecnica.tiers, totalItems) : 0;
+  const tecnicaCost = tecnica ? tecnicaPricePerPiece * totalItems : 0;
   const total       = subtotal + tecnicaCost;
+  const MIN_ORDER_AMOUNT = 30;
   const FREE_SHIPPING_THRESHOLD = 5000;
   const freeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
-  const totalItems   = items.reduce((a, i) => a + i.quantity, 0);
+  const belowMinimum = total < MIN_ORDER_AMOUNT;
+  const defaultAddr = getDefault();
+  const noAddress = !defaultAddr;
 
   function handleSelectTecnica(id: string) {
     if (selectedTecnica === id) {
@@ -74,6 +92,14 @@ export default function CarritoPage() {
       window.location.href = "/login";
       return;
     }
+    if (belowMinimum) {
+      setCheckoutError(`El monto mínimo de compra es ${formatPrice(MIN_ORDER_AMOUNT)}`);
+      return;
+    }
+    if (noAddress) {
+      setCheckoutError("Agrega una dirección de entrega antes de proceder al pago.");
+      return;
+    }
     setCheckoutLoading(true);
     setCheckoutError(null);
     try {
@@ -90,7 +116,7 @@ export default function CarritoPage() {
             image: i.image,
             color: i.color ?? null,
           })),
-          tecnica: tecnica ? { label: tecnica.label, price: tecnica.price } : null,
+          tecnica: tecnica ? { label: tecnica.label, price: tecnicaCost, pricePerPiece: tecnicaPricePerPiece, pieces: totalItems } : null,
         }),
       });
       const data = await res.json();
@@ -103,14 +129,14 @@ export default function CarritoPage() {
         id: i.id, name: i.name, sku: i.sku, price: i.price ?? null,
         quantity: i.quantity, image: i.image, color: i.color ?? null,
       }));
-      const defaultAddr = getDefault();
+      const addrString = defaultAddr ? `${defaultAddr.street} ${defaultAddr.exterior}${defaultAddr.interior ? `, Int. ${defaultAddr.interior}` : ""}, ${defaultAddr.colonia ? defaultAddr.colonia + ", " : ""}${defaultAddr.city}, ${defaultAddr.state} C.P. ${defaultAddr.zip}` : "";
       const orderData = {
         items: orderItems,
-        tecnica: tecnica ? { label: tecnica.label, price: tecnica.price } : null,
+        tecnica: tecnica ? { label: tecnica.label, price: tecnicaCost } : null,
         subtotal,
         total,
         status: "pending" as const,
-        shippingAddress: defaultAddr ? `${defaultAddr.street} ${defaultAddr.exterior}, ${defaultAddr.city}, ${defaultAddr.state}` : undefined,
+        shippingAddress: addrString || undefined,
       };
 
       // Save to zustand order store (single source of truth)
@@ -125,8 +151,9 @@ export default function CarritoPage() {
       // Save for WhatsApp message on gracias page + order ID for status update
       localStorage.setItem("lastOrder", JSON.stringify({
         items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, color: i.color ?? null, sku: i.sku })),
-        tecnica: tecnica ? { label: tecnica.label, price: tecnica.price } : null,
+        tecnica: tecnica ? { label: tecnica.label, price: tecnicaCost, pricePerPiece: tecnicaPricePerPiece, pieces: totalItems } : null,
         total,
+        address: addrString,
       }));
       localStorage.setItem("lastOrderId", orderId);
 
@@ -167,7 +194,7 @@ export default function CarritoPage() {
                 {items.map((item) => (
                   <div key={`${item.id}-${item.color ?? ''}`} className="bg-white dark:bg-[#12141A] rounded-2xl border border-[#EFEFEF] dark:border-[#1E2028] shadow-sm p-4 md:p-5 flex gap-4 items-start transition-all duration-200 hover:shadow-md">
                     <Link href={`/producto/${item.slug}`} className="w-[90px] h-[90px] md:w-[110px] md:h-[110px] flex-shrink-0 rounded-xl overflow-hidden bg-[#F8F8F8] dark:bg-[#1A1C24] border border-[#EFEFEF] dark:border-[#2A2D36] flex items-center justify-center">
-                      <Image src={item.image || "/placeholder-product.png"} alt={item.name} width={110} height={110} className="w-full h-full object-contain p-2" />
+                      <Image src={item.image?.trim() || "/placeholder-product.svg"} alt={item.name} width={110} height={110} className="w-full h-full object-contain p-2" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder-product.svg"; }} />
                     </Link>
                     <div className="flex-1 min-w-0">
                       <p className="text-[11px] text-[#AAAAAA] dark:text-[#666] font-medium uppercase tracking-wider mb-1">{item.sku}</p>
@@ -217,9 +244,12 @@ export default function CarritoPage() {
                     </div>
 
                     {tecnica && (
-                      <div className="flex justify-between text-[13px] text-[#666] dark:text-[#999]">
-                        <span>Personalización ({tecnica.label})</span>
-                        <span className="font-semibold text-[#111] dark:text-white">+ {formatPrice(tecnica.price)}</span>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex justify-between text-[13px] text-[#666] dark:text-[#999]">
+                          <span>{tecnica.label} ({totalItems} pza{totalItems !== 1 ? "s" : ""} × {formatPrice(tecnicaPricePerPiece)})</span>
+                          <span className="font-semibold text-[#111] dark:text-white">+ {formatPrice(tecnicaCost)}</span>
+                        </div>
+                        <p className="text-[10px] text-[#14C6C9] font-medium">Rango: {getTierLabel(totalItems)} — {formatPrice(tecnicaPricePerPiece)}/pza</p>
                       </div>
                     )}
 
@@ -249,10 +279,38 @@ export default function CarritoPage() {
 
                   <div className="h-px bg-[#F0F0F0] dark:bg-[#1E2028]" />
 
+                  {/* Shipping address */}
+                  <div className="flex flex-col gap-2">
+                    <span className="text-[12px] font-bold text-[#111] dark:text-white uppercase tracking-wide">Dirección de entrega</span>
+                    {defaultAddr ? (
+                      <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F8F8F8] dark:bg-[#1A1C24] border border-[#EFEFEF] dark:border-[#2A2D36]">
+                        <MapPin className="w-4 h-4 text-[#14C6C9] mt-0.5 flex-shrink-0" />
+                        <div className="text-[12px] text-[#555] dark:text-[#999] leading-relaxed">
+                          <p className="font-semibold text-[#111] dark:text-white">{defaultAddr.label}</p>
+                          <p>{defaultAddr.street} {defaultAddr.exterior}{defaultAddr.interior ? `, Int. ${defaultAddr.interior}` : ""}</p>
+                          <p>{defaultAddr.colonia ? `${defaultAddr.colonia}, ` : ""}{defaultAddr.city}, {defaultAddr.state} C.P. {defaultAddr.zip}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <Link href="/cuenta" className="flex items-center gap-2 p-3 rounded-lg border-2 border-dashed border-[#E0007A] bg-[#E0007A]/5 text-[#E0007A] text-[12px] font-semibold hover:bg-[#E0007A]/10 transition-colors">
+                        <MapPin className="w-4 h-4" />
+                        Agrega una dirección para continuar
+                      </Link>
+                    )}
+                  </div>
+
+                  <div className="h-px bg-[#F0F0F0] dark:bg-[#1E2028]" />
+
                   <div className="flex justify-between items-center">
                     <span className="text-[15px] font-bold text-[#111] dark:text-white">Total</span>
                     <span className="text-[20px] font-bold text-[#14C6C9]">{formatPrice(total)}</span>
                   </div>
+
+                  {belowMinimum && (
+                    <p className="text-[12px] text-[#E0007A] font-semibold text-center">
+                      El monto mínimo de compra es {formatPrice(MIN_ORDER_AMOUNT)}. Te faltan {formatPrice(MIN_ORDER_AMOUNT - total)}.
+                    </p>
+                  )}
 
                   {!user ? (
                     <Link href="/login"
@@ -262,8 +320,12 @@ export default function CarritoPage() {
                   ) : (
                     <button
                       onClick={handleCheckout}
-                      disabled={checkoutLoading}
-                      className="w-full h-[52px] rounded-xl bg-[#14C6C9] hover:bg-[#0fa8ab] active:scale-[0.98] text-white font-bold text-[14px] uppercase tracking-widest transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
+                      disabled={checkoutLoading || belowMinimum || noAddress}
+                      className={`w-full h-[52px] rounded-xl text-white font-bold text-[14px] uppercase tracking-widest transition-all duration-200 shadow-md flex items-center justify-center disabled:cursor-not-allowed ${
+                        belowMinimum || noAddress
+                          ? "bg-gray-400 opacity-60"
+                          : "bg-[#14C6C9] hover:bg-[#0fa8ab] active:scale-[0.98] hover:shadow-lg disabled:opacity-60"
+                      }`}
                     >
                       {checkoutLoading ? (
                         <span className="flex items-center gap-2">
@@ -289,11 +351,11 @@ export default function CarritoPage() {
             <div className="w-full bg-white dark:bg-[#12141A] rounded-2xl border border-[#EFEFEF] dark:border-[#1E2028] shadow-sm p-6">
               <div className="flex items-center justify-between mb-1">
                 <h3 className="text-[13px] font-bold text-[#111] dark:text-white uppercase tracking-wider">Elige tu técnica de personalización</h3>
-                {selectedTecnica && (
-                  <span className="text-[11px] font-semibold text-[#14C6C9]">+ {formatPrice(100)} al total</span>
+                {tecnica && (
+                  <span className="text-[11px] font-semibold text-[#14C6C9]">+ {formatPrice(tecnicaCost)} al total ({totalItems} pza{totalItems !== 1 ? "s" : ""} × {formatPrice(tecnicaPricePerPiece)})</span>
                 )}
               </div>
-              <p className="text-[11px] text-[#AAAAAA] dark:text-[#555] mb-4">Selecciona una opción — se sumará al precio del pedido.</p>
+              <p className="text-[11px] text-[#AAAAAA] dark:text-[#555] mb-4">Selecciona una opción — precio por pieza, baja con más cantidad.</p>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {TECNICAS.map((t) => {
@@ -318,7 +380,8 @@ export default function CarritoPage() {
                       </div>
                       <p className="text-[11px] font-bold text-[#111] dark:text-white leading-tight">{t.label}</p>
                       <p className="text-[10px] text-[#888] dark:text-[#666] leading-snug">{t.desc}</p>
-                      <p className="text-[11px] font-bold" style={{ color: t.color }}>{formatPrice(t.price)}</p>
+                      <p className="text-[11px] font-bold" style={{ color: t.color }}>{formatPrice(getTierPrice(t.tiers, totalItems))}/pza</p>
+                      <p className="text-[9px] text-[#AAA]">{getTierLabel(totalItems)}</p>
                     </button>
                   );
                 })}

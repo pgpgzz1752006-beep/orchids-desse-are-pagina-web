@@ -7,6 +7,7 @@ import { useOrderStore } from "@/lib/orderStore";
 
 export default function GraciasPage() {
   const [cartSummary, setCartSummary] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
   const { updateOrderStatus } = useOrderStore();
 
   useEffect(() => {
@@ -27,8 +28,9 @@ export default function GraciasPage() {
         const parsed = JSON.parse(lastOrder);
         // Support new format {items, tecnica, total} and old format (array)
         const items: Array<{ name?: string; quantity?: number; price?: number; color?: string | null; sku?: string }> = Array.isArray(parsed) ? parsed : (parsed.items ?? []);
-        const tecnica: { label: string; price: number } | null = Array.isArray(parsed) ? null : (parsed.tecnica ?? null);
+        const tecnica: { label: string; price: number; pricePerPiece?: number; pieces?: number } | null = Array.isArray(parsed) ? null : (parsed.tecnica ?? null);
         const savedTotal: number | null = Array.isArray(parsed) ? null : (parsed.total ?? null);
+        const address: string | null = Array.isArray(parsed) ? null : (parsed.address ?? null);
 
         if (items.length > 0) {
           const lines = items.map((item) => {
@@ -41,19 +43,49 @@ export default function GraciasPage() {
             return `• ${name} x${qty}\n  ${details ? details + "\n  " : ""}${price}`;
           });
 
-          let tecnicaLine = "";
-          if (tecnica) {
-            tecnicaLine = `\n\n🎨 *Personalización: ${tecnica.label}* — $${tecnica.price.toFixed(2)}`;
-          }
+          const tecnicaLine = tecnica
+            ? `\n\n🎨 *Personalización: ${tecnica.label}*\n  ${tecnica.pieces || "?"} pzas × $${(tecnica.pricePerPiece || tecnica.price).toFixed(2)}/pza = $${tecnica.price.toFixed(2)}`
+            : `\n\n🎨 *Personalización: N/A*`;
 
           const total = savedTotal ?? items.reduce(
             (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
             0
           );
 
+          const addressLine = address
+            ? `\n\n📍 *Dirección de entrega:*\n${address}`
+            : "";
+
           setCartSummary(
-            `\n\n📦 *Mi pedido:*\n\n${lines.join("\n\n")}${tecnicaLine}\n\n💰 *Total: $${total.toFixed(2)} MXN*`
+            `\n\n📦 *Mi pedido:*\n\n${lines.join("\n\n")}${tecnicaLine}\n\n💰 *Total: $${total.toFixed(2)} MXN*${addressLine}`
           );
+
+          // Send automatic email to supplier (only once)
+          const emailAlreadySent = sessionStorage.getItem("order_email_sent_" + (lastOrderId || "current"));
+          if (!emailAlreadySent) {
+            sessionStorage.setItem("order_email_sent_" + (lastOrderId || "current"), "true");
+            fetch("/api/send-order-email", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                items: items.map(i => ({
+                  name: i.name || "Producto",
+                  quantity: i.quantity || 1,
+                  price: i.price ?? null,
+                  color: i.color ?? null,
+                  sku: i.sku ?? "",
+                })),
+                tecnica,
+                total,
+                orderId: lastOrderId || undefined,
+              }),
+            })
+              .then((r) => r.json())
+              .then(() => setEmailSent(true))
+              .catch(() => {});
+          } else {
+            setEmailSent(true);
+          }
         }
       }
     } catch {
@@ -80,9 +112,18 @@ export default function GraciasPage() {
         <p className="text-[15px] text-[#666] dark:text-[#999] max-w-[500px] mb-2 leading-relaxed">
           Tu pago fue procesado correctamente. Para que podamos procesar tu pedido, envíanos los detalles por WhatsApp.
         </p>
-        <p className="text-[13px] text-[#AAA] dark:text-[#555] mb-8">
+        <p className="text-[13px] text-[#AAA] dark:text-[#555] mb-4">
           No olvides adjuntar la imagen o logo que deseas en tus productos (si aplica).
         </p>
+
+        {emailSent && (
+          <div className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#7BC043]/10 mb-6">
+            <svg className="w-4 h-4 text-[#7BC043]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="text-[12px] text-[#7BC043] font-semibold">Pedido enviado automáticamente al proveedor</span>
+          </div>
+        )}
 
         <a
           href={`https://wa.me/529512424333?text=${whatsappMessage}`}

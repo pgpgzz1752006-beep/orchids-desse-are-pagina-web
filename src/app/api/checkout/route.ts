@@ -28,6 +28,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'El carrito está vacío' }, { status: 400 })
     }
 
+    const MIN_ORDER = 30
+    const itemsTotal = items.reduce((sum, i) => sum + (i.price || 0) * i.quantity, 0)
+    const tecnicaTotal = tecnica?.price || 0
+    if (itemsTotal + tecnicaTotal < MIN_ORDER) {
+      return NextResponse.json({ error: `El monto mínimo de compra es $${MIN_ORDER} MXN` }, { status: 400 })
+    }
+
     // Build MP items
     const mpItems = items
       .filter((i) => i.price != null && i.price > 0)
