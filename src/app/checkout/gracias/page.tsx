@@ -29,6 +29,8 @@ export default function GraciasPage() {
         // Support new format {items, tecnica, total} and old format (array)
         const items: Array<{ name?: string; quantity?: number; price?: number; color?: string | null; sku?: string }> = Array.isArray(parsed) ? parsed : (parsed.items ?? []);
         const tecnica: { label: string; price: number; pricePerPiece?: number; pieces?: number } | null = Array.isArray(parsed) ? null : (parsed.tecnica ?? null);
+        const savedSubtotal: number | null = Array.isArray(parsed) ? null : (parsed.subtotal ?? null);
+        const savedIva: number | null = Array.isArray(parsed) ? null : (parsed.iva ?? null);
         const savedTotal: number | null = Array.isArray(parsed) ? null : (parsed.total ?? null);
         const address: string | null = Array.isArray(parsed) ? null : (parsed.address ?? null);
 
@@ -47,17 +49,22 @@ export default function GraciasPage() {
             ? `\n\n🎨 *Personalización: ${tecnica.label}*\n  ${tecnica.pieces || "?"} pzas × $${(tecnica.pricePerPiece || tecnica.price).toFixed(2)}/pza = $${tecnica.price.toFixed(2)}`
             : `\n\n🎨 *Personalización: N/A*`;
 
-          const total = savedTotal ?? items.reduce(
+          const itemsSubtotal = items.reduce(
             (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
             0
           );
+          const subtotalVal = savedSubtotal ?? (itemsSubtotal + (tecnica?.price ?? 0));
+          const ivaVal = savedIva ?? Math.round(subtotalVal * 0.16 * 100) / 100;
+          const total = savedTotal ?? Math.round((subtotalVal + ivaVal) * 100) / 100;
 
           const addressLine = address
             ? `\n\n📍 *Dirección de entrega:*\n${address}`
             : "";
 
+          const ivaLine = `\n\n🧾 *Subtotal: $${subtotalVal.toFixed(2)}*\n📊 *IVA (16%): $${ivaVal.toFixed(2)}*`;
+
           setCartSummary(
-            `\n\n📦 *Mi pedido:*\n\n${lines.join("\n\n")}${tecnicaLine}\n\n💰 *Total: $${total.toFixed(2)} MXN*${addressLine}`
+            `\n\n📦 *Mi pedido:*\n\n${lines.join("\n\n")}${tecnicaLine}${ivaLine}\n\n💰 *Total: $${total.toFixed(2)} MXN*${addressLine}`
           );
 
           // Send automatic email to supplier (only once)

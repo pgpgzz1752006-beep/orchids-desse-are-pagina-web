@@ -1,12 +1,19 @@
 /**
  * Pricing helpers — single source of truth for all price calculations.
  *
- * MARKUP is read from MARKUP_PERCENT env var (default 35).
- * The base price stored in the DB is never modified; markup is applied
- * only when building API responses.
+ * Two-step pricing:
+ *  1. DISCOUNT_PERCENT (distributor level, e.g. 20) → applied first
+ *  2. MARKUP_PERCENT (our margin, e.g. 36.6) → applied on top
  *
- * displayPrice = Math.round(basePrice * (1 + MARKUP_PERCENT/100) * 100) / 100
+ * displayPrice = basePrice * (1 - DISCOUNT/100) * (1 + MARKUP/100)
  */
+
+const DISCOUNT_PERCENT = (() => {
+  const raw = process.env.DISCOUNT_PERCENT
+  if (!raw) return 0
+  const parsed = parseFloat(raw)
+  return isNaN(parsed) ? 0 : parsed
+})()
 
 const MARKUP_PERCENT = (() => {
   const raw = process.env.MARKUP_PERCENT
@@ -15,10 +22,10 @@ const MARKUP_PERCENT = (() => {
   return isNaN(parsed) ? 35 : parsed
 })()
 
-const MULTIPLIER = 1 + MARKUP_PERCENT / 100 // e.g. 1.35
+const MULTIPLIER = (1 - DISCOUNT_PERCENT / 100) * (1 + MARKUP_PERCENT / 100)
 
 /**
- * Apply the global markup to a base price.
+ * Apply distributor discount + markup to a base price.
  * Returns null when price is null/undefined/zero.
  * Rounds to 2 decimal places.
  */
@@ -28,7 +35,7 @@ export function applyMarkup(price: number | null | undefined): number | null {
 }
 
 /**
- * The multiplier being applied (e.g. 1.35).
+ * The combined multiplier being applied.
  * Exposed so callers can log / audit.
  */
 export const PRICE_MULTIPLIER = MULTIPLIER

@@ -54,7 +54,10 @@ export default function CarritoPage() {
   const totalItems   = items.reduce((a, i) => a + i.quantity, 0);
   const tecnicaPricePerPiece = tecnica ? getTierPrice(tecnica.tiers, totalItems) : 0;
   const tecnicaCost = tecnica ? tecnicaPricePerPiece * totalItems : 0;
-  const total       = subtotal + tecnicaCost;
+  const IVA_RATE     = 0.16;
+  const subtotalBeforeIVA = subtotal + tecnicaCost;
+  const iva          = Math.round(subtotalBeforeIVA * IVA_RATE * 100) / 100;
+  const total        = Math.round((subtotalBeforeIVA + iva) * 100) / 100;
   const MIN_ORDER_AMOUNT = 30;
   const FREE_SHIPPING_THRESHOLD = 5000;
   const freeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
@@ -111,12 +114,12 @@ export default function CarritoPage() {
             id: i.id,
             name: i.name,
             sku: i.sku,
-            price: i.price,
+            price: i.price != null ? Math.round(i.price * (1 + IVA_RATE) * 100) / 100 : null,
             quantity: i.quantity,
             image: i.image,
             color: i.color ?? null,
           })),
-          tecnica: tecnica ? { label: tecnica.label, price: tecnicaCost, pricePerPiece: tecnicaPricePerPiece, pieces: totalItems } : null,
+          tecnica: tecnica ? { label: tecnica.label, price: Math.round(tecnicaCost * (1 + IVA_RATE) * 100) / 100, pricePerPiece: tecnicaPricePerPiece, pieces: totalItems } : null,
         }),
       });
       const data = await res.json();
@@ -133,7 +136,7 @@ export default function CarritoPage() {
       const orderData = {
         items: orderItems,
         tecnica: tecnica ? { label: tecnica.label, price: tecnicaCost } : null,
-        subtotal,
+        subtotal: subtotalBeforeIVA,
         total,
         status: "pending" as const,
         shippingAddress: addrString || undefined,
@@ -152,6 +155,8 @@ export default function CarritoPage() {
       localStorage.setItem("lastOrder", JSON.stringify({
         items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price, color: i.color ?? null, sku: i.sku })),
         tecnica: tecnica ? { label: tecnica.label, price: tecnicaCost, pricePerPiece: tecnicaPricePerPiece, pieces: totalItems } : null,
+        subtotal: subtotalBeforeIVA,
+        iva,
         total,
         address: addrString,
       }));
@@ -275,6 +280,11 @@ export default function CarritoPage() {
                     {freeShipping && (
                       <p className="text-[11px] font-semibold text-[#7BC043]">¡Tu pedido califica para envío gratuito!</p>
                     )}
+
+                    <div className="flex justify-between text-[13px] text-[#666] dark:text-[#999]">
+                      <span>IVA (16%)</span>
+                      <span className="font-semibold text-[#111] dark:text-white">+ {formatPrice(iva)}</span>
+                    </div>
                   </div>
 
                   <div className="h-px bg-[#F0F0F0] dark:bg-[#1E2028]" />
